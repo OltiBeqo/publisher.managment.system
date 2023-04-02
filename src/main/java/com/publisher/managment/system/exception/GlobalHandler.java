@@ -1,4 +1,4 @@
 package com.publisher.managment.system.exception;
 
-public class ExceptionMessage {
+public class GlobalHandler {
 }

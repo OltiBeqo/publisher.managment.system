@@ -17,7 +17,7 @@ public class CategoryMapper {
                 .name(categoryDTO.getName())
                 .build();
     }
-    public static Category toEntityForUpdate(CategoryDTO categoryDTO, Category category){
+    public static Category toEntityForUpdate(Category category, CategoryDTO categoryDTO){
         category.setName(categoryDTO.getName());
         return category;
     }
