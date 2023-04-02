@@ -1,5 +1,7 @@
 package com.publisher.managment.system.entity;
 
+import com.publisher.managment.system.entity.enums.Gender;
+import com.publisher.managment.system.entity.enums.Role;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -23,11 +25,12 @@ public class User {
     @Column(unique = true)
     private String username;
     private String password;
+    @Enumerated(EnumType.STRING)
+    private Gender gender;
     private boolean active;
     @CreatedDate
     private LocalDate createdAt;
-    @ManyToOne
-    @JoinColumn(name = "role_id", referencedColumnName = "id")
+    @Enumerated(EnumType.STRING)
     private Role role;
     @OneToMany(mappedBy = "user")
     private List<Order> orders;

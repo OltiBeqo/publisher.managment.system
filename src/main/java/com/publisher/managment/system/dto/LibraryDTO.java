@@ -6,8 +6,6 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.validation.constraints.Email;
-import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 import java.util.List;
 
@@ -20,7 +18,7 @@ public class LibraryDTO {
     private Integer id;
     @NotNull(message = "Library name is required")
     private String library;
-    @NotNull(message = "Address is required")
+    @NotNull(message = "address is required")
     private String address;
     @Email(message = "Email is not valid")
     @NotNull(message = "Email is required")

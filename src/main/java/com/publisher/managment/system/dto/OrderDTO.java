@@ -1,5 +1,6 @@
 package com.publisher.managment.system.dto;
 
+import com.publisher.managment.system.entity.User;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -16,6 +17,7 @@ import java.util.List;
 @Builder
 public class OrderDTO {
     private Integer id;
+    private User user;
     private Double totalAmount;
     @NotNull(message = "at least a book is required to create an order")
     private List<BookDTO> book;

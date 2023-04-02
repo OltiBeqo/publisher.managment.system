@@ -1,13 +1,12 @@
 package com.publisher.managment.system.dto;
 
+import com.publisher.managment.system.entity.enums.Gender;
+import com.publisher.managment.system.entity.enums.Role;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-
-import javax.persistence.Enumerated;
-import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.NotEmpty;
+import org.springframework.data.annotation.CreatedDate;
 import javax.validation.constraints.NotNull;
 import java.time.LocalDate;
 @Data
@@ -25,6 +24,10 @@ public class UserDTO {
     private String username;
     @NotNull(message = "Password is required")
     private String password;
-    private String role;
+    @NotNull(message = "Define gender")
+    private Gender gender;
+    private boolean active;
+    private Role role;
+    @CreatedDate
     private LocalDate createdAt;
 }

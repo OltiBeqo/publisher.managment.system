@@ -9,6 +9,6 @@ public interface LibraryService {
     LibraryDTO addLibrary(LibraryDTO libraryDTO);
     List<LibraryDTO> getLibraries();
     LibraryDTO getLibraryById(Integer id);
-    LibraryDTO updateLibrary(Integer id);
+    LibraryDTO updateLibrary(Integer id, LibraryDTO libraryDTO);
     void deleteLibraryById(Integer id);
 }

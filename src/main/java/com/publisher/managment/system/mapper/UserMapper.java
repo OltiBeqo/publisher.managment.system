@@ -2,10 +2,8 @@ package com.publisher.managment.system.mapper;
 
 import com.publisher.managment.system.dto.UserDTO;
 import com.publisher.managment.system.entity.User;
-import org.mapstruct.Mapper;
-
 import java.time.LocalDate;
-@Mapper
+
 public class UserMapper {
     public static UserDTO toDto(User user){
         return UserDTO.builder()
@@ -13,6 +11,7 @@ public class UserMapper {
                 .firstname(user.getFirstname())
                 .lastname(user.getLastname())
                 .username(user.getUsername())
+                .gender(user.getGender())
                 .createdAt(LocalDate.now())
                 .build();
     }
@@ -22,6 +21,8 @@ public class UserMapper {
                 .firstname(userDTO.getFirstname())
                 .lastname(userDTO.getLastname())
                 .username(userDTO.getUsername())
+                .gender(userDTO.getGender())
+                .role(userDTO.getRole())
                 .createdAt(LocalDate.now())
                 .build();
     }
@@ -29,6 +30,7 @@ public class UserMapper {
         user.setFirstname(userDTO.getFirstname());
         user.setLastname(userDTO.getLastname());
         user.setUsername(userDTO.getUsername());
+        user.setRole(userDTO.getRole());
         return user;
     }
 

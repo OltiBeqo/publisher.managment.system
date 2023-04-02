@@ -1,15 +1,9 @@
 package com.publisher.managment.system.repository;
 
 import com.publisher.managment.system.entity.User;
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.stereotype.Repository;
 
-import java.util.List;
-
-public interface UserRepository {
-
-    User createUser(User user);
-    List<User> getUsers();
-    User getUserById(Integer id);
-    User updateUser(Integer id);
-    void deleteUserById(Integer id);
-
+@Repository
+public interface UserRepository extends JpaRepository<User, Integer> {
 }

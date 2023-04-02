@@ -1,14 +1,9 @@
 package com.publisher.managment.system.repository;
 
 import com.publisher.managment.system.entity.Library;
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.stereotype.Repository;
 
-import java.util.List;
-
-public interface LibraryRepository {
-    Library addLibrary(Library library);
-    List<Library> getLibraries();
-    Library getLibraryById(Integer id);
-    Library updateLibrary(Integer id);
-    void deleteLibraryById(Integer id);
-
+@Repository
+public interface LibraryRepository extends JpaRepository<Library, Integer> {
 }

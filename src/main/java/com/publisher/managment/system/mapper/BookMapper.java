@@ -1,10 +1,10 @@
 package com.publisher.managment.system.mapper;
 
 import com.publisher.managment.system.dto.BookDTO;
-import com.publisher.managment.system.dto.CategoryDTO;
 import com.publisher.managment.system.entity.Book;
 
 public class BookMapper {
+
     public static BookDTO toDto(Book book){
         return BookDTO.builder()
                 .id(book.getId())
@@ -16,7 +16,6 @@ public class BookMapper {
     public static Book toEntity(BookDTO bookDTO){
         return Book.builder()
                 .id(bookDTO.getId())
-                .title(bookDTO.getTitle())
                 .title(bookDTO.getTitle())
                 .author(bookDTO.getAuthor())
                 .price(bookDTO.getPrice())

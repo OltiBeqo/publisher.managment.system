@@ -8,6 +8,6 @@ public interface OrderService {
     OrderDTO createOrder(OrderDTO orderDTO);
     List<OrderDTO> getOrders();
     OrderDTO getOrderById(Integer id);
-    OrderDTO updateOrder(Integer id);
+    OrderDTO updateOrder(Integer id, OrderDTO orderDTO);
     void deleteOrderById(Integer id);
 }

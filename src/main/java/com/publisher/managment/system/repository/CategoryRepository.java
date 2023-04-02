@@ -1,12 +1,9 @@
 package com.publisher.managment.system.repository;
 
 import com.publisher.managment.system.entity.Category;
-import java.util.List;
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.stereotype.Repository;
 
-public interface CategoryRepository {
-    Category addCategory(Category category);
-    List<Category> getCategories();
-    Category getCategoryById(Integer id);
-    Category updateCategory(Integer id);
-    void deleteCategoryById(Integer id);
+@Repository
+public interface CategoryRepository extends JpaRepository<Category, Integer> {
 }

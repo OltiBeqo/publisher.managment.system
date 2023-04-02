@@ -8,7 +8,7 @@ public interface UserService {
     UserDTO createUser(UserDTO userDTO);
     List<UserDTO> getUsers();
     UserDTO getUserById(Integer id);
-    UserDTO updateUser(Integer id);
+    UserDTO updateUser(Integer id, UserDTO userDTO);
     void deleteUserById(Integer id);
 
 }
