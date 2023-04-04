@@ -1,6 +1,5 @@
 package com.publisher.managment.system.controller;
 
-import com.publisher.managment.system.dto.UserDTO;
 import com.publisher.managment.system.dto.auth.AuthRequest;
 import com.publisher.managment.system.dto.auth.TokenDTO;
 import com.publisher.managment.system.entity.User;
@@ -49,7 +48,7 @@ public class AuthController {
                     .issuer("ikubinfo.al")
                     .issuedAt(now)
                     .expiresAt(now.plusSeconds(expiry))
-                    .subject(String.format("%s, %s,"user.getId(), user.getUsername()))
+                    .subject(String.format("%s, %s,", user.getId(), user.getUsername()))
                     .claim("roles", scope)
                     .build();
 

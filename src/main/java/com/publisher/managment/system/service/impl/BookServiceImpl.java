@@ -2,6 +2,8 @@ package com.publisher.managment.system.service.impl;
 
 import com.publisher.managment.system.dto.BookDTO;
 import com.publisher.managment.system.entity.Book;
+import com.publisher.managment.system.exception.BadRequestException;
+import com.publisher.managment.system.exception.ExceptionMessage;
 import com.publisher.managment.system.mapper.BookMapper;
 import com.publisher.managment.system.repository.BookRepository;
 import com.publisher.managment.system.service.BookService;
@@ -10,10 +12,11 @@ import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
-public class BookServiceImpl implements BookService {
+public class BookServiceImpl extends ExceptionMessage implements BookService {
     @Autowired
     private BookRepository bookRepository;
     @Override
@@ -29,7 +32,13 @@ public class BookServiceImpl implements BookService {
 
     @Override
     public BookDTO getBookById(Integer id) {
-        return bookRepository.findById(id).map(book -> BookMapper.toDto(book)).orElseThrow(()-> new RuntimeException());
+        return bookRepository.findById(id).map(BookMapper::toDto).orElseThrow(()-> new RuntimeException());
+    }
+
+    @Override
+    public BookDTO getBookByTitle(String title){
+        return bookRepository.findBookByTitle(title).map(book -> BookMapper.toDto(book))
+                .orElseThrow(() -> new BadRequestException(String.format(BOOK_NOT_FOUND, Book.class.getSimpleName(), title)));
     }
 
     @Override
