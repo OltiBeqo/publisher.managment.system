@@ -15,27 +15,22 @@ import java.util.List;
 public class OrderController {
     @Autowired
     private OrderService orderService;
-    @RolesAllowed({"ADMIN", "SALESFORCE"})
     @GetMapping
     public ResponseEntity<List<OrderDTO>> getOrders(){
         return ResponseEntity.ok(orderService.getOrders());
     }
-    @RolesAllowed({"ADMIN", "SALESFORCE"})
     @GetMapping("/{id}")
     public ResponseEntity<OrderDTO> getOrderById(@PathVariable Integer id){
         return ResponseEntity.ok(orderService.getOrderById(id));
     }
-    @RolesAllowed({"ADMIN", "SALESFORCE"})
     @PostMapping
     public ResponseEntity<OrderDTO> createOrder(@RequestBody OrderDTO orderDTO){
         return ResponseEntity.ok(orderService.createOrder(orderDTO));
     }
-    @RolesAllowed({"ADMIN", "SALESFORCE"})
     @PutMapping("/{id}")
     public ResponseEntity<OrderDTO> updateOrder(@PathVariable Integer id, @RequestBody OrderDTO orderDTO){
         return ResponseEntity.ok(orderService.updateOrder(id, orderDTO));
     }
-    @RolesAllowed({"ADMIN", "SALESFORCE"})
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteOrder(@PathVariable Integer id){
         orderService.deleteOrderById(id);

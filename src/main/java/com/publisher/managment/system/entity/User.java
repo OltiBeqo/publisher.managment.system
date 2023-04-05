@@ -2,10 +2,7 @@ package com.publisher.managment.system.entity;
 
 import com.publisher.managment.system.entity.enums.Gender;
 import com.publisher.managment.system.entity.enums.Role;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -25,6 +22,7 @@ import java.util.List;
 public class User implements UserDetails {
     @Id
     @GeneratedValue
+    @Column(unique = true)
     private Integer id;
     private String firstname;
     private String lastname;
@@ -33,7 +31,6 @@ public class User implements UserDetails {
     private String password;
     @Enumerated(EnumType.STRING)
     private Gender gender;
-    private boolean active;
     @CreatedDate
     private LocalDate createdAt;
     @Enumerated(EnumType.STRING)

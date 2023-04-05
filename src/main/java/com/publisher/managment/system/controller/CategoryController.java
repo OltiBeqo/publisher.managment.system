@@ -15,27 +15,22 @@ import java.util.List;
 public class CategoryController {
     @Autowired
     private CategoryService categoryService;
-    @RolesAllowed({"ADMIN", "SALESFORCE"})
     @GetMapping
     public ResponseEntity<List<CategoryDTO>> getCategories(){
         return ResponseEntity.ok(categoryService.getCategories());
     }
-    @RolesAllowed({"ADMIN", "SALESFORCE"})
     @GetMapping("/{id}")
     public ResponseEntity<CategoryDTO> getCategoryById(@PathVariable Integer id){
         return ResponseEntity.ok(categoryService.getCategoryById(id));
     }
-    @RolesAllowed({"ADMIN", "SALESFORCE"})
     @PostMapping
     public ResponseEntity<CategoryDTO> addCategory(@RequestBody CategoryDTO categoryDTO){
         return ResponseEntity.ok(categoryService.addCategory(categoryDTO));
     }
-    @RolesAllowed({"ADMIN", "SALESFORCE"})
     @PutMapping("/{id}")
     public ResponseEntity<CategoryDTO> updateCategory(@PathVariable Integer id, @RequestBody CategoryDTO categoryDTO){
         return ResponseEntity.ok(categoryService.updateCategory(id, categoryDTO));
     }
-    @RolesAllowed({"ADMIN", "SALESFORCE"})
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteCategoryById(@PathVariable Integer id){
         categoryService.deleteCategoryById(id);

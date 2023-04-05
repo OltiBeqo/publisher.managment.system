@@ -21,6 +21,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import java.time.Instant;
+import java.util.Arrays;
 import java.util.stream.Collectors;
 
 @RestController
@@ -36,27 +37,34 @@ public class AuthController {
     public ResponseEntity<TokenDTO> login(@RequestBody @Valid AuthRequest request) {
         try {
             Authentication authentication =
-                    authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(request.getUsername(), request.getPassword()));
+                    authenticationManager.authenticate(
+                            new UsernamePasswordAuthenticationToken(request.getUsername(), request.getPassword()));
+
             User user = (User) authentication.getPrincipal();
 
             Instant now = Instant.now();
-            Long expiry = 36000L;
+            Long expiry = 3600L;
 
-            String scope = authentication.getAuthorities().stream().map(GrantedAuthority::getAuthority).collect(Collectors.joining(""));
+            String scope =
+                    authentication.getAuthorities().stream()
+                            .map(GrantedAuthority::getAuthority)
+                            .collect(Collectors.joining(" "));
 
-            JwtClaimsSet claims = JwtClaimsSet.builder()
-                    .issuer("ikubinfo.al")
-                    .issuedAt(now)
-                    .expiresAt(now.plusSeconds(expiry))
-                    .subject(String.format("%s, %s,", user.getId(), user.getUsername()))
-                    .claim("roles", scope)
-                    .build();
+            JwtClaimsSet claims =
+                    JwtClaimsSet.builder()
+                            .issuer("ikubinfo.al")
+                            .issuedAt(now)
+                            .expiresAt(now.plusSeconds(expiry))
+                            .subject(String.format("%s,%s", user.getId(), user.getUsername()))
+                            .claim("roles", scope)
+                            .audience(Arrays.asList("Audienca"))
+                            .build();
 
             String token = this.jwtEncoder.encode(JwtEncoderParameters.from(claims)).getTokenValue();
 
             return ResponseEntity.ok()
-                    .header(HttpHeaders.AUTHORIZATION, token)
-                    .body(new TokenDTO(token));
+                    .header(HttpHeaders.AUTHORIZATION, "Bearer ".concat(token))
+                    .body(new TokenDTO("Bearer ".concat(token)));
         } catch (BadCredentialsException ex) {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
         }

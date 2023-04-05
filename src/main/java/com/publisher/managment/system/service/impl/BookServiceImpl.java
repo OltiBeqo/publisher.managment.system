@@ -2,7 +2,6 @@ package com.publisher.managment.system.service.impl;
 
 import com.publisher.managment.system.dto.BookDTO;
 import com.publisher.managment.system.entity.Book;
-import com.publisher.managment.system.exception.BadRequestException;
 import com.publisher.managment.system.exception.ExceptionMessage;
 import com.publisher.managment.system.mapper.BookMapper;
 import com.publisher.managment.system.repository.BookRepository;
@@ -12,7 +11,6 @@ import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
 import java.util.List;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -27,7 +25,7 @@ public class BookServiceImpl extends ExceptionMessage implements BookService {
 
     @Override
     public List<BookDTO> getBooks() {
-        return bookRepository.findAll().stream().map(book -> BookMapper.toDto(book)).collect(Collectors.toList());
+        return bookRepository.findAll().stream().map(BookMapper::toDto).collect(Collectors.toList());
     }
 
     @Override
@@ -37,7 +35,7 @@ public class BookServiceImpl extends ExceptionMessage implements BookService {
 
     @Override
     public BookDTO getBookByTitle(String title){
-        return bookRepository.findBookByTitle(title).map(book -> BookMapper.toDto(book))
+        return bookRepository.findBookByTitle(title).map(BookMapper::toDto)
                 .orElseThrow(() -> new BadRequestException(String.format(BOOK_NOT_FOUND, Book.class.getSimpleName(), title)));
     }
 

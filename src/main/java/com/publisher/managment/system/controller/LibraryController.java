@@ -15,27 +15,22 @@ import java.util.List;
 public class LibraryController {
     @Autowired
     private LibraryService libraryService;
-    @RolesAllowed({"ADMIN", "SALESFORCE"})
     @GetMapping
     public ResponseEntity<List<LibraryDTO>> getLibraries(){
         return ResponseEntity.ok(libraryService.getLibraries());
     }
-    @RolesAllowed({"ADMIN", "SALESFORCE"})
     @GetMapping("/{id}")
     public ResponseEntity<LibraryDTO> getLibraryById(@PathVariable Integer id){
         return ResponseEntity.ok(libraryService.getLibraryById(id));
     }
-    @RolesAllowed({"ADMIN", "SALESFORCE"})
     @PostMapping
     public ResponseEntity<LibraryDTO> addLibrary(@RequestBody LibraryDTO libraryDTO){
         return ResponseEntity.ok(libraryService.addLibrary(libraryDTO));
     }
-    @RolesAllowed({"ADMIN", "SALESFORCE"})
     @PutMapping("/{id}")
     public ResponseEntity<LibraryDTO> updateLibrary(@PathVariable Integer id, @RequestBody LibraryDTO libraryDTO){
         return ResponseEntity.ok(libraryService.updateLibrary(id, libraryDTO));
     }
-    @RolesAllowed({"ADMIN", "SALESFORCE"})
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteLibraryById(@PathVariable Integer id){
         libraryService.deleteLibraryById(id);

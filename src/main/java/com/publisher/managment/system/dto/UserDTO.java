@@ -26,7 +26,6 @@ public class UserDTO {
     private String password;
     @NotNull(message = "Define gender")
     private Gender gender;
-    private boolean active;
     private Role role;
     @CreatedDate
     private LocalDate createdAt;

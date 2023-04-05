@@ -15,23 +15,18 @@ import java.util.List;
 public class UserController {
     @Autowired
     private UserService userService;
-
-    @RolesAllowed("ADMIN")
     @GetMapping("/admin")
     public ResponseEntity<List<UserDTO>> getUsers(){
         return ResponseEntity.ok(userService.getUsers());
     }
-    @RolesAllowed("ADMIN")
     @PostMapping("/admin")
     public ResponseEntity<UserDTO> createUser(@RequestBody UserDTO userDTO){
         return ResponseEntity.ok(userService.createUser(userDTO));
     }
-    @RolesAllowed("ADMIN")
     @PutMapping("/admin/{id}")
     public ResponseEntity<UserDTO> updateUser(@PathVariable Integer id, @RequestBody UserDTO userDTO){
         return ResponseEntity.ok(userService.updateUser(id, userDTO));
     }
-    @RolesAllowed("ADMIN")
     @DeleteMapping("admin//{id}")
     public ResponseEntity<Void> deleteUserById(@PathVariable Integer id){
         userService.deleteUserById(id);
