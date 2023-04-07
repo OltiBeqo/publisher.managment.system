@@ -2,6 +2,9 @@ package com.publisher.managment.system.mapper;
 
 import com.publisher.managment.system.dto.UserDTO;
 import com.publisher.managment.system.entity.User;
+import com.publisher.managment.system.entity.enums.Gender;
+import com.publisher.managment.system.entity.enums.Role;
+
 import java.time.LocalDate;
 
 public class UserMapper {
@@ -11,7 +14,7 @@ public class UserMapper {
                 .firstname(user.getFirstname())
                 .lastname(user.getLastname())
                 .username(user.getUsername())
-                .gender(user.getGender())
+                .gender(user.getGender().getValue())
                 .createdAt(LocalDate.now())
                 .build();
     }
@@ -21,8 +24,8 @@ public class UserMapper {
                 .firstname(userDTO.getFirstname())
                 .lastname(userDTO.getLastname())
                 .username(userDTO.getUsername())
-                .gender(userDTO.getGender())
-                .role(userDTO.getRole())
+                .gender(Gender.fromValue(userDTO.getGender()))
+                .role(Role.fromValue(userDTO.getRole()))
                 .createdAt(LocalDate.now())
                 .build();
     }
@@ -30,7 +33,7 @@ public class UserMapper {
         user.setFirstname(userDTO.getFirstname());
         user.setLastname(userDTO.getLastname());
         user.setUsername(userDTO.getUsername());
-        user.setRole(userDTO.getRole());
+        user.setRole(Role.fromValue(userDTO.getRole()));
         return user;
     }
 

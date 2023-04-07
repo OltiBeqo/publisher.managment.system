@@ -8,9 +8,11 @@ import com.publisher.managment.system.mapper.BookMapper;
 import com.publisher.managment.system.repository.BookRepository;
 import com.publisher.managment.system.service.BookService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
+import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -28,7 +30,6 @@ public class BookServiceImpl extends ExceptionMessage implements BookService {
     public List<BookDTO> getBooks() {
         return bookRepository.findAll().stream().map(BookMapper::toDto).collect(Collectors.toList());
     }
-
     @Override
     public BookDTO getBookById(Integer id) {
         return bookRepository.findById(id).map(BookMapper::toDto).orElseThrow(()-> new ResourceNotFoundException(String.format(BOOK_NOT_FOUND, id)));

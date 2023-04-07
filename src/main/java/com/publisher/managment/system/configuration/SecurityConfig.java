@@ -75,7 +75,7 @@ public class SecurityConfig {
     // Set permissions on endpoints
     http.authorizeRequests()
         // Our public endpoints
-        .antMatchers("/auth/**")
+        .mvcMatchers("/auth/**")
         .permitAll()
         // Our private endpoints
         .anyRequest()

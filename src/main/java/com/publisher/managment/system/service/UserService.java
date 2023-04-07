@@ -5,6 +5,7 @@ import com.publisher.managment.system.dto.UserDTO;
 import java.util.List;
 
 public interface UserService {
+    UserDTO registerUser(UserDTO req, String userRole);
     UserDTO createUser(UserDTO userDTO);
     List<UserDTO> getUsers();
     UserDTO getUserById(Integer id);

@@ -37,12 +37,10 @@ public class User implements UserDetails {
     private Role role;
     @OneToMany(mappedBy = "user")
     private List<Order> orders;
-
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         return Arrays.asList(new SimpleGrantedAuthority(role.getValue()));
     }
-
     @Override
     public boolean isAccountNonExpired() {
         return true;
@@ -59,9 +57,10 @@ public class User implements UserDetails {
     public boolean isCredentialsNonExpired() {
         return true;
     }
-
     @Override
     public boolean isEnabled() {
         return true;
     }
 }
+
+

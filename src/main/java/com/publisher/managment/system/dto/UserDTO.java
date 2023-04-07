@@ -2,10 +2,7 @@ package com.publisher.managment.system.dto;
 
 import com.publisher.managment.system.entity.enums.Gender;
 import com.publisher.managment.system.entity.enums.Role;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 import org.springframework.data.annotation.CreatedDate;
 import javax.validation.constraints.NotNull;
 import java.time.LocalDate;
@@ -25,8 +22,10 @@ public class UserDTO {
     @NotNull(message = "Password is required")
     private String password;
     @NotNull(message = "Define gender")
-    private Gender gender;
-    private Role role;
+    private String gender;
+    @NotNull(message = "Select role")
+    private String role;
     @CreatedDate
     private LocalDate createdAt;
+
 }
