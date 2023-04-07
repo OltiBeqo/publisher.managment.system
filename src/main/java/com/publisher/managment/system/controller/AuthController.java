@@ -49,7 +49,7 @@ public class AuthController {
             User user = (User) authentication.getPrincipal();
 
             Instant now = Instant.now();
-            Long expiry = 3600L;
+            Long expiry = 3600*8L;
 
             String scope =
                     authentication.getAuthorities().stream()

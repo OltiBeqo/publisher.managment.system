@@ -8,10 +8,10 @@ public enum Role {
     ADMIN("Admin"), EMPLOYEE("Employee"), COURIER("Courier");
 
     private String value;
-    public static Role fromValue(String role){
+    public static Role fromValue(String value){
         return Arrays.asList(Role.values()).stream()
-                .filter(r -> r.value.equals(role))
-                .findFirst().orElseThrow(()-> new RuntimeException(String.format("Role %s not found", role)));
+                .filter(r -> r.value.equals(value))
+                .findFirst().orElseThrow(()-> new RuntimeException(String.format("Role %s not found", value)));
     }
     public String getValue() {
         return value;

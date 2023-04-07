@@ -1,6 +1,7 @@
 package com.publisher.managment.system.service.impl;
 
 import com.publisher.managment.system.dto.OrderDTO;
+import com.publisher.managment.system.dto.UserDTO;
 import com.publisher.managment.system.entity.Order;
 import com.publisher.managment.system.exception.ExceptionMessage;
 import com.publisher.managment.system.exception.ResourceNotFoundException;
@@ -47,5 +48,35 @@ public class OrderServiceImpl extends ExceptionMessage implements OrderService {
     public void deleteOrderById(Integer id) {
         Order order = orderRepository.findById(id).orElseThrow(()-> new ResourceNotFoundException(String.format(ORDER_NOT_FOUND, id)));
         orderRepository.delete(order);
+    }
+
+    @Override
+    public void setOrderStatus(String status) {
+
+    }
+
+    @Override
+    public List<OrderDTO> getOrdersByClient(Integer libraryId) {
+        return null;
+    }
+
+    @Override
+    public List<OrderDTO> getOrdersByPaymentMethod(String paymentMethod) {
+        return null;
+    }
+
+    @Override
+    public List<OrderDTO> getOrdersAssigned(OrderDTO orderDTO, UserDTO userDTO) {
+        return null;
+    }
+
+    @Override
+    public Integer getTotalOfOrders(Integer orderId) {
+        return null;
+    }
+
+    @Override
+    public Double getTotalRevenue(Double orderAmount) {
+       return null;
     }
 }

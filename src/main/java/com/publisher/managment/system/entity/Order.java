@@ -1,5 +1,6 @@
 package com.publisher.managment.system.entity;
 
+import com.publisher.managment.system.entity.enums.OrderStatus;
 import lombok.*;
 import org.springframework.data.annotation.CreatedDate;
 
@@ -19,8 +20,11 @@ public class Order {
     @GeneratedValue
     private Integer id;
     private Double totalAmount;
+    private String comment;
     @CreatedDate
     private LocalDate createdAt;
+    @Enumerated(EnumType.STRING)
+    private OrderStatus orderStatus;
     @ManyToOne
     @JoinColumn(name = "library_id", referencedColumnName = "id")
     private Library library;
@@ -30,6 +34,9 @@ public class Order {
     @OneToMany
     @JoinColumn(name = "order_id", referencedColumnName = "id")
     private List<Book> books;
+    @ManyToOne
+    @JoinColumn(name = "payment_id",referencedColumnName = "id")
+    private Payment payment;
 
 
 
