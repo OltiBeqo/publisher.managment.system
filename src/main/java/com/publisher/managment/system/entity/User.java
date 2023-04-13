@@ -21,7 +21,7 @@ import java.util.List;
 @Table(name = "users")
 public class User implements UserDetails {
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
     @Column(nullable = false)
     private String firstname;
@@ -31,11 +31,11 @@ public class User implements UserDetails {
     private String username;
     @Column(nullable = false)
     private String password;
-    @Enumerated(EnumType.STRING)
+    @Enumerated(EnumType.STRING) @Column(nullable = false)
     private Gender gender;
     @CreatedDate
     private LocalDate createdAt;
-    @Enumerated(EnumType.STRING)
+    @Enumerated(EnumType.STRING)@Column(name = "role",nullable = false)
     private Role role;
     @OneToMany(mappedBy = "user")
     private List<Order> orders;

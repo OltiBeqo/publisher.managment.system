@@ -7,7 +7,7 @@ import java.util.Arrays;
 @AllArgsConstructor
 public enum OrderStatus {
 
-    IN_PENDING("IN_PROGRESS"), CANCELLED("CANCELLED"), DELIVERED("DELIVERED");
+    IN_PENDING("IN_PENDING"), CANCELLED("CANCELLED"), DELIVERED("DELIVERED");
 
     private String value;
 

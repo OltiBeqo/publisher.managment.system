@@ -17,10 +17,14 @@ import java.util.List;
 public class Library {
 
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
+    @Column(nullable = false, unique = true)
     private String library;
+    @Column(nullable = false, unique = true)
     private String address;
+    @Column(nullable = false, unique = true)
     private String email;
+    @Column(nullable = false, unique = true)
     private String phoneNumber;
 }

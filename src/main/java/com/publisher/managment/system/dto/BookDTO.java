@@ -15,13 +15,14 @@ import javax.validation.constraints.NotNull;
 @Builder
 public class BookDTO {
     private Integer id;
-    @NotNull(message = "Book title is required")
+    @NotEmpty(message = "Book title is required")
     private String title;
-    @NotNull(message = "Author is required")
+    @NotEmpty(message = "Author is required")
     private String author;
-    @NotNull(message = "Price is required")
+    @NotEmpty(message = "Price is required")
     private Double price;
+    @NotNull(message = "Cannot be null")@NotEmpty(message = "Cannot be empty")
     private Integer quantity;
-    @NotNull(message = "Assign a category")
+    @NotEmpty(message = "Assign a category")
     private CategoryDTO category;
 }

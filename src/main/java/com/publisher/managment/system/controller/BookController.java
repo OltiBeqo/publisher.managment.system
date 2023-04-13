@@ -1,6 +1,7 @@
 package com.publisher.managment.system.controller;
 
 import com.publisher.managment.system.dto.BookDTO;
+import com.publisher.managment.system.dto.CategoryDTO;
 import com.publisher.managment.system.service.BookService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -22,9 +23,13 @@ public class BookController {
     public ResponseEntity<BookDTO> getBookById(@PathVariable Integer id){
         return ResponseEntity.ok(bookService.getBookById(id));
     }
+    @GetMapping("/find/{title}")
+    public ResponseEntity<BookDTO> getBookByTitle(@PathVariable String title){
+        return ResponseEntity.ok(bookService.getBookByTitle(title));
+    }
     @PostMapping
-    public ResponseEntity<BookDTO> addBook(@RequestBody BookDTO bookDTO){
-        return ResponseEntity.ok(bookService.addBook(bookDTO));
+    public ResponseEntity<BookDTO> addBook(@RequestBody BookDTO bookDTO, @PathVariable CategoryDTO categoryDTO){
+        return ResponseEntity.ok(bookService.addBook(bookDTO, categoryDTO));
     }
     @PutMapping("/{id}")
     public ResponseEntity<BookDTO> updateBook(@PathVariable Integer id, @RequestBody BookDTO bookDTO){

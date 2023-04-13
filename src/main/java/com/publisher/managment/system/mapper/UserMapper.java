@@ -11,9 +11,9 @@ public class UserMapper {
     public static UserDTO toDto(User user){
         return UserDTO.builder()
                 .id(user.getId())
+                .username(user.getUsername())
                 .firstname(user.getFirstname())
                 .lastname(user.getLastname())
-                .username(user.getUsername())
                 .gender(user.getGender().getValue())
                 .createdAt(LocalDate.now())
                 .build();
@@ -21,9 +21,10 @@ public class UserMapper {
     public static User toEntity(UserDTO userDTO){
         return User.builder()
                 .id(userDTO.getId())
+                .username(userDTO.getUsername())
                 .firstname(userDTO.getFirstname())
                 .lastname(userDTO.getLastname())
-                .username(userDTO.getUsername())
+                .password(userDTO.getPassword())
                 .gender(Gender.fromValue(userDTO.getGender()))
                 .role(Role.fromValue(userDTO.getRole()))
                 .createdAt(LocalDate.now())

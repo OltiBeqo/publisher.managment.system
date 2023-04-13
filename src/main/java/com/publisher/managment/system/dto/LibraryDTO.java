@@ -6,6 +6,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.validation.constraints.Email;
+import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 import java.util.List;
 
@@ -16,14 +17,14 @@ import java.util.List;
 public class LibraryDTO {
 
     private Integer id;
-    @NotNull(message = "Library name is required")
+    @NotEmpty(message = "Library name is required")
     private String library;
-    @NotNull(message = "address is required")
+    @NotEmpty(message = "address is required")
     private String address;
     @Email(message = "Email is not valid")
-    @NotNull(message = "Email is required")
+    @NotEmpty(message = "Email is required")
     private String email;
-    @NotNull(message = "Phone number is required")
+    @NotEmpty(message = "Phone number is required")
     private String phoneNumber;
     private List<OrderDTO> orders;
 }

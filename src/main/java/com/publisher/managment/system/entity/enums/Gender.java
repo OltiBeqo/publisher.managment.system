@@ -6,7 +6,7 @@ import java.util.Arrays;
 
 @AllArgsConstructor
 public enum Gender {
-    MALE("Male"), FEMALE("Female");
+    MALE("MALE"), FEMALE("FEMALE");
 
     private String value;
     public static Gender fromValue(String value){

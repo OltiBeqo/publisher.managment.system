@@ -5,7 +5,7 @@ import lombok.AllArgsConstructor;
 import java.util.Arrays;
 @AllArgsConstructor
 public enum Role {
-    ADMIN("Admin"), EMPLOYEE("Employee"), COURIER("Courier");
+    ADMIN("ADMIN"), EMPLOYEE("EMPLOYEE"), COURIER("COURIER");
 
     private String value;
     public static Role fromValue(String value){

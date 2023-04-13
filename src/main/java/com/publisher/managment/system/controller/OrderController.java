@@ -23,9 +23,9 @@ public class OrderController {
     public ResponseEntity<OrderDTO> getOrderById(@PathVariable Integer id){
         return ResponseEntity.ok(orderService.getOrderById(id));
     }
-    @PostMapping
-    public ResponseEntity<OrderDTO> createOrder(@RequestBody OrderDTO orderDTO){
-        return ResponseEntity.ok(orderService.createOrder(orderDTO));
+    @PostMapping("/newOrder/{libraryId}")
+    public ResponseEntity<OrderDTO> createOrder(@RequestBody OrderDTO orderDTO, @PathVariable Integer libraryId){
+        return ResponseEntity.ok(orderService.createOrder(orderDTO, libraryId));
     }
     @PutMapping("/{id}")
     public ResponseEntity<OrderDTO> updateOrder(@PathVariable Integer id, @RequestBody OrderDTO orderDTO){

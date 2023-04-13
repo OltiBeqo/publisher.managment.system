@@ -1,5 +1,6 @@
 package com.publisher.managment.system.exception;
 
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -15,6 +16,7 @@ import java.util.Map;
 
 @RestControllerAdvice
 public class GlobalHandler extends ResponseEntityExceptionHandler {
+
     @ExceptionHandler
     public ResponseEntity<Object> handleResourceNotFoundException(ResourceNotFoundException ex, HttpServletRequest request) {
         ExceptionResponse resp = new ExceptionResponse(HttpStatus.BAD_REQUEST,ex.getMessage());

@@ -27,17 +27,13 @@ public class UserServiceImpl extends ExceptionMessage implements UserService, Us
     private UserRepository userRepository;
     @Autowired
     private PasswordEncoder passwordEncoder;
-    @Transactional
     @Override
-    public UserDTO registerUser(UserDTO userDTO, String userRole) {
-        User user = UserMapper.toEntity(userDTO);
-        user.setRole(userRole!=null? Role.fromValue(userRole):Role.ADMIN);
-        user.setPassword(passwordEncoder.encode(userDTO.getPassword()));
-        user = userRepository.findByUsername(userDTO.getUsername()).orElse(null);
-        if (user != null) {
-            throw new ResourceNotFoundException(String.format(USERNAME_EXISTS, User.class.getSimpleName(), "username", userDTO.getUsername()));
-        }
-        return UserMapper.toDto(userRepository.save(UserMapper.toEntity(userDTO)));
+    public UserDTO registerUser(UserDTO userDTO) {
+        User u = UserMapper.toEntity(userDTO);
+        u.setRole(userDTO.getRole()!=null?Role.fromValue(userDTO.getRole()):Role.EMPLOYEE);
+        u.setPassword(passwordEncoder.encode(userDTO.getPassword()));
+        u = userRepository.save(u);
+        return UserMapper.toDto(u);
     }
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
@@ -70,4 +66,8 @@ public class UserServiceImpl extends ExceptionMessage implements UserService, Us
         userRepository.delete(user);
     }
 
+    @Override
+    public List<UserDTO> getUsersByRole(Role role) {
+        return userRepository.findAllByRole(role).stream().map(UserMapper::toDto).collect(Collectors.toList());
+    }
 }

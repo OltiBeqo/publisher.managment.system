@@ -1,11 +1,14 @@
 package com.publisher.managment.system.service.impl;
 
 import com.publisher.managment.system.dto.BookDTO;
+import com.publisher.managment.system.dto.CategoryDTO;
 import com.publisher.managment.system.entity.Book;
+import com.publisher.managment.system.entity.Category;
 import com.publisher.managment.system.exception.ExceptionMessage;
 import com.publisher.managment.system.exception.ResourceNotFoundException;
 import com.publisher.managment.system.mapper.BookMapper;
 import com.publisher.managment.system.repository.BookRepository;
+import com.publisher.managment.system.repository.CategoryRepository;
 import com.publisher.managment.system.service.BookService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -18,10 +21,13 @@ import java.util.stream.Collectors;
 public class BookServiceImpl extends ExceptionMessage implements BookService {
     @Autowired
     private BookRepository bookRepository;
+    @Autowired
+    private CategoryRepository categoryRepository;
     @Override
     @Transactional
-    public BookDTO addBook(BookDTO bookDTO) {
-        return BookMapper.toDto(bookRepository.save(BookMapper.toEntity(bookDTO)));
+    public BookDTO addBook(BookDTO bookDTO, CategoryDTO categoryDTO) {
+        Category category = categoryRepository.findById(categoryDTO.getId()).orElseThrow(()-> new ResourceNotFoundException(String.format(CATEGORY_NOT_FOUND, categoryDTO)));
+        return BookMapper.toDto(bookRepository.save(BookMapper.toEntity(bookDTO, categoryDTO)));
     }
 
     @Override

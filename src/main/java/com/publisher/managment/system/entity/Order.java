@@ -17,8 +17,9 @@ import java.util.List;
 public class Order {
 
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
+    @Column(nullable = false)
     private Double totalAmount;
     private String comment;
     @CreatedDate
@@ -31,12 +32,15 @@ public class Order {
     @ManyToOne
     @JoinColumn(name = "user_id", referencedColumnName = "id")
     private User user;
-    @OneToMany
+    @ManyToMany
     @JoinColumn(name = "order_id", referencedColumnName = "id")
     private List<Book> books;
     @ManyToOne
     @JoinColumn(name = "payment_id",referencedColumnName = "id")
     private Payment payment;
+    @OneToOne
+    @JoinColumn(name = "courier_id", referencedColumnName = "id")
+    private User courier;
 
 
 

@@ -15,6 +15,6 @@ import javax.validation.constraints.NotNull;
 @Builder
 public class CategoryDTO {
     private Integer id;
-    @NotNull(message = "Category name is required")
+    @NotEmpty(message = "Category name is required")
     private String name;
 }
