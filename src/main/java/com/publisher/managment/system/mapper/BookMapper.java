@@ -17,13 +17,13 @@ public class BookMapper {
                 .category(book.getCategory()!=null?CategoryMapper.toDto(book.getCategory()):null)
                 .build();
     }
-    public static Book toEntity(BookDTO bookDTO, CategoryDTO categoryDTO){
+    public static Book toEntity(BookDTO bookDTO){
         return Book.builder()
                 .id(bookDTO.getId())
                 .title(bookDTO.getTitle())
                 .author(bookDTO.getAuthor())
                 .price(bookDTO.getPrice())
-                .category(CategoryMapper.toEntity(categoryDTO))
+                .category(Category.builder().id(bookDTO.getCategory().getId()).build())
                 .quantity(bookDTO.getQuantity())
                 .build();
     }
@@ -31,7 +31,7 @@ public class BookMapper {
         book.setTitle(bookDTO.getTitle());
         book.setAuthor(bookDTO.getAuthor());
         book.setPrice(bookDTO.getPrice());
-        book.setQuantity(bookDTO.getQuantity());
+        book.setQuantity(book.getQuantity() + bookDTO.getQuantity());
         return book;
     }
 }

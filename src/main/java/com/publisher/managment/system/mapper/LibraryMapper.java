@@ -2,9 +2,10 @@ package com.publisher.managment.system.mapper;
 
 import com.publisher.managment.system.dto.LibraryDTO;
 import com.publisher.managment.system.entity.Library;
+import org.springframework.stereotype.Component;
 
 public class LibraryMapper {
-    public static LibraryDTO toDto(Library library){
+    public static LibraryDTO toDto(Library library) {
         return LibraryDTO.builder()
                 .id(library.getId())
                 .library(library.getLibrary())
@@ -13,7 +14,8 @@ public class LibraryMapper {
                 .phoneNumber(library.getPhoneNumber())
                 .build();
     }
-    public static Library toEntity(LibraryDTO libraryDTO){
+
+    public static Library toEntity(LibraryDTO libraryDTO) {
         return Library.builder()
                 .id(libraryDTO.getId())
                 .library(libraryDTO.getLibrary())
@@ -22,7 +24,8 @@ public class LibraryMapper {
                 .phoneNumber(libraryDTO.getPhoneNumber())
                 .build();
     }
-    public static Library toEntityForUpdate(Library library, LibraryDTO libraryDTO){
+
+    public static Library toEntityForUpdate(Library library, LibraryDTO libraryDTO) {
         library.setLibrary(libraryDTO.getLibrary());
         library.setAddress(libraryDTO.getAddress());
         library.setEmail(libraryDTO.getEmail());

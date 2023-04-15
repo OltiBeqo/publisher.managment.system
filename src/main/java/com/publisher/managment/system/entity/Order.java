@@ -6,6 +6,7 @@ import org.springframework.data.annotation.CreatedDate;
 
 import javax.persistence.*;
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 
 @Data
@@ -21,6 +22,7 @@ public class Order {
     private Integer id;
     @Column(nullable = false)
     private Double totalAmount;
+    private double discount;
     private String comment;
     @CreatedDate
     private LocalDate createdAt;
@@ -34,14 +36,12 @@ public class Order {
     private User user;
     @ManyToMany
     @JoinColumn(name = "order_id", referencedColumnName = "id")
-    private List<Book> books;
+    private List<Book> book = new ArrayList<>();
     @ManyToOne
     @JoinColumn(name = "payment_id",referencedColumnName = "id")
     private Payment payment;
     @OneToOne
     @JoinColumn(name = "courier_id", referencedColumnName = "id")
     private User courier;
-
-
 
 }

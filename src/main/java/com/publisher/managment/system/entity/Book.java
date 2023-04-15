@@ -31,6 +31,6 @@ public class Book {
     @ManyToOne
     @JoinColumn(name = "category_id", referencedColumnName = "id")
     private Category category;
-    @ManyToMany(mappedBy = "books")
-    private List<Order> orders;
+    @ManyToMany(mappedBy = "book")
+    private List<Order> order;
 }

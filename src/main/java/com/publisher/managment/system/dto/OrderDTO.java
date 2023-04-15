@@ -17,6 +17,7 @@ import java.util.List;
 public class OrderDTO {
     private Integer id;
     private String comment;
+    private double discount;
     private User user;
     private Double totalAmount;
     private String orderStatus;

@@ -8,6 +8,7 @@ import com.publisher.managment.system.exception.ResourceNotFoundException;
 import com.publisher.managment.system.mapper.LibraryMapper;
 import com.publisher.managment.system.repository.LibraryRepository;
 import com.publisher.managment.system.service.LibraryService;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -17,8 +18,7 @@ import java.util.stream.Collectors;
 
 @Service
 public class LibraryServiceImpl extends ExceptionMessage implements LibraryService {
-    @Autowired
-    private LibraryRepository libraryRepository;
+    @Autowired private LibraryRepository libraryRepository;
     @Override
     @Transactional
     public LibraryDTO addLibrary(LibraryDTO libraryDTO) {

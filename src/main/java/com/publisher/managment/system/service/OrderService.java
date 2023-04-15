@@ -1,9 +1,9 @@
 package com.publisher.managment.system.service;
 
-import com.publisher.managment.system.dto.BookDTO;
 import com.publisher.managment.system.dto.OrderDTO;
 import com.publisher.managment.system.dto.UserDTO;
 import com.publisher.managment.system.entity.Book;
+import com.publisher.managment.system.entity.enums.PaymentMethod;
 
 import java.util.List;
 
@@ -22,13 +22,13 @@ public interface OrderService {
 
     List<OrderDTO> getOrdersByClient(Integer libraryId);
 
-    List<OrderDTO> getOrdersByPaymentMethod(String paymentMethod);
+//    List<OrderDTO> getOrdersByPaymentMethod(PaymentMethod paymentMethod);
 
     List<OrderDTO> getOrdersAssigned(OrderDTO orderDTO, UserDTO userDTO);
 
-    Integer getTotalOfOrders(Integer orderId);
+    long getTotalOfOrders(Integer orderId);
 
-    Double getTotalRevenue(Double orderAmount);
+    Double getTotalRevenue();
 
-    Book setDiscount(Double percentage, BookDTO bookDTO);
+    Book setDiscount(Double percentage, Integer bookId);
 }

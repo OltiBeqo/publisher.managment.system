@@ -9,4 +9,5 @@ public class ExceptionMessage {
     protected static final String ORDER_NOT_FOUND = "Order with id %s not found";
     protected static final String LIBRARY_NOT_FOUND = "Library with id %s not found";
     protected static final String CATEGORY_NOT_FOUND = "Category with id %s not found";
+    protected static final String QUANTITY_NOT_AVAILABLE = "Quantity %s not available";
 }

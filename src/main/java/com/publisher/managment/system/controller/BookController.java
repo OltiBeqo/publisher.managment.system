@@ -27,9 +27,9 @@ public class BookController {
     public ResponseEntity<BookDTO> getBookByTitle(@PathVariable String title){
         return ResponseEntity.ok(bookService.getBookByTitle(title));
     }
-    @PostMapping
-    public ResponseEntity<BookDTO> addBook(@RequestBody BookDTO bookDTO, @PathVariable CategoryDTO categoryDTO){
-        return ResponseEntity.ok(bookService.addBook(bookDTO, categoryDTO));
+    @PostMapping("/newBook/")
+    public ResponseEntity<BookDTO> addBook(@RequestBody BookDTO bookDTO){
+        return ResponseEntity.ok(bookService.addBook(bookDTO));
     }
     @PutMapping("/{id}")
     public ResponseEntity<BookDTO> updateBook(@PathVariable Integer id, @RequestBody BookDTO bookDTO){

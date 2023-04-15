@@ -52,7 +52,6 @@ public class AuthController {
             User user = (User) authentication.getPrincipal();
 
             Instant now = Instant.now();
-            Long expiry = 3600L;
 
             String scope =
                     authentication.getAuthorities().stream()
@@ -63,7 +62,6 @@ public class AuthController {
                     JwtClaimsSet.builder()
                             .issuer("ikubinfo.al")
                             .issuedAt(now)
-                            .expiresAt(now.plusSeconds(expiry))
                             .subject(String.format("%s,%s", user.getId(), user.getUsername()))
                             .claim("roles", scope)
                             .build();
