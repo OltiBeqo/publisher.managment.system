@@ -8,6 +8,7 @@ import com.publisher.managment.system.entity.Book;
 import com.publisher.managment.system.entity.Order;
 import com.publisher.managment.system.entity.User;
 import com.publisher.managment.system.entity.enums.OrderStatus;
+import com.publisher.managment.system.entity.enums.PaymentMethod;
 import com.publisher.managment.system.entity.enums.Role;
 import com.publisher.managment.system.exception.BadRequestException;
 import com.publisher.managment.system.exception.ExceptionMessage;
@@ -15,11 +16,13 @@ import com.publisher.managment.system.exception.ResourceNotFoundException;
 import com.publisher.managment.system.mapper.BookMapper;
 import com.publisher.managment.system.mapper.LibraryMapper;
 import com.publisher.managment.system.mapper.OrderMapper;
+import com.publisher.managment.system.mapper.PaymentMapper;
 import com.publisher.managment.system.repository.BookRepository;
 import com.publisher.managment.system.repository.LibraryRepository;
 import com.publisher.managment.system.repository.OrderRepository;
 import com.publisher.managment.system.repository.UserRepository;
 import com.publisher.managment.system.service.OrderService;
+import com.publisher.managment.system.service.PaymentService;
 import com.publisher.managment.system.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -35,6 +38,7 @@ public class OrderServiceImpl extends ExceptionMessage implements OrderService {
     @Autowired private UserRepository userRepository;
     @Autowired private UserService userService;
     @Autowired private BookRepository bookRepository;
+    @Autowired private PaymentService paymentService;
     @Override
     @Transactional
     public OrderDTO createOrder(OrderDTO orderDTO, Integer libraryId) {
@@ -48,7 +52,7 @@ public class OrderServiceImpl extends ExceptionMessage implements OrderService {
     }
 
     private List<Book> retrieveBooks(List<BookDTO> books) {
-        books.forEach(bookDTO -> checkBooks(bookDTO));
+        books.forEach(this::checkBooks);
         return books.stream().map(BookMapper::toEntity).collect(Collectors.toList());
     }
 
@@ -125,7 +129,7 @@ public class OrderServiceImpl extends ExceptionMessage implements OrderService {
     @Override
     public Double getTotalRevenue() {
         return orderRepository.findAll().stream()
-                .map(order -> order.getTotalAmount())
+                .map(Order::getTotalAmount)
                 .mapToDouble(Double::doubleValue).sum();
     }
 
