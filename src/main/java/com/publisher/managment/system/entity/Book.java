@@ -4,7 +4,6 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.aspectj.weaver.ast.Or;
 
 import javax.persistence.*;
 import java.util.List;
@@ -31,6 +30,4 @@ public class Book {
     @ManyToOne
     @JoinColumn(name = "category_id", referencedColumnName = "id")
     private Category category;
-    @ManyToMany(mappedBy = "book")
-    private List<Order> order;
 }

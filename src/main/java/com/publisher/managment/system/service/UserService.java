@@ -14,4 +14,5 @@ public interface UserService {
     UserDTO updateUser(Integer id, UserDTO userDTO);
     void deleteUserById(Integer id);
     List<UserDTO> getUsersByRole(Role role);
+    User getRandomCourier();
 }

@@ -10,6 +10,8 @@ import javax.persistence.Column;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
+
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
@@ -30,6 +32,6 @@ public class UserDTO {
     @NotEmpty(message = "Select role")
     private String role;
     @CreatedDate
-    private LocalDate createdAt;
+    private LocalDateTime createdAt;
 
 }

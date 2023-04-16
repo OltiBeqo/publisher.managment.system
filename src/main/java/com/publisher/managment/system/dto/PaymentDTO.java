@@ -6,6 +6,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 @Data
 @NoArgsConstructor
@@ -16,5 +17,6 @@ public class PaymentDTO {
     private String paymentMethod;
     private double amount;
     private String transactionId;
-    private LocalDate createdAt;
+    private LocalDateTime createdAt;
+    private Integer orderId;
 }

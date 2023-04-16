@@ -8,7 +8,7 @@ import com.publisher.managment.system.entity.enums.PaymentMethod;
 import java.util.List;
 
 public interface OrderService {
-    OrderDTO createOrder(OrderDTO orderDTO, Integer libraryId);
+    OrderDTO createOrder(OrderDTO orderDTO);
 
     List<OrderDTO> getOrders();
 
@@ -22,13 +22,10 @@ public interface OrderService {
 
     List<OrderDTO> getOrdersByClient(Integer libraryId);
 
-//    List<OrderDTO> getOrdersByPaymentMethod(PaymentMethod paymentMethod);
+    List<OrderDTO> getOrdersAssigned();
+    List<OrderDTO> getOrdersByCourier(Integer courierId);
 
-    List<OrderDTO> getOrdersAssigned(OrderDTO orderDTO, UserDTO userDTO);
-
-    long getTotalOfOrders(Integer orderId);
+    long getTotalOfOrders();
 
     Double getTotalRevenue();
-
-    Book setDiscount(Double percentage, Integer bookId);
 }

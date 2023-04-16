@@ -6,6 +6,7 @@ import com.publisher.managment.system.entity.enums.PaymentMethod;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.UUID;
 
 public class PaymentMapper {
     public static PaymentDTO toDto(Payment payment){
@@ -14,7 +15,7 @@ public class PaymentMapper {
                 .paymentMethod(payment.getPaymentMethod().getValue())
                 .amount(payment.getAmount())
                 .transactionId(payment.getTransactionId())
-                .createdAt(LocalDate.now())
+                .createdAt(LocalDateTime.now())
                 .build();
     }
     public static Payment toEntity(PaymentDTO paymentDTO){

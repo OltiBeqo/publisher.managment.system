@@ -33,7 +33,6 @@ public class BookServiceImpl extends ExceptionMessage implements BookService {
             return BookMapper.toDto(bookRepository.save(BookMapper.toEntity(bookDTO)));
         }
     }
-
     @Override
     public List<BookDTO> getBooks() {
         return bookRepository.findAll().stream().map(BookMapper::toDto).collect(Collectors.toList());
@@ -42,20 +41,17 @@ public class BookServiceImpl extends ExceptionMessage implements BookService {
     public BookDTO getBookById(Integer id) {
         return bookRepository.findById(id).map(BookMapper::toDto).orElseThrow(()-> new ResourceNotFoundException(String.format(BOOK_NOT_FOUND, id)));
     }
-
     @Override
     public BookDTO getBookByTitle(String title){
         return bookRepository.findBookByTitle(title).map(BookMapper::toDto)
                 .orElseThrow(() -> new ResourceNotFoundException(String.format(BOOK_TITLE_FOUND, title)));
     }
-
     @Override
     @Transactional
     public BookDTO updateBook(Integer id, BookDTO bookDTO) {
         Book book = bookRepository.findById(id).orElseThrow(()-> new ResourceNotFoundException(String.format(BOOK_NOT_FOUND, id)));
         return BookMapper.toDto(bookRepository.save(BookMapper.toEntityForUpdate(book, bookDTO)));
     }
-
     @Override
     @Transactional
     public void deleteBookById(Integer id) {

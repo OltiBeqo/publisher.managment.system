@@ -9,6 +9,8 @@ import org.springframework.data.annotation.CreatedDate;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
+import java.util.UUID;
+
 @Entity
 @Table(name = "payments")
 @AllArgsConstructor
@@ -23,7 +25,10 @@ public class Payment {
     @Enumerated(EnumType.STRING)
     private PaymentMethod paymentMethod;
     private Double amount;
-    private String transactionId;
+    private String transactionId = UUID.randomUUID().toString();
+    @OneToOne
+    @JoinColumn(name = "order_id", referencedColumnName = "id")
+    private Order order;
     @CreatedDate
     private LocalDateTime createdAt;
     @PrePersist

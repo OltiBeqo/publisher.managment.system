@@ -24,24 +24,20 @@ public class LibraryServiceImpl extends ExceptionMessage implements LibraryServi
     public LibraryDTO addLibrary(LibraryDTO libraryDTO) {
         return LibraryMapper.toDto(libraryRepository.save(LibraryMapper.toEntity(libraryDTO)));
     }
-
     @Override
     public List<LibraryDTO> getLibraries() {
         return libraryRepository.findAll().stream().map(LibraryMapper::toDto).collect(Collectors.toList());
     }
-
     @Override
     public LibraryDTO getLibraryById(Integer id) {
         return libraryRepository.findById(id).map(LibraryMapper::toDto).orElseThrow(()-> new ResourceNotFoundException(String.format(LIBRARY_NOT_FOUND, id)));
     }
-
     @Override
     @Transactional
     public LibraryDTO updateLibrary(Integer id, LibraryDTO libraryDTO) {
         Library library = libraryRepository.findById(id).orElseThrow(()-> new ResourceNotFoundException(String.format(LIBRARY_NOT_FOUND, id)));
         return LibraryMapper.toDto(libraryRepository.save(LibraryMapper.toEntityForUpdate(library, libraryDTO)));
     }
-
     @Override
     @Transactional
     public void deleteLibraryById(Integer id) {

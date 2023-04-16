@@ -9,9 +9,7 @@ import java.util.List;
 
 @Repository
 public interface OrderRepository extends JpaRepository<Order, Integer> {
-//    List<Order> findAllByPaymentMethod(PaymentMethod paymentMethod);
     List<Order> findAllByLibraryId(Integer libraryId);
-
     List<Order> findByCourier_Id(Integer id);
 
 }

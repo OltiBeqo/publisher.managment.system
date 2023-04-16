@@ -10,6 +10,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 
 import javax.persistence.*;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
@@ -35,7 +36,7 @@ public class User implements UserDetails {
     @Enumerated(EnumType.STRING) @Column(nullable = false)
     private Gender gender;
     @CreatedDate
-    private LocalDate createdAt;
+    private LocalDateTime createdAt;
     @Enumerated(EnumType.STRING)@Column(name = "role",nullable = false)
     private Role role;
     @OneToMany(mappedBy = "user")

@@ -21,10 +21,9 @@ public class LibraryDTO {
     private String library;
     @NotEmpty(message = "address is required")
     private String address;
-    @Email(message = "Email is not valid")
     @NotEmpty(message = "Email is required")
+    @Email(message = "Email is not valid")
     private String email;
     @NotEmpty(message = "Phone number is required")
     private String phoneNumber;
-    private List<OrderDTO> orders;
 }

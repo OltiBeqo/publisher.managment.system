@@ -6,6 +6,7 @@ import com.publisher.managment.system.entity.enums.Gender;
 import com.publisher.managment.system.entity.enums.Role;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 public class UserMapper {
     public static UserDTO toDto(User user){
@@ -15,7 +16,7 @@ public class UserMapper {
                 .firstname(user.getFirstname())
                 .lastname(user.getLastname())
                 .gender(user.getGender().getValue())
-                .createdAt(LocalDate.now())
+                .createdAt(LocalDateTime.now())
                 .build();
     }
     public static User toEntity(UserDTO userDTO){
@@ -27,7 +28,7 @@ public class UserMapper {
                 .password(userDTO.getPassword())
                 .gender(Gender.fromValue(userDTO.getGender()))
                 .role(Role.fromValue(userDTO.getRole()))
-                .createdAt(LocalDate.now())
+                .createdAt(LocalDateTime.now())
                 .build();
     }
     public static User toEntityForUpdate(User user, UserDTO userDTO){
