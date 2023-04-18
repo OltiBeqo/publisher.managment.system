@@ -6,10 +6,6 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.oauth2.jwt.Jwt;
 
 public class SecurityUtil {
-    public static Jwt getJwt() {
-        return (Jwt) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-    }
-
     public static Integer getUserIdFromContext() {
         String userID = SecurityContextHolder.getContext().getAuthentication().getName().split(",")[0];
         return Integer.parseInt(userID);

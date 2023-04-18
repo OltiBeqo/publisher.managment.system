@@ -5,6 +5,8 @@ import com.publisher.managment.system.dto.CategoryDTO;
 import com.publisher.managment.system.entity.Book;
 import com.publisher.managment.system.entity.Category;
 
+import java.time.LocalDateTime;
+
 public class BookMapper {
 
     public static BookDTO toDto(Book book){
@@ -15,6 +17,7 @@ public class BookMapper {
                 .price(book.getPrice())
                 .quantity(book.getQuantity())
                 .category(book.getCategory()!=null?CategoryMapper.toDto(book.getCategory()):null)
+                .createdAt(LocalDateTime.now())
                 .build();
     }
     public static Book toEntity(BookDTO bookDTO){
@@ -25,6 +28,7 @@ public class BookMapper {
                 .price(bookDTO.getPrice())
                 .category(Category.builder().id(bookDTO.getCategory().getId()).build())
                 .quantity(bookDTO.getQuantity())
+                .createdAt(LocalDateTime.now())
                 .build();
     }
     public static Book toEntityForUpdate(Book book, BookDTO bookDTO){
@@ -32,6 +36,7 @@ public class BookMapper {
         book.setAuthor(bookDTO.getAuthor());
         book.setPrice(bookDTO.getPrice());
         book.setQuantity(book.getQuantity() + bookDTO.getQuantity());
+        book.setModifiedAt(LocalDateTime.now());
         return book;
     }
 }

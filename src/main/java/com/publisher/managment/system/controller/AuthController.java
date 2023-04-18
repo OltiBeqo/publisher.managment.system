@@ -6,6 +6,7 @@ import com.publisher.managment.system.dto.auth.TokenDTO;
 import com.publisher.managment.system.entity.User;
 import com.publisher.managment.system.service.UserService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -21,6 +22,8 @@ import org.springframework.security.oauth2.jwt.JwtEncoderParameters;
 import org.springframework.security.web.authentication.logout.SecurityContextLogoutHandler;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
+
+import javax.annotation.security.RolesAllowed;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
@@ -29,12 +32,14 @@ import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping(path = "/auth")
-@RequiredArgsConstructor @Validated
+@Validated
 public class AuthController {
-
-    private final AuthenticationManager authenticationManager;
-    private final JwtEncoder jwtEncoder;
-    private final UserService userService;
+    @Autowired
+    private AuthenticationManager authenticationManager;
+    @Autowired
+    private JwtEncoder jwtEncoder;
+    @Autowired
+    private UserService userService;
 
     @PostMapping("/login")
     public ResponseEntity<TokenDTO> login(@RequestBody @Valid AuthRequest request) {
@@ -70,6 +75,7 @@ public class AuthController {
         }
     }
     @GetMapping("/logout")
+    //TODO CHECK
     public Void logout (HttpServletRequest request, HttpServletResponse response) {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         if (auth != null){
@@ -77,7 +83,7 @@ public class AuthController {
         }
         return null;
     }
-    @PostMapping("/register")
+    @PostMapping("/register") @RolesAllowed({"ADMIN"})
     public ResponseEntity<UserDTO> registerUser(@RequestBody @Valid UserDTO u){
         return ResponseEntity.ok(userService.registerUser(u));
     }

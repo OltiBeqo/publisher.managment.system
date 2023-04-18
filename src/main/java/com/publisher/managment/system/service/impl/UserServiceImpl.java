@@ -3,6 +3,7 @@ package com.publisher.managment.system.service.impl;
 import com.publisher.managment.system.dto.UserDTO;
 import com.publisher.managment.system.entity.User;
 import com.publisher.managment.system.entity.enums.Role;
+import com.publisher.managment.system.exception.BadRequestException;
 import com.publisher.managment.system.exception.ExceptionMessage;
 import com.publisher.managment.system.exception.ResourceNotFoundException;
 import com.publisher.managment.system.mapper.UserMapper;
@@ -31,12 +32,13 @@ public class UserServiceImpl extends ExceptionMessage implements UserService, Us
     @Override
     @Transactional
     public UserDTO registerUser(UserDTO userDTO) {
-        checkIfExist(userDTO.getUsername());
-        User u = UserMapper.toEntity(userDTO);
-        u.setRole(userDTO.getRole() != null ? Role.fromValue(userDTO.getRole()) : Role.EMPLOYEE);
-        u.setPassword(passwordEncoder.encode(userDTO.getPassword()));
-        u = userRepository.save(u);
-        return UserMapper.toDto(u);
+        //TODO RETURNS ALWAYS EXISTING USER
+//        checkIfExist(userDTO.getUsername());
+        User user = UserMapper.toEntity(userDTO);
+        user.setRole(userDTO.getRole() != null ? Role.fromValue(userDTO.getRole()) : Role.EMPLOYEE);
+        user.setPassword(passwordEncoder.encode(userDTO.getPassword()));
+        user = userRepository.save(user);
+        return UserMapper.toDto(user);
     }
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
@@ -52,6 +54,12 @@ public class UserServiceImpl extends ExceptionMessage implements UserService, Us
         return userRepository.findById(id).map(UserMapper::toDto)
                 .orElseThrow(() -> new ResourceNotFoundException(String.format(USER_NOT_FOUND, User.class.getSimpleName(), id)));
     }
+
+    @Override
+    public UserDTO getUserByUsername(String username) {
+        return userRepository.findByUsername(username).map(UserMapper::toDto).orElseThrow(()-> new ResourceNotFoundException("User not found"));
+    }
+
     @Override
     @Transactional
     public UserDTO updateUser(Integer id, UserDTO userDTO) {
@@ -62,6 +70,7 @@ public class UserServiceImpl extends ExceptionMessage implements UserService, Us
     @Override
     @Transactional
     public void deleteUserById(Integer id) {
+        //TODO SOFT DELETE
         User user = userRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException(String.format(USER_NOT_FOUND, User.class.getSimpleName(), id)));
         userRepository.delete(user);
     }
@@ -76,6 +85,6 @@ public class UserServiceImpl extends ExceptionMessage implements UserService, Us
                 .orElseThrow(() -> new ResourceNotFoundException("Courier not available"));
     }
     private void checkIfExist(String username) {
-        userRepository.findByUsername(username).orElseThrow(() -> new ResourceNotFoundException(String.format(USERNAME_EXISTS, username)));
+        userRepository.findByUsername(username).orElseThrow(()-> new BadRequestException(null));
     }
 }

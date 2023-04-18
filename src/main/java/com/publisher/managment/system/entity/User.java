@@ -37,6 +37,7 @@ public class User implements UserDetails {
     private Gender gender;
     @CreatedDate
     private LocalDateTime createdAt;
+    private LocalDateTime modifiedAt;
     @Enumerated(EnumType.STRING)@Column(name = "role",nullable = false)
     private Role role;
     @OneToMany(mappedBy = "user")

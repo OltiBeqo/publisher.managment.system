@@ -6,45 +6,47 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import javax.annotation.security.RolesAllowed;
 import java.util.List;
 
 @RestController
 @RequestMapping("orders")
 public class OrderController {
     @Autowired private OrderService orderService;
-    @GetMapping
+    @GetMapping @RolesAllowed({"ADMIN", "EMPLOYEE"})
     public ResponseEntity<List<OrderDTO>> getOrders(){
         return ResponseEntity.ok(orderService.getOrders());
     }
-    @GetMapping("library/{libraryId}")
+    @GetMapping("library/{libraryId}") @RolesAllowed({"ADMIN", "EMPLOYEE"})
     public ResponseEntity<List<OrderDTO>> getOrdersByClient(@PathVariable Integer libraryId){
         return ResponseEntity.ok(orderService.getOrdersByClient(libraryId));
     }
-    @GetMapping("/{id}")
+    @GetMapping("/{id}") @RolesAllowed({"ADMIN", "EMPLOYEE"})
     public ResponseEntity<OrderDTO> getOrderById(@PathVariable Integer id){
         return ResponseEntity.ok(orderService.getOrderById(id));
     }
-    @GetMapping("/totalOrders")
+    @GetMapping("/totalOrders") @RolesAllowed({"ADMIN", "EMPLOYEE"})
     public ResponseEntity<Long> getTotalOfOrders(){
         return ResponseEntity.ok(orderService.getTotalOfOrders());
     }
-    @GetMapping("/totalRevenue")
+    @GetMapping("/totalRevenue") @RolesAllowed({"ADMIN", "EMPLOYEE"})
     public ResponseEntity<Double> getTotalRevenue(){
         return ResponseEntity.ok(orderService.getTotalRevenue());
     }
-    @GetMapping("/assigned")
+    @GetMapping("/assigned") @RolesAllowed({"COURIER"})
     public ResponseEntity<List<OrderDTO>> getOrdersAssigned(){
         return ResponseEntity.ok(orderService.getOrdersAssigned());
     }
-    @PostMapping
+    @PostMapping @RolesAllowed({"ADMIN", "EMPLOYEE"})
     public ResponseEntity<OrderDTO> createOrder(@RequestBody OrderDTO orderDTO){
         return ResponseEntity.ok(orderService.createOrder(orderDTO));
     }
-    @PutMapping
+    @PutMapping @RolesAllowed({"ADMIN", "EMPLOYEE"})
     public ResponseEntity<OrderDTO> updateOrder(@PathVariable Integer id, @RequestBody OrderDTO orderDTO){
         return ResponseEntity.ok(orderService.updateOrder(id, orderDTO));
     }
-    @DeleteMapping("/{id}")
+    @DeleteMapping("/{id}") @RolesAllowed({"ADMIN", "EMPLOYEE"})
     public ResponseEntity<Void> deleteOrder(@PathVariable Integer id){
         orderService.deleteOrderById(id);
         return new ResponseEntity<>(HttpStatus.OK);

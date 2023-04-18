@@ -18,7 +18,7 @@ public interface OrderService {
 
     void deleteOrderById(Integer id);
 
-    void setOrderStatus(String status, Integer orderId);
+    void updateOrderStatus(String status, Integer orderId);
 
     List<OrderDTO> getOrdersByClient(Integer libraryId);
 

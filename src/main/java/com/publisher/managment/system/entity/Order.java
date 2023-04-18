@@ -27,6 +27,7 @@ public class Order {
     private String comment;
     @CreatedDate
     private LocalDateTime createdAt;
+    private LocalDateTime modifiedAt;
     @Enumerated(EnumType.STRING)
     private OrderStatus orderStatus;
     @ManyToOne

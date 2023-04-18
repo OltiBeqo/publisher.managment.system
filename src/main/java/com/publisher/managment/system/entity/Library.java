@@ -4,8 +4,10 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.springframework.data.annotation.CreatedDate;
 
 import javax.persistence.*;
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Data
@@ -27,4 +29,7 @@ public class Library {
     private String email;
     @Column(nullable = false, unique = true)
     private String phoneNumber;
+    @CreatedDate
+    private LocalDateTime createdAt;
+    private LocalDateTime modifiedAt;
 }

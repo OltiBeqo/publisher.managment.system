@@ -3,10 +3,7 @@ package com.publisher.managment.system.mapper;
 import com.publisher.managment.system.dto.PaymentDTO;
 import com.publisher.managment.system.entity.Payment;
 import com.publisher.managment.system.entity.enums.PaymentMethod;
-
-import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.util.UUID;
 
 public class PaymentMapper {
     public static PaymentDTO toDto(Payment payment){

@@ -13,11 +13,8 @@ import com.publisher.managment.system.exception.ResourceNotFoundException;
 import com.publisher.managment.system.mapper.BookMapper;
 import com.publisher.managment.system.mapper.OrderMapper;
 import com.publisher.managment.system.repository.BookRepository;
-import com.publisher.managment.system.repository.LibraryRepository;
 import com.publisher.managment.system.repository.OrderRepository;
-import com.publisher.managment.system.repository.UserRepository;
 import com.publisher.managment.system.service.OrderService;
-import com.publisher.managment.system.service.PaymentService;
 import com.publisher.managment.system.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -31,15 +28,9 @@ public class OrderServiceImpl extends ExceptionMessage implements OrderService {
     @Autowired
     private OrderRepository orderRepository;
     @Autowired
-    private LibraryRepository libraryRepository;
-    @Autowired
-    private UserRepository userRepository;
-    @Autowired
     private UserService userService;
     @Autowired
     private BookRepository bookRepository;
-    @Autowired
-    private PaymentService paymentService;
 
     @Override
     @Transactional
@@ -88,7 +79,7 @@ public class OrderServiceImpl extends ExceptionMessage implements OrderService {
         orderRepository.delete(order);
     }
     @Override
-    public void setOrderStatus(String status, Integer orderId) {
+    public void updateOrderStatus(String status, Integer orderId) {
         Order order = orderRepository.findById(orderId).orElseThrow(() -> new ResourceNotFoundException(String.format(ORDER_NOT_FOUND, orderId)));
         order.setOrderStatus(OrderStatus.fromValue(status));
 
@@ -117,7 +108,7 @@ public class OrderServiceImpl extends ExceptionMessage implements OrderService {
     }
 
     private void calculateTotalAmount(OrderDTO orderDTO) {
-        Double totalAmount = orderDTO.getBooks().stream().map(book -> book.getPrice() * book.getQuantity()).mapToDouble(Double::doubleValue).sum();
+        double totalAmount = orderDTO.getBooks().stream().map(book -> book.getPrice() * book.getQuantity()).mapToDouble(Double::doubleValue).sum();
         orderDTO.setTotalAmount(totalAmount - (totalAmount * orderDTO.getDiscount()));
     }
 }

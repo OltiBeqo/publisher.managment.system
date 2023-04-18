@@ -16,6 +16,7 @@ public class UserMapper {
                 .firstname(user.getFirstname())
                 .lastname(user.getLastname())
                 .gender(user.getGender().getValue())
+                .role(user.getRole().getValue())
                 .createdAt(LocalDateTime.now())
                 .build();
     }
@@ -36,6 +37,7 @@ public class UserMapper {
         user.setLastname(userDTO.getLastname());
         user.setUsername(userDTO.getUsername());
         user.setRole(Role.fromValue(userDTO.getRole()));
+        user.setModifiedAt(LocalDateTime.now());
         return user;
     }
 

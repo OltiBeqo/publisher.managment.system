@@ -8,6 +8,7 @@ import lombok.NoArgsConstructor;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
+import java.time.LocalDateTime;
 
 @Data
 @NoArgsConstructor
@@ -25,4 +26,6 @@ public class BookDTO {
     private Integer quantity;
     @NotEmpty(message = "Assign a category")
     private CategoryDTO category;
+    private LocalDateTime createdAt;
+    private LocalDateTime modifiedAt;
 }

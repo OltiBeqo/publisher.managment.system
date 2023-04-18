@@ -8,6 +8,7 @@ import lombok.NoArgsConstructor;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Data
@@ -26,4 +27,6 @@ public class LibraryDTO {
     private String email;
     @NotEmpty(message = "Phone number is required")
     private String phoneNumber;
+    private LocalDateTime createdAt;
+    private LocalDateTime modifiedAt;
 }

@@ -33,5 +33,6 @@ public class UserDTO {
     private String role;
     @CreatedDate
     private LocalDateTime createdAt;
+    private LocalDateTime modifiedAt;
 
 }

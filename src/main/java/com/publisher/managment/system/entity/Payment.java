@@ -25,12 +25,13 @@ public class Payment {
     @Enumerated(EnumType.STRING)
     private PaymentMethod paymentMethod;
     private Double amount;
-    private String transactionId = UUID.randomUUID().toString();
+    private String transactionId;
+    @CreatedDate
+    private LocalDateTime createdAt;
+    private LocalDateTime modifiedAt;
     @OneToOne
     @JoinColumn(name = "order_id", referencedColumnName = "id")
     private Order order;
-    @CreatedDate
-    private LocalDateTime createdAt;
     @PrePersist
     public void prePersist(){
         createdAt = LocalDateTime.now();

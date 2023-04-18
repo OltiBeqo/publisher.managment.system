@@ -19,4 +19,5 @@ public class PaymentDTO {
     private String transactionId;
     private LocalDateTime createdAt;
     private Integer orderId;
+    private LocalDateTime modifiedAt;
 }

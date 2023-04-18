@@ -20,6 +20,7 @@ public class PaymentServiceImpl extends ExceptionMessage implements PaymentServi
     private PaymentRepository paymentRepository;
     @Override
     public PaymentDTO addPayment(PaymentDTO paymentDTO){
+        //TODO ADD ORDER AMOUNT TO PAYMENT
         return PaymentMapper.toDto(paymentRepository.save(PaymentMapper.toEntity(paymentDTO)));
     }
 

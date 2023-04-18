@@ -4,8 +4,10 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.springframework.data.annotation.CreatedDate;
 
 import javax.persistence.*;
+import java.time.LocalDateTime;
 
 @Data
 @NoArgsConstructor
@@ -20,5 +22,8 @@ public class Category {
     private Integer id;
     @Column(nullable = false, unique = true)
     private String name;
+    @CreatedDate
+    private LocalDateTime createdAt;
+    private LocalDateTime modifiedAt;
 
 }

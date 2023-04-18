@@ -27,5 +27,6 @@ public class OrderDTO {
     private List<BookDTO> books;
     private LibraryDTO library;
     private LocalDateTime createdAt;
+    private LocalDateTime modifiedAt;
     private UserDTO courier;
 }

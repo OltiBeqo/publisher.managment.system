@@ -34,11 +34,12 @@ public class OrderMapper {
     }
 
     public static Order toEntityForUpdate(Order order, OrderDTO orderDTO) {
-        order.setBooks(orderDTO.getBooks().stream().map(bookDTO -> BookMapper.toEntity(bookDTO)).collect(Collectors.toList()));
+        order.setBooks(orderDTO.getBooks().stream().map(BookMapper::toEntity).collect(Collectors.toList()));
         order.setComment(order.getComment());
         order.setTotalAmount(orderDTO.getTotalAmount());
         order.setOrderStatus(OrderStatus.fromValue(orderDTO.getOrderStatus()));
         order.setUser(orderDTO.getUser());
+        order.setModifiedAt(LocalDateTime.now());
         return order;
     }
 }

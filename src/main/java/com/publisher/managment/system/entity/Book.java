@@ -4,8 +4,10 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.springframework.data.annotation.CreatedDate;
 
 import javax.persistence.*;
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Data
@@ -27,6 +29,9 @@ public class Book {
     private Double price;
     @Column(nullable = false)
     private Integer quantity;
+    @CreatedDate
+    private LocalDateTime createdAt;
+    private LocalDateTime modifiedAt;
     @ManyToOne
     @JoinColumn(name = "category_id", referencedColumnName = "id")
     private Category category;

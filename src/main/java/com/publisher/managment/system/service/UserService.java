@@ -11,6 +11,7 @@ public interface UserService {
     UserDTO registerUser(UserDTO userDTO);
     List<UserDTO> getUsers();
     UserDTO getUserById(Integer id);
+    UserDTO getUserByUsername(String username);
     UserDTO updateUser(Integer id, UserDTO userDTO);
     void deleteUserById(Integer id);
     List<UserDTO> getUsersByRole(Role role);

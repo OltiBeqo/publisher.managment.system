@@ -8,6 +8,7 @@ import lombok.NoArgsConstructor;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
+import java.time.LocalDateTime;
 
 @Data
 @NoArgsConstructor
@@ -17,4 +18,6 @@ public class CategoryDTO {
     private Integer id;
     @NotEmpty(message = "Category name is required")
     private String name;
+    private LocalDateTime createdAt;
+    private LocalDateTime modifiedAt;
 }
