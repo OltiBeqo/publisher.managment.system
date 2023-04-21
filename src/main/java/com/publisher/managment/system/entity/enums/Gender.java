@@ -9,10 +9,11 @@ public enum Gender {
     MALE("MALE"), FEMALE("FEMALE");
 
     private String value;
-    public static Gender fromValue(String value){
+
+    public static Gender fromValue(String value) {
         return Arrays.asList(Gender.values()).stream()
                 .filter(g -> g.value.equals(value))
-                .findFirst().orElseThrow(()-> new RuntimeException(String.format("Gender %s doesn't exists", value)));
+                .findFirst().orElseThrow(() -> new RuntimeException(String.format("Gender %s doesn't exists", value)));
     }
 
     public String getValue() {

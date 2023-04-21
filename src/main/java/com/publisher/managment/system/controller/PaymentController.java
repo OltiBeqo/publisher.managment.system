@@ -16,30 +16,35 @@ import java.util.List;
 public class PaymentController {
     @Autowired
     private PaymentService paymentService;
+
     @RolesAllowed({"ADMIN", "EMPLOYEE"})
     @GetMapping
-    public ResponseEntity<List<PaymentDTO>> getPayments(){
-        return ResponseEntity.ok(paymentService.getPayments());
+    public ResponseEntity<List<PaymentDTO>> getPaymentsByStatus(@RequestParam boolean isDeleted) {
+        return ResponseEntity.ok(paymentService.getPaymentsByStatus(isDeleted));
     }
+
     @RolesAllowed({"ADMIN", "EMPLOYEE"})
-    @GetMapping("/{id}")
-    public ResponseEntity<PaymentDTO> getPaymentById(@PathVariable Integer paymentId){
+    @GetMapping("/{paymentId}")
+    public ResponseEntity<PaymentDTO> getPaymentById(@PathVariable Integer paymentId) {
         return ResponseEntity.ok(paymentService.getPaymentById(paymentId));
     }
+
     @RolesAllowed({"ADMIN", "EMPLOYEE"})
-    @GetMapping("/{paymentMethod}")
-    public ResponseEntity<List<PaymentDTO>> getPaymentByMethod(@PathVariable PaymentMethod paymentMethod){
+    @GetMapping("/method/{paymentMethod}")
+    public ResponseEntity<List<PaymentDTO>> getPaymentByMethod(@PathVariable PaymentMethod paymentMethod) {
         return ResponseEntity.ok(paymentService.getPaymentsByMethod(paymentMethod));
     }
+
     @RolesAllowed({"ADMIN", "EMPLOYEE"})
     @PostMapping
-    public ResponseEntity<PaymentDTO> addPayment(@RequestBody PaymentDTO paymentDTO){
+    public ResponseEntity<PaymentDTO> addPayment(@RequestBody PaymentDTO paymentDTO) {
         return ResponseEntity.ok(paymentService.addPayment(paymentDTO));
     }
+
     @RolesAllowed({"ADMIN"})
-    @DeleteMapping
-    public ResponseEntity<Void> deletePayment(@PathVariable Integer paymentId){
-        paymentService.getPaymentById(paymentId);
+    @DeleteMapping("/{paymentId}")
+    public ResponseEntity<Void> deletePayment(@PathVariable Integer paymentId) {
+        paymentService.deletePayment(paymentId);
         return new ResponseEntity<>(HttpStatus.OK);
     }
 }

@@ -23,10 +23,11 @@ public class LibraryDTO {
     @NotEmpty(message = "address is required")
     private String address;
     @NotEmpty(message = "Email is required")
-    @Email(message = "Email is not valid")
+    @Email(message = "Email should be valid")
     private String email;
     @NotEmpty(message = "Phone number is required")
     private String phoneNumber;
     private LocalDateTime createdAt;
     private LocalDateTime modifiedAt;
+    private boolean deleted;
 }

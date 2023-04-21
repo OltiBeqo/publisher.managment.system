@@ -7,7 +7,6 @@ import com.publisher.managment.system.exception.ResourceNotFoundException;
 import com.publisher.managment.system.mapper.CategoryMapper;
 import com.publisher.managment.system.repository.CategoryRepository;
 import com.publisher.managment.system.service.CategoryService;
-import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -17,30 +16,39 @@ import java.util.stream.Collectors;
 
 @Service
 public class CategoryServiceImpl extends ExceptionMessage implements CategoryService {
-    @Autowired private CategoryRepository categoryRepository;
+    @Autowired
+    private CategoryRepository categoryRepository;
+
     @Override
     @Transactional
     public CategoryDTO addCategory(CategoryDTO categoryDTO) {
         return CategoryMapper.toDto(categoryRepository.save(CategoryMapper.toEntity(categoryDTO)));
     }
+
     @Override
     public List<CategoryDTO> getCategories() {
         return categoryRepository.findAll().stream().map(CategoryMapper::toDto).collect(Collectors.toList());
     }
+
     @Override
     public CategoryDTO getCategoryById(Integer id) {
-        return categoryRepository.findById(id).map(CategoryMapper::toDto).orElseThrow(()-> new ResourceNotFoundException(String.format(CATEGORY_NOT_FOUND, id)));
+        return categoryRepository.findById(id).map(CategoryMapper::toDto)
+                .orElseThrow(() -> new ResourceNotFoundException(String.format(CATEGORY_NOT_FOUND, id)));
     }
+
     @Override
     @Transactional
     public CategoryDTO updateCategory(Integer id, CategoryDTO categoryDTO) {
-        Category category = categoryRepository.findById(id).orElseThrow(()-> new ResourceNotFoundException(String.format(CATEGORY_NOT_FOUND, id)));
+        Category category = categoryRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException(String.format(CATEGORY_NOT_FOUND, id)));
         return CategoryMapper.toDto(categoryRepository.save(CategoryMapper.toEntityForUpdate(category, categoryDTO)));
     }
+
     @Override
     @Transactional
     public void deleteCategoryById(Integer id) {
-        Category category = categoryRepository.findById(id).orElseThrow(()-> new ResourceNotFoundException(String.format(CATEGORY_NOT_FOUND, id)));
+        Category category = categoryRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException(String.format(CATEGORY_NOT_FOUND, id)));
         categoryRepository.delete(category);
     }
 }

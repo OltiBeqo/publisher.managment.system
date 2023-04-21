@@ -28,4 +28,5 @@ public class BookDTO {
     private CategoryDTO category;
     private LocalDateTime createdAt;
     private LocalDateTime modifiedAt;
+    private boolean deleted;
 }

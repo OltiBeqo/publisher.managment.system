@@ -5,7 +5,6 @@ import com.publisher.managment.system.dto.auth.AuthRequest;
 import com.publisher.managment.system.dto.auth.TokenDTO;
 import com.publisher.managment.system.entity.User;
 import com.publisher.managment.system.service.UserService;
-import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -74,17 +73,20 @@ public class AuthController {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
         }
     }
+
     @GetMapping("/logout")
     //TODO CHECK
-    public Void logout (HttpServletRequest request, HttpServletResponse response) {
+    public Void logout(HttpServletRequest request, HttpServletResponse response) {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-        if (auth != null){
+        if (auth != null) {
             new SecurityContextLogoutHandler().logout(request, response, auth);
         }
         return null;
     }
-    @PostMapping("/register") @RolesAllowed({"ADMIN"})
-    public ResponseEntity<UserDTO> registerUser(@RequestBody @Valid UserDTO u){
+
+    @PostMapping("/register")
+    @RolesAllowed({"ADMIN"})
+    public ResponseEntity<UserDTO> registerUser(@RequestBody @Valid UserDTO u) {
         return ResponseEntity.ok(userService.registerUser(u));
     }
 

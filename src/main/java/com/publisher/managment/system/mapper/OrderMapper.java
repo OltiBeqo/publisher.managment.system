@@ -4,7 +4,6 @@ import com.publisher.managment.system.dto.OrderDTO;
 import com.publisher.managment.system.entity.Order;
 import com.publisher.managment.system.entity.enums.OrderStatus;
 
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.stream.Collectors;
 
@@ -12,12 +11,19 @@ public class OrderMapper {
     public static OrderDTO toDto(Order order) {
         return OrderDTO.builder()
                 .id(order.getId())
-                .library(LibraryMapper.toDto(order.getLibrary()))
+                .library(order.getLibrary() != null
+                        ? LibraryMapper.toDto(order.getLibrary())
+                        : null
+                )
                 .comment(order.getComment())
+                .user(UserMapper.toDto(order.getUser()))
+                .courier(UserMapper.toDto(order.getCourier()))
+                .orderStatus(order.getOrderStatus().getValue())
                 .books(order.getBooks().stream().map(BookMapper::toDto).collect(Collectors.toList()))
                 .totalAmount(order.getTotalAmount())
-                .payment(order.getPayment().getPaymentMethod().getValue())
+                .deleted(order.isDeleted())
                 .createdAt(LocalDateTime.now())
+                .modifiedAt(LocalDateTime.now())
                 .build();
     }
 
@@ -25,20 +31,25 @@ public class OrderMapper {
         return Order.builder()
                 .id(orderDTO.getId())
                 .comment(orderDTO.getComment())
+                .user(UserMapper.toEntity(orderDTO.getUser()))
+                .courier(UserMapper.toEntity(orderDTO.getCourier()))
+                .discount(orderDTO.getDiscount())
                 .totalAmount(orderDTO.getTotalAmount())
-                .library(LibraryMapper.toEntity(orderDTO.getLibrary()))
+                .library(orderDTO.getLibrary() != null
+                        ? LibraryMapper.toEntity(orderDTO.getLibrary())
+                        : null
+                )
                 .orderStatus(OrderStatus.fromValue(orderDTO.getOrderStatus()))
                 .books(orderDTO.getBooks().stream().map(BookMapper::toEntity).collect(Collectors.toList()))
                 .createdAt(LocalDateTime.now())
+                .modifiedAt(LocalDateTime.now())
                 .build();
     }
 
     public static Order toEntityForUpdate(Order order, OrderDTO orderDTO) {
-        order.setBooks(orderDTO.getBooks().stream().map(BookMapper::toEntity).collect(Collectors.toList()));
+//        order.setBooks(orderDTO.getBooks().stream().map(BookMapper::toEntity).collect(Collectors.toList()));
         order.setComment(order.getComment());
-        order.setTotalAmount(orderDTO.getTotalAmount());
         order.setOrderStatus(OrderStatus.fromValue(orderDTO.getOrderStatus()));
-        order.setUser(orderDTO.getUser());
         order.setModifiedAt(LocalDateTime.now());
         return order;
     }

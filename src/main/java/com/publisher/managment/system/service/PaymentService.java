@@ -7,9 +7,15 @@ import java.util.List;
 
 public interface PaymentService {
     PaymentDTO addPayment(PaymentDTO paymentDTO);
-    List<PaymentDTO> getPayments();
+
+    PaymentDTO updatePayment(Integer paymentId, PaymentDTO paymentDTO);
+
+    List<PaymentDTO> getPaymentsByStatus(boolean isDeleted);
+
     PaymentDTO getPaymentById(Integer paymentId);
+
     void deletePayment(Integer paymentId);
+
     List<PaymentDTO> getPaymentsByMethod(PaymentMethod paymentMethod);
 
 }

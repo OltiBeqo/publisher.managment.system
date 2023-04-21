@@ -4,9 +4,12 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.*;
 import org.springframework.data.annotation.CreatedDate;
 
 import javax.persistence.*;
+import javax.persistence.Entity;
+import javax.persistence.Table;
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -16,10 +19,12 @@ import java.util.List;
 @Builder
 @Entity
 @Table(name = "books")
+@SQLDelete(sql = "UPDATE books SET deleted = true WHERE id=?")
 public class Book {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(updatable = false)
     private Integer id;
     @Column(nullable = false)
     private String title;
@@ -29,6 +34,7 @@ public class Book {
     private Double price;
     @Column(nullable = false)
     private Integer quantity;
+    private boolean deleted = Boolean.FALSE;
     @CreatedDate
     private LocalDateTime createdAt;
     private LocalDateTime modifiedAt;

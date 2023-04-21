@@ -15,24 +15,34 @@ import java.util.List;
 public class LibraryController {
     @Autowired
     private LibraryService libraryService;
-    @GetMapping @RolesAllowed({"ADMIN", "EMPLOYEE"})
-    public ResponseEntity<List<LibraryDTO>> getLibraries(){
-        return ResponseEntity.ok(libraryService.getLibraries());
+
+    @GetMapping
+    @RolesAllowed({"ADMIN", "EMPLOYEE"})
+    public ResponseEntity<List<LibraryDTO>> getLibrariesByStatus(@RequestParam boolean isDeleted) {
+        return ResponseEntity.ok(libraryService.getLibrariesByStatus(isDeleted));
     }
-    @GetMapping("/{id}") @RolesAllowed({"ADMIN", "EMPLOYEE"})
-    public ResponseEntity<LibraryDTO> getLibraryById(@PathVariable Integer id){
+
+    @GetMapping("/{id}")
+    @RolesAllowed({"ADMIN", "EMPLOYEE"})
+    public ResponseEntity<LibraryDTO> getLibraryById(@PathVariable Integer id) {
         return ResponseEntity.ok(libraryService.getLibraryById(id));
     }
-    @PostMapping @RolesAllowed({"ADMIN", "EMPLOYEE"})
-    public ResponseEntity<LibraryDTO> addLibrary(@RequestBody LibraryDTO libraryDTO){
+
+    @PostMapping
+    @RolesAllowed({"ADMIN", "EMPLOYEE"})
+    public ResponseEntity<LibraryDTO> addLibrary(@RequestBody LibraryDTO libraryDTO) {
         return ResponseEntity.ok(libraryService.addLibrary(libraryDTO));
     }
-    @PutMapping("/{id}") @RolesAllowed({"ADMIN", "EMPLOYEE"})
-    public ResponseEntity<LibraryDTO> updateLibrary(@PathVariable Integer id, @RequestBody LibraryDTO libraryDTO){
+
+    @PutMapping("/{id}")
+    @RolesAllowed({"ADMIN", "EMPLOYEE"})
+    public ResponseEntity<LibraryDTO> updateLibrary(@PathVariable Integer id, @RequestBody LibraryDTO libraryDTO) {
         return ResponseEntity.ok(libraryService.updateLibrary(id, libraryDTO));
     }
-    @DeleteMapping("/{id}") @RolesAllowed({"ADMIN", "EMPLOYEE"})
-    public ResponseEntity<Void> deleteLibraryById(@PathVariable Integer id){
+
+    @DeleteMapping("/{id}")
+    @RolesAllowed({"ADMIN", "EMPLOYEE"})
+    public ResponseEntity<Void> deleteLibraryById(@PathVariable Integer id) {
         libraryService.deleteLibraryById(id);
         return new ResponseEntity<>(HttpStatus.OK);
     }

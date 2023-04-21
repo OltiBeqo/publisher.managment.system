@@ -19,14 +19,14 @@ public class OrderDTO {
     private Integer id;
     private String comment;
     private double discount;
-    private User user;
+    private UserDTO user;
     private Double totalAmount;
     private String orderStatus;
-    private String payment;
     @NotNull(message = "at least a books is required to create an order")
     private List<BookDTO> books;
     private LibraryDTO library;
     private LocalDateTime createdAt;
     private LocalDateTime modifiedAt;
     private UserDTO courier;
+    private boolean deleted;
 }

@@ -5,11 +5,10 @@ import com.publisher.managment.system.entity.User;
 import com.publisher.managment.system.entity.enums.Gender;
 import com.publisher.managment.system.entity.enums.Role;
 
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 public class UserMapper {
-    public static UserDTO toDto(User user){
+    public static UserDTO toDto(User user) {
         return UserDTO.builder()
                 .id(user.getId())
                 .username(user.getUsername())
@@ -18,9 +17,11 @@ public class UserMapper {
                 .gender(user.getGender().getValue())
                 .role(user.getRole().getValue())
                 .createdAt(LocalDateTime.now())
+                .modifiedAt(LocalDateTime.now())
                 .build();
     }
-    public static User toEntity(UserDTO userDTO){
+
+    public static User toEntity(UserDTO userDTO) {
         return User.builder()
                 .id(userDTO.getId())
                 .username(userDTO.getUsername())
@@ -30,9 +31,11 @@ public class UserMapper {
                 .gender(Gender.fromValue(userDTO.getGender()))
                 .role(Role.fromValue(userDTO.getRole()))
                 .createdAt(LocalDateTime.now())
+                .modifiedAt(LocalDateTime.now())
                 .build();
     }
-    public static User toEntityForUpdate(User user, UserDTO userDTO){
+
+    public static User toEntityForUpdate(User user, UserDTO userDTO) {
         user.setFirstname(userDTO.getFirstname());
         user.setLastname(userDTO.getLastname());
         user.setUsername(userDTO.getUsername());

@@ -17,16 +17,21 @@ import java.util.Map;
 @RestControllerAdvice
 public class GlobalHandler extends ResponseEntityExceptionHandler {
 
-    @ExceptionHandler
+    @ExceptionHandler(ResourceNotFoundException.class)
     public ResponseEntity<Object> handleResourceNotFoundException(ResourceNotFoundException ex, HttpServletRequest request) {
-        ExceptionResponse resp = new ExceptionResponse(HttpStatus.BAD_REQUEST,ex.getMessage());
-        return new ResponseEntity<>(resp,HttpStatus.BAD_REQUEST);
+        ExceptionResponse resp = new ExceptionResponse(HttpStatus.NOT_FOUND,ex.getMessage());
+        return new ResponseEntity<>(resp,HttpStatus.NOT_FOUND);
     }
 
-    @Override
+    @ExceptionHandler(BadRequestException.class)
     protected ResponseEntity<Object> handleMethodArgumentNotValid(MethodArgumentNotValidException ex, HttpHeaders headers, HttpStatus status, WebRequest request) {
         ExceptionResponse resp = new ExceptionResponse(HttpStatus.BAD_REQUEST,getRequiredFields(ex));
         return new ResponseEntity<>(resp,HttpStatus.BAD_REQUEST);
+    }
+    @ExceptionHandler(Exception.class)
+    protected ResponseEntity<Object> handleException(Exception ex, HttpHeaders headers, HttpStatus status, WebRequest request) {
+        ExceptionResponse resp = new ExceptionResponse(HttpStatus.INTERNAL_SERVER_ERROR,ex.getMessage());
+        return new ResponseEntity<>(resp,HttpStatus.INTERNAL_SERVER_ERROR);
     }
 
     private Map<String,String> getRequiredFields(MethodArgumentNotValidException ex){

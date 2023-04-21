@@ -2,7 +2,6 @@ package com.publisher.managment.system.mapper;
 
 import com.publisher.managment.system.dto.LibraryDTO;
 import com.publisher.managment.system.entity.Library;
-import org.springframework.stereotype.Component;
 
 import java.time.LocalDateTime;
 
@@ -15,6 +14,8 @@ public class LibraryMapper {
                 .email(library.getEmail())
                 .phoneNumber(library.getPhoneNumber())
                 .createdAt(LocalDateTime.now())
+                .modifiedAt(LocalDateTime.now())
+                .deleted(library.isDeleted())
                 .build();
     }
 
@@ -26,6 +27,7 @@ public class LibraryMapper {
                 .email(libraryDTO.getEmail())
                 .phoneNumber(libraryDTO.getPhoneNumber())
                 .createdAt(LocalDateTime.now())
+                .modifiedAt(LocalDateTime.now())
                 .build();
     }
 

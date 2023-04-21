@@ -5,12 +5,10 @@ import com.publisher.managment.system.dto.OrderDTO;
 import com.publisher.managment.system.dto.auth.SecurityUtil;
 import com.publisher.managment.system.entity.Book;
 import com.publisher.managment.system.entity.Order;
-import com.publisher.managment.system.entity.User;
 import com.publisher.managment.system.entity.enums.OrderStatus;
 import com.publisher.managment.system.exception.BadRequestException;
 import com.publisher.managment.system.exception.ExceptionMessage;
 import com.publisher.managment.system.exception.ResourceNotFoundException;
-import com.publisher.managment.system.mapper.BookMapper;
 import com.publisher.managment.system.mapper.OrderMapper;
 import com.publisher.managment.system.repository.BookRepository;
 import com.publisher.managment.system.repository.OrderRepository;
@@ -35,66 +33,71 @@ public class OrderServiceImpl extends ExceptionMessage implements OrderService {
     @Override
     @Transactional
     public OrderDTO createOrder(OrderDTO orderDTO) {
-        Order order = OrderMapper.toEntity(orderDTO);
+        checkBooks(orderDTO.getBooks());
         calculateTotalAmount(orderDTO);
-        order.setOrderStatus(OrderStatus.IN_PENDING);
-        order.setCourier(userService.getRandomCourier());
-        order.setBooks(retrieveBooks(orderDTO.getBooks()));
-        order.setUser(User.builder().id(SecurityUtil.getUserIdFromContext()).build());
-        return OrderMapper.toDto(orderRepository.save(order));
+        orderDTO.setOrderStatus(OrderStatus.IN_PENDING.getValue());
+        orderDTO.setCourier(userService.getRandomCourier());
+        orderDTO.setUser(userService.getUserById(SecurityUtil.getUserIdFromContext()));
+        return OrderMapper.toDto(orderRepository.save(OrderMapper.toEntity(orderDTO)));
     }
-    private List<Book> retrieveBooks(List<BookDTO> books) {
-        books.forEach(this::checkBooks);
-        return books.stream().map(BookMapper::toEntity).collect(Collectors.toList());
+
+    private void checkBooks(List<BookDTO> books) {
+        books.forEach(bookDTO ->
+        {
+            Book bookEntity = bookRepository.findById(bookDTO.getId()).orElseThrow(() -> new ResourceNotFoundException(BOOK_NOT_FOUND));
+            Integer quantity = bookEntity.getQuantity();
+            Integer orderedQuantity = bookDTO.getQuantity();
+            if (orderedQuantity <= quantity) {
+                bookEntity.setQuantity(quantity - orderedQuantity);
+                bookRepository.save(bookEntity);
+            } else {
+                throw new BadRequestException(String.format(QUANTITY_NOT_AVAILABLE, orderedQuantity));
+            }
+        });
     }
-    private void checkBooks(BookDTO bookDTO) {
-        Book bookEntity = bookRepository.findById(bookDTO.getId()).orElseThrow(() -> new ResourceNotFoundException(BOOK_NOT_FOUND));
-        Integer quantity = bookEntity.getQuantity();
-        Integer orderedQuantity = bookDTO.getQuantity();
-        if (orderedQuantity <= quantity) {
-            bookEntity.setQuantity(quantity - orderedQuantity);
-            bookRepository.save(bookEntity);
-        } else {
-            throw new BadRequestException(String.format(QUANTITY_NOT_AVAILABLE, orderedQuantity));
-        }
-    }
+
     @Override
-    public List<OrderDTO> getOrders() {
-        return orderRepository.findAll().stream().map(OrderMapper::toDto).collect(Collectors.toList());
+    public List<OrderDTO> getOrdersByStatus(boolean isDeleted) {
+        return orderRepository.findByDeleted(isDeleted).stream().map(OrderMapper::toDto).collect(Collectors.toList());
     }
+
     @Override
     public OrderDTO getOrderById(Integer id) {
-        return orderRepository.findById(id).map(OrderMapper::toDto).orElseThrow(() -> new ResourceNotFoundException(String.format(ORDER_NOT_FOUND, id)));
+        return orderRepository.findById(id)
+                .map(OrderMapper::toDto).orElseThrow(() -> new ResourceNotFoundException(String.format(ORDER_NOT_FOUND, id)));
     }
+
     @Override
     @Transactional
     public OrderDTO updateOrder(Integer id, OrderDTO orderDTO) {
-        Order order = orderRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException(String.format(ORDER_NOT_FOUND, id)));
+        Order order = orderRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException(String.format(ORDER_NOT_FOUND, id)));
         return OrderMapper.toDto(orderRepository.save(OrderMapper.toEntityForUpdate(order, orderDTO)));
+        //TODO ROLLBACK IF ORDER GET CANCELLED
     }
+
     @Override
     @Transactional
     public void deleteOrderById(Integer id) {
-        Order order = orderRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException(String.format(ORDER_NOT_FOUND, id)));
+        Order order = orderRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException(String.format(ORDER_NOT_FOUND, id)));
         orderRepository.delete(order);
     }
-    @Override
-    public void updateOrderStatus(String status, Integer orderId) {
-        Order order = orderRepository.findById(orderId).orElseThrow(() -> new ResourceNotFoundException(String.format(ORDER_NOT_FOUND, orderId)));
-        order.setOrderStatus(OrderStatus.fromValue(status));
 
-    }
     @Override
     public List<OrderDTO> getOrdersByClient(Integer libraryId) {
         return orderRepository.findAllByLibraryId(libraryId).stream().map(OrderMapper::toDto).collect(Collectors.toList());
     }
+
     @Override
     public List<OrderDTO> getOrdersAssigned() {
-        return orderRepository.findByCourier_Id(SecurityUtil.getUserIdFromContext()).stream().map(OrderMapper::toDto).collect(Collectors.toList());
+        return orderRepository.findByCourierId(SecurityUtil.getUserIdFromContext())
+                .stream().map(OrderMapper::toDto).collect(Collectors.toList());
     }
+
     @Override
     public List<OrderDTO> getOrdersByCourier(Integer courierId) {
-        return orderRepository.findByCourier_Id(courierId).stream().map(OrderMapper::toDto).collect(Collectors.toList());
+        return orderRepository.findByCourierId(courierId).stream().map(OrderMapper::toDto).collect(Collectors.toList());
     }
 
     @Override
@@ -108,7 +111,12 @@ public class OrderServiceImpl extends ExceptionMessage implements OrderService {
     }
 
     private void calculateTotalAmount(OrderDTO orderDTO) {
-        double totalAmount = orderDTO.getBooks().stream().map(book -> book.getPrice() * book.getQuantity()).mapToDouble(Double::doubleValue).sum();
+        double totalAmount = orderDTO.getBooks().stream()
+                .map(bookDTO -> {
+                    double price = bookRepository.findById(bookDTO.getId()).get().getPrice();
+                    return price * bookDTO.getQuantity();
+                })
+                .mapToDouble(Double::doubleValue).sum();
         orderDTO.setTotalAmount(totalAmount - (totalAmount * orderDTO.getDiscount()));
     }
 }

@@ -9,6 +9,7 @@ import org.springframework.data.annotation.CreatedDate;
 import javax.persistence.Column;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 
@@ -26,6 +27,7 @@ public class UserDTO {
     @NotEmpty(message = "Username is required")
     private String username;
     @NotEmpty(message = "Password is required")
+    @Size(min = 6, max = 10, message = "Password must be between 6 and 8 characters")
     private String password;
     @NotEmpty(message = "Define gender")
     private String gender;

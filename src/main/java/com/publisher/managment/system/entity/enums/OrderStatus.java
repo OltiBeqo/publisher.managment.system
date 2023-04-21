@@ -4,6 +4,7 @@ import com.publisher.managment.system.exception.ResourceNotFoundException;
 import lombok.AllArgsConstructor;
 
 import java.util.Arrays;
+
 @AllArgsConstructor
 public enum OrderStatus {
 
@@ -11,11 +12,11 @@ public enum OrderStatus {
 
     private String value;
 
-    public static OrderStatus fromValue(String orderStatus){
+    public static OrderStatus fromValue(String orderStatus) {
         return Arrays.asList(OrderStatus.values())
                 .stream().filter(r -> r.value.equals(orderStatus))
                 .findFirst()
-                .orElseThrow(()-> new ResourceNotFoundException(String.format("Order status %s not found",orderStatus)));
+                .orElseThrow(() -> new ResourceNotFoundException(String.format("Order status %s not found", orderStatus)));
     }
 
     public String getValue() {

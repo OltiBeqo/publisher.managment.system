@@ -9,8 +9,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.security.RolesAllowed;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 import java.util.List;
 
 @RestController
@@ -18,28 +16,35 @@ import java.util.List;
 public class UserController {
     @Autowired
     private UserService userService;
-    @GetMapping @RolesAllowed({"ADMIN"})
-    public ResponseEntity<List<UserDTO>> getUsers(){
+
+    @GetMapping
+    @RolesAllowed({"ADMIN"})
+    public ResponseEntity<List<UserDTO>> getUsers() {
         return ResponseEntity.ok(userService.getUsers());
+
     }
-    @GetMapping("/{id}") @RolesAllowed({"ADMIN"})
-    public ResponseEntity<UserDTO> getUserById(@PathVariable Integer id){
+
+    @GetMapping("/{id}")
+    @RolesAllowed({"ADMIN"})
+    public ResponseEntity<UserDTO> getUserById(@PathVariable Integer id) {
         return ResponseEntity.ok(userService.getUserById(id));
     }
-    @GetMapping("/username/{username}")
-    public ResponseEntity<UserDTO> getUserByUsername(@PathVariable String username){
-        return ResponseEntity.ok(userService.getUserByUsername(username));
-    }
-    @GetMapping("/role/{role}") @RolesAllowed({"ADMIN"})
-    public ResponseEntity<List<UserDTO>> getUsersByRole(@PathVariable Role role){
+
+    @GetMapping("/role/{role}")
+    @RolesAllowed({"ADMIN"})
+    public ResponseEntity<List<UserDTO>> getUsersByRole(@PathVariable Role role) {
         return ResponseEntity.ok(userService.getUsersByRole(role));
     }
-    @PutMapping("/{id}") @RolesAllowed({"ADMIN"})
-    public ResponseEntity<UserDTO> updateUser(@PathVariable Integer id, @RequestBody UserDTO userDTO){
+
+    @PutMapping("/{id}")
+    @RolesAllowed({"ADMIN"})
+    public ResponseEntity<UserDTO> updateUser(@PathVariable Integer id, @RequestBody UserDTO userDTO) {
         return ResponseEntity.ok(userService.updateUser(id, userDTO));
     }
-    @DeleteMapping("/{id}") @RolesAllowed({"ADMIN"})
-    public ResponseEntity<Void> deleteUserById(@PathVariable Integer id){
+
+    @DeleteMapping("/{id}")
+    @RolesAllowed({"ADMIN"})
+    public ResponseEntity<Void> deleteUserById(@PathVariable Integer id) {
         userService.deleteUserById(id);
         return new ResponseEntity<>(HttpStatus.OK);
     }

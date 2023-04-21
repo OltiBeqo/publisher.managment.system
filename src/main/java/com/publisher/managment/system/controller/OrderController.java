@@ -13,41 +13,60 @@ import java.util.List;
 @RestController
 @RequestMapping("orders")
 public class OrderController {
-    @Autowired private OrderService orderService;
-    @GetMapping @RolesAllowed({"ADMIN", "EMPLOYEE"})
-    public ResponseEntity<List<OrderDTO>> getOrders(){
-        return ResponseEntity.ok(orderService.getOrders());
+    @Autowired
+    private OrderService orderService;
+
+    @GetMapping
+    @RolesAllowed({"ADMIN", "EMPLOYEE"})
+    public ResponseEntity<List<OrderDTO>> getOrdersByStatus(@RequestParam boolean isDeleted) {
+        return ResponseEntity.ok(orderService.getOrdersByStatus(isDeleted));
     }
-    @GetMapping("library/{libraryId}") @RolesAllowed({"ADMIN", "EMPLOYEE"})
-    public ResponseEntity<List<OrderDTO>> getOrdersByClient(@PathVariable Integer libraryId){
+
+    @GetMapping("library/{libraryId}")
+    @RolesAllowed({"ADMIN", "EMPLOYEE"})
+    public ResponseEntity<List<OrderDTO>> getOrdersByClient(@PathVariable Integer libraryId) {
         return ResponseEntity.ok(orderService.getOrdersByClient(libraryId));
     }
-    @GetMapping("/{id}") @RolesAllowed({"ADMIN", "EMPLOYEE"})
-    public ResponseEntity<OrderDTO> getOrderById(@PathVariable Integer id){
+
+    @GetMapping("/{id}")
+    @RolesAllowed({"ADMIN", "EMPLOYEE"})
+    public ResponseEntity<OrderDTO> getOrderById(@PathVariable Integer id) {
         return ResponseEntity.ok(orderService.getOrderById(id));
     }
-    @GetMapping("/totalOrders") @RolesAllowed({"ADMIN", "EMPLOYEE"})
-    public ResponseEntity<Long> getTotalOfOrders(){
+
+    @GetMapping("/totalOrders")
+    @RolesAllowed({"ADMIN", "EMPLOYEE"})
+    public ResponseEntity<Long> getTotalOfOrders() {
         return ResponseEntity.ok(orderService.getTotalOfOrders());
     }
-    @GetMapping("/totalRevenue") @RolesAllowed({"ADMIN", "EMPLOYEE"})
-    public ResponseEntity<Double> getTotalRevenue(){
+
+    @GetMapping("/totalRevenue")
+    @RolesAllowed({"ADMIN", "EMPLOYEE"})
+    public ResponseEntity<Double> getTotalRevenue() {
         return ResponseEntity.ok(orderService.getTotalRevenue());
     }
-    @GetMapping("/assigned") @RolesAllowed({"COURIER"})
-    public ResponseEntity<List<OrderDTO>> getOrdersAssigned(){
+
+    @GetMapping("/assigned")
+    @RolesAllowed({"COURIER"})
+    public ResponseEntity<List<OrderDTO>> getOrdersAssigned() {
         return ResponseEntity.ok(orderService.getOrdersAssigned());
     }
-    @PostMapping @RolesAllowed({"ADMIN", "EMPLOYEE"})
-    public ResponseEntity<OrderDTO> createOrder(@RequestBody OrderDTO orderDTO){
+
+    @PostMapping
+    @RolesAllowed({"ADMIN", "EMPLOYEE"})
+    public ResponseEntity<OrderDTO> createOrder(@RequestBody OrderDTO orderDTO) {
         return ResponseEntity.ok(orderService.createOrder(orderDTO));
     }
-    @PutMapping @RolesAllowed({"ADMIN", "EMPLOYEE"})
-    public ResponseEntity<OrderDTO> updateOrder(@PathVariable Integer id, @RequestBody OrderDTO orderDTO){
+
+    @PutMapping("/{id}")
+    @RolesAllowed({"ADMIN", "EMPLOYEE"})
+    public ResponseEntity<OrderDTO> updateOrder(@PathVariable Integer id, @RequestBody OrderDTO orderDTO) {
         return ResponseEntity.ok(orderService.updateOrder(id, orderDTO));
     }
-    @DeleteMapping("/{id}") @RolesAllowed({"ADMIN", "EMPLOYEE"})
-    public ResponseEntity<Void> deleteOrder(@PathVariable Integer id){
+
+    @DeleteMapping("/{id}")
+    @RolesAllowed({"ADMIN", "EMPLOYEE"})
+    public ResponseEntity<Void> deleteOrder(@PathVariable Integer id) {
         orderService.deleteOrderById(id);
         return new ResponseEntity<>(HttpStatus.OK);
     }

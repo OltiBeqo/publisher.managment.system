@@ -10,6 +10,7 @@ import java.util.List;
 @Repository
 public interface OrderRepository extends JpaRepository<Order, Integer> {
     List<Order> findAllByLibraryId(Integer libraryId);
-    List<Order> findByCourier_Id(Integer id);
+    List<Order> findByCourierId(Integer id);
+    List<Order> findByDeleted(boolean isDeleted);
 
 }
