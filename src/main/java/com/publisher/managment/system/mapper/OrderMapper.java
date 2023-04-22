@@ -47,8 +47,8 @@ public class OrderMapper {
     }
 
     public static Order toEntityForUpdate(Order order, OrderDTO orderDTO) {
-//        order.setBooks(orderDTO.getBooks().stream().map(BookMapper::toEntity).collect(Collectors.toList()));
-        order.setComment(order.getComment());
+        order.setBooks(orderDTO.getBooks().stream().map(BookMapper::toEntity).collect(Collectors.toList()));
+        order.setComment(orderDTO.getComment());
         order.setOrderStatus(OrderStatus.fromValue(orderDTO.getOrderStatus()));
         order.setModifiedAt(LocalDateTime.now());
         return order;

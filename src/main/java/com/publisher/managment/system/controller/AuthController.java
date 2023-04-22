@@ -1,5 +1,6 @@
 package com.publisher.managment.system.controller;
 
+import com.publisher.managment.system.aspect.TrackExecutionTime;
 import com.publisher.managment.system.dto.UserDTO;
 import com.publisher.managment.system.dto.auth.AuthRequest;
 import com.publisher.managment.system.dto.auth.TokenDTO;
@@ -40,6 +41,7 @@ public class AuthController {
     @Autowired
     private UserService userService;
 
+    @TrackExecutionTime
     @PostMapping("/login")
     public ResponseEntity<TokenDTO> login(@RequestBody @Valid AuthRequest request) {
         try {
@@ -74,6 +76,7 @@ public class AuthController {
         }
     }
 
+    @TrackExecutionTime
     @GetMapping("/logout")
     //TODO CHECK
     public Void logout(HttpServletRequest request, HttpServletResponse response) {
@@ -84,6 +87,7 @@ public class AuthController {
         return null;
     }
 
+    @TrackExecutionTime
     @PostMapping("/register")
     @RolesAllowed({"ADMIN"})
     public ResponseEntity<UserDTO> registerUser(@RequestBody @Valid UserDTO u) {

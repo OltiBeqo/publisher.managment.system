@@ -7,6 +7,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
+import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 
@@ -23,12 +24,19 @@ public class GlobalHandler extends ResponseEntityExceptionHandler {
         return new ResponseEntity<>(resp,HttpStatus.NOT_FOUND);
     }
 
-    @ExceptionHandler(BadRequestException.class)
+//    @ExceptionHandler(BadRequestException.class)
+    @Override
     protected ResponseEntity<Object> handleMethodArgumentNotValid(MethodArgumentNotValidException ex, HttpHeaders headers, HttpStatus status, WebRequest request) {
         ExceptionResponse resp = new ExceptionResponse(HttpStatus.BAD_REQUEST,getRequiredFields(ex));
         return new ResponseEntity<>(resp,HttpStatus.BAD_REQUEST);
     }
-    @ExceptionHandler(Exception.class)
+//    @ExceptionHandler(HttpClientErrorException.Forbidden.class)
+    @ExceptionHandler(HttpClientErrorException.class)
+    protected ResponseEntity<Object> handleHttpClientErrorException(HttpClientErrorException ex, HttpServletRequest request){
+        ExceptionResponse resp = new ExceptionResponse(HttpStatus.FORBIDDEN, ex.getMessage());
+        return new ResponseEntity<>(resp, HttpStatus.FORBIDDEN);
+    }
+//    @ExceptionHandler(Exception.class)
     protected ResponseEntity<Object> handleException(Exception ex, HttpHeaders headers, HttpStatus status, WebRequest request) {
         ExceptionResponse resp = new ExceptionResponse(HttpStatus.INTERNAL_SERVER_ERROR,ex.getMessage());
         return new ResponseEntity<>(resp,HttpStatus.INTERNAL_SERVER_ERROR);

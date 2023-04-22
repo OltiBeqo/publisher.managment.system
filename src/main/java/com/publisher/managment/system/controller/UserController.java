@@ -1,5 +1,6 @@
 package com.publisher.managment.system.controller;
 
+import com.publisher.managment.system.aspect.TrackExecutionTime;
 import com.publisher.managment.system.dto.UserDTO;
 import com.publisher.managment.system.entity.enums.Role;
 import com.publisher.managment.system.service.UserService;
@@ -17,6 +18,7 @@ public class UserController {
     @Autowired
     private UserService userService;
 
+    @TrackExecutionTime
     @GetMapping
     @RolesAllowed({"ADMIN"})
     public ResponseEntity<List<UserDTO>> getUsers() {
@@ -24,24 +26,28 @@ public class UserController {
 
     }
 
+    @TrackExecutionTime
     @GetMapping("/{id}")
     @RolesAllowed({"ADMIN"})
     public ResponseEntity<UserDTO> getUserById(@PathVariable Integer id) {
         return ResponseEntity.ok(userService.getUserById(id));
     }
 
+    @TrackExecutionTime
     @GetMapping("/role/{role}")
     @RolesAllowed({"ADMIN"})
     public ResponseEntity<List<UserDTO>> getUsersByRole(@PathVariable Role role) {
         return ResponseEntity.ok(userService.getUsersByRole(role));
     }
 
+    @TrackExecutionTime
     @PutMapping("/{id}")
     @RolesAllowed({"ADMIN"})
     public ResponseEntity<UserDTO> updateUser(@PathVariable Integer id, @RequestBody UserDTO userDTO) {
         return ResponseEntity.ok(userService.updateUser(id, userDTO));
     }
 
+    @TrackExecutionTime
     @DeleteMapping("/{id}")
     @RolesAllowed({"ADMIN"})
     public ResponseEntity<Void> deleteUserById(@PathVariable Integer id) {

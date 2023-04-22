@@ -70,9 +70,13 @@ public class OrderServiceImpl extends ExceptionMessage implements OrderService {
     @Override
     @Transactional
     public OrderDTO updateOrder(Integer id, OrderDTO orderDTO) {
-        Order order = orderRepository.findById(id)
-                .orElseThrow(() -> new ResourceNotFoundException(String.format(ORDER_NOT_FOUND, id)));
-        return OrderMapper.toDto(orderRepository.save(OrderMapper.toEntityForUpdate(order, orderDTO)));
+        Order order = orderRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException(String.format(ORDER_NOT_FOUND, id)));
+        if (order.getOrderStatus().getValue() != OrderStatus.CANCELLED.getValue()) {
+            OrderMapper.toDto(orderRepository.save(OrderMapper.toEntityForUpdate(order, orderDTO)));
+        } else {
+            return null;
+        }
+        return null;
         //TODO ROLLBACK IF ORDER GET CANCELLED
     }
 
