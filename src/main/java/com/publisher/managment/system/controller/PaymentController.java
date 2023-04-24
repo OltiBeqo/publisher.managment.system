@@ -1,6 +1,7 @@
 package com.publisher.managment.system.controller;
 
 import com.publisher.managment.system.aspect.TrackExecutionTime;
+import com.publisher.managment.system.dto.OrderDTO;
 import com.publisher.managment.system.dto.PaymentDTO;
 import com.publisher.managment.system.entity.enums.PaymentMethod;
 import com.publisher.managment.system.service.PaymentService;
@@ -30,6 +31,13 @@ public class PaymentController {
     @GetMapping("/{paymentId}")
     public ResponseEntity<PaymentDTO> getPaymentById(@PathVariable Integer paymentId) {
         return ResponseEntity.ok(paymentService.getPaymentById(paymentId));
+    }
+
+    @TrackExecutionTime
+    @GetMapping("/totalRevenue")
+    @RolesAllowed({"ADMIN", "EMPLOYEE"})
+    public ResponseEntity<Double> getTotalRevenue() {
+        return ResponseEntity.ok(paymentService.getTotalRevenue());
     }
 
     @TrackExecutionTime

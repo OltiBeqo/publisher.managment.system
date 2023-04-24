@@ -7,7 +7,6 @@ import com.publisher.managment.system.entity.Payment;
 import com.publisher.managment.system.entity.enums.PaymentMethod;
 import com.publisher.managment.system.exception.ExceptionMessage;
 import com.publisher.managment.system.exception.ResourceNotFoundException;
-import com.publisher.managment.system.mapper.OrderMapper;
 import com.publisher.managment.system.mapper.PaymentMapper;
 import com.publisher.managment.system.repository.PaymentRepository;
 import com.publisher.managment.system.service.OrderService;
@@ -38,6 +37,11 @@ public class PaymentServiceImpl extends ExceptionMessage implements PaymentServi
         Payment payment = paymentRepository.findById(paymentId)
                 .orElseThrow(() -> new ResourceNotFoundException(String.format(PAYMENT_NOT_FOUND, paymentId)));
         return PaymentMapper.toDto(paymentRepository.save(PaymentMapper.toEntityForUpdate(payment, paymentDTO)));
+    }
+
+    @Override
+    public Double getTotalRevenue() {
+        return paymentRepository.findAll().stream().map(Payment::getAmount).mapToDouble(Double::doubleValue).sum();
     }
 
     @Override

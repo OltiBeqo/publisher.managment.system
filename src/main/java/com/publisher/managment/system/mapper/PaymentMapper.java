@@ -1,6 +1,8 @@
 package com.publisher.managment.system.mapper;
 
+import com.publisher.managment.system.dto.OrderDTO;
 import com.publisher.managment.system.dto.PaymentDTO;
+import com.publisher.managment.system.entity.Order;
 import com.publisher.managment.system.entity.Payment;
 import com.publisher.managment.system.entity.enums.PaymentMethod;
 
@@ -13,7 +15,7 @@ public class PaymentMapper {
                 .paymentMethod(payment.getPaymentMethod().getValue())
                 .amount(payment.getAmount())
                 .transactionId(payment.getTransactionId())
-                .order(payment.getOrder() != null ? OrderMapper.toDto(payment.getOrder()) : null )
+                .order(payment.getOrder().getId() != null ? OrderMapper.toDto(payment.getOrder()) : null)
                 .createdAt(LocalDateTime.now())
                 .modifiedAt(LocalDateTime.now())
                 .deleted(payment.isDeleted())

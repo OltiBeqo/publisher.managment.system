@@ -1,11 +1,11 @@
 package com.publisher.managment.system.controller;
 
+
 import com.publisher.managment.system.BaseTest;
-import com.publisher.managment.system.dto.UserDTO;
 import com.publisher.managment.system.dto.auth.AuthRequest;
+import com.publisher.managment.system.entity.User;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
-import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
@@ -22,21 +22,20 @@ import java.util.Arrays;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @SpringBootTest
-@AutoConfigureMockMvc
 public class AuthControllerTest extends BaseTest {
 
     @MockBean
-    private  AuthenticationManager authenticationManager;
+    private AuthenticationManager authenticationManager;
 
     @MockBean
-    private  JwtEncoder jwtEncoder;
+    private JwtEncoder jwtEncoder;
 
     @Test
     public void test_login_ok() throws Exception{
         Authentication auth = Mockito.mock(UsernamePasswordAuthenticationToken.class);
         Mockito.doReturn(auth).when(authenticationManager).authenticate(Mockito.any());
-        UserDTO fakeUser = new UserDTO();
-        fakeUser.setUsername("user");
+        User fakeUser = new User();
+        fakeUser.setUsername("username");
         Mockito.doReturn(fakeUser).when(auth).getPrincipal();
         Mockito.doReturn(Arrays.asList(new SimpleGrantedAuthority("test")))
                 .when(auth).getAuthorities();
@@ -46,8 +45,8 @@ public class AuthControllerTest extends BaseTest {
         Mockito.doReturn("Bearer ").when(fakeJwt).getTokenValue();
 
         mvc.perform(MockMvcRequestBuilders.post("/auth/login")
-                .contentType(MediaType.APPLICATION_JSON)
-                .content(mapper.writeValueAsString(new AuthRequest("user","password"))))
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(mapper.writeValueAsString(new AuthRequest("username","password"))))
                 .andExpect(status().isOk());
     }
 }

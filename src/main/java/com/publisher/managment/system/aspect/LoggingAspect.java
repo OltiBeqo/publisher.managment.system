@@ -6,27 +6,43 @@ import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.stereotype.Component;
+import org.springframework.context.annotation.Configuration;
 
-@Component
+@Configuration
 @Aspect
 public class LoggingAspect {
     Logger logger = LoggerFactory.getLogger(LoggingAspect.class);
 
     @Before(value = "execution(* com.publisher.managment.system.controller.*.*(..)))")
-    public void beforeAdviceUser(JoinPoint joinPoint) {
+    public void beforeAdviceController(JoinPoint joinPoint) {
         logger.info("Controller Method {} got triggered", joinPoint.getSignature().getName());
     }
 
+    @Before(value = "execution(* com.publisher.managment.system.service.*.*(..)))")
+    public void beforeAdviceService(JoinPoint joinPoint) {
+        logger.info("Service Method {} got triggered", joinPoint.getSignature().getName());
+    }
+
     @AfterReturning(value = "execution(* com.publisher.managment.system.controller.*.*(..)))")
-    public void afterAdviceUser(JoinPoint joinPoint) {
-        logger.info("After Returning Method {} got triggered", joinPoint.getSignature().getName());
+    public void afterReturningAdviceController(JoinPoint joinPoint) {
+        logger.info("After Returning Controller Method {} got triggered", joinPoint.getSignature().getName());
+    }
+
+    @AfterReturning(value = "execution(* com.publisher.managment.system.controller.*.*(..)))")
+    public void afterReturningAdviceService(JoinPoint joinPoint) {
+        logger.info("After Returning Service Method {} got triggered", joinPoint.getSignature().getName());
     }
 
     @AfterThrowing(value = "com.publisher.managment.system.aspect.JoinPointConfiguration.controllerLogging()", throwing = "exception")
-    public void afterThrowingAdvice(JoinPoint joinPoint, Object exception) {
-        logger.info("After Throwing Method {} got triggered ERROR : {}", joinPoint.getSignature().getName(), exception.toString());
+    public void afterThrowingAdviceController(JoinPoint joinPoint, Object exception) {
+        logger.info("After Throwing Controller Method {} got triggered ERROR : {}", joinPoint.getSignature().getName(), exception.toString());
     }
+
+    @AfterThrowing(value = "com.publisher.managment.system.aspect.JoinPointConfiguration.logging()", throwing = "exception")
+    public void afterThrowingAdviceService(JoinPoint joinPoint, Object exception) {
+        logger.info("After Throwing Service Method {} got triggered ERROR : {}", joinPoint.getSignature().getName(), exception.toString());
+    }
+
 
     @Around(value = "@annotation(com.publisher.managment.system.aspect.TrackExecutionTime)")
     public Object AroundAdvice(ProceedingJoinPoint proceedingJoinPoint) throws Throwable {

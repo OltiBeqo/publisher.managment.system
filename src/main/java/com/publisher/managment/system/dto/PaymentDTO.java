@@ -21,6 +21,7 @@ public class PaymentDTO {
     private String transactionId = UUID.randomUUID().toString();
     private LocalDateTime createdAt;
     private OrderDTO order;
+//    private Integer orderId;
     private LocalDateTime modifiedAt;
     private boolean deleted;
 }

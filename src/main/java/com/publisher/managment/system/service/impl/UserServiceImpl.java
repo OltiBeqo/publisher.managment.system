@@ -16,7 +16,6 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import javax.persistence.EntityManager;
 import javax.transaction.Transactional;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -27,8 +26,6 @@ import static java.lang.String.format;
 public class UserServiceImpl extends ExceptionMessage implements UserService, UserDetailsService {
     @Autowired
     private UserRepository userRepository;
-    @Autowired
-    private EntityManager entityManager;
     @Autowired
     private PasswordEncoder passwordEncoder;
 
@@ -54,7 +51,7 @@ public class UserServiceImpl extends ExceptionMessage implements UserService, Us
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         return userRepository.findByUsername(username)
-                .orElseThrow(() -> new UsernameNotFoundException(format("User with username - %s, not found", username)));
+                .orElseThrow(() -> new UsernameNotFoundException(format(USERNAME_NOT_FOUND, username)));
     }
 
 
@@ -63,13 +60,6 @@ public class UserServiceImpl extends ExceptionMessage implements UserService, Us
         return userRepository.findById(id)
                 .map(UserMapper::toDto)
                 .orElseThrow(() -> new ResourceNotFoundException(String.format(USER_NOT_FOUND, id)));
-    }
-
-    @Override
-    public UserDTO getUserByUsername(String username) {
-        return userRepository.findByUsername(username)
-                .map(UserMapper::toDto)
-                .orElseThrow(() -> new ResourceNotFoundException("User not found"));
     }
 
     @Override

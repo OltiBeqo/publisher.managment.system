@@ -44,7 +44,8 @@ public class OrderServiceImpl extends ExceptionMessage implements OrderService {
     private void checkBooks(List<BookDTO> books) {
         books.forEach(bookDTO ->
         {
-            Book bookEntity = bookRepository.findById(bookDTO.getId()).orElseThrow(() -> new ResourceNotFoundException(BOOK_NOT_FOUND));
+            Book bookEntity = bookRepository.findById(bookDTO.getId())
+                    .orElseThrow(() -> new ResourceNotFoundException(String.format(BOOK_NOT_FOUND, bookDTO.getId())));
             Integer quantity = bookEntity.getQuantity();
             Integer orderedQuantity = bookDTO.getQuantity();
             if (orderedQuantity <= quantity) {
@@ -71,13 +72,15 @@ public class OrderServiceImpl extends ExceptionMessage implements OrderService {
     @Transactional
     public OrderDTO updateOrder(Integer id, OrderDTO orderDTO) {
         Order order = orderRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException(String.format(ORDER_NOT_FOUND, id)));
-        if (order.getOrderStatus().getValue() != OrderStatus.CANCELLED.getValue()) {
+        if (orderDTO.getOrderStatus() != OrderStatus.CANCELLED.getValue()) {
             OrderMapper.toDto(orderRepository.save(OrderMapper.toEntityForUpdate(order, orderDTO)));
         } else {
+            //set ordered quantity
+            //set payment to 0
             return null;
         }
         return null;
-        //TODO ROLLBACK IF ORDER GET CANCELLED
+        //TODO ROLLBACK CHANGES IF ORDER GET CANCELLED
     }
 
     @Override
@@ -109,10 +112,6 @@ public class OrderServiceImpl extends ExceptionMessage implements OrderService {
         return orderRepository.findAll().stream().count();
     }
 
-    @Override
-    public Double getTotalRevenue() {
-        return orderRepository.findAll().stream().map(Order::getTotalAmount).mapToDouble(Double::doubleValue).sum();
-    }
 
     private void calculateTotalAmount(OrderDTO orderDTO) {
         double totalAmount = orderDTO.getBooks().stream()

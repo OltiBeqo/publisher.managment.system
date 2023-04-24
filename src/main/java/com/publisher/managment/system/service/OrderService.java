@@ -23,5 +23,5 @@ public interface OrderService {
 
     long getTotalOfOrders();
 
-    Double getTotalRevenue();
+
 }

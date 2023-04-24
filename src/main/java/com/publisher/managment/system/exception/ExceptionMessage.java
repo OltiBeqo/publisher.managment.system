@@ -2,6 +2,7 @@ package com.publisher.managment.system.exception;
 
 public class ExceptionMessage {
     protected static final String USER_NOT_FOUND = "User with id %s not found";
+    protected static final String USERNAME_NOT_FOUND = "User with username : %s, not found";
     protected static final String USERNAME_EXISTS = "User with username %s already exists";
     protected static final String BOOK_TITLE_FOUND = "Book with title %s not found";
     protected static final String BOOK_NOT_FOUND = "Book with id %d not found";

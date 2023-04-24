@@ -14,6 +14,8 @@ public interface PaymentService {
 
     PaymentDTO getPaymentById(Integer paymentId);
 
+    Double getTotalRevenue();
+
     void deletePayment(Integer paymentId);
 
     List<PaymentDTO> getPaymentsByMethod(PaymentMethod paymentMethod);

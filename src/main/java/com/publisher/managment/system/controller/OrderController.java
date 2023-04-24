@@ -46,13 +46,6 @@ public class OrderController {
     }
 
     @TrackExecutionTime
-    @GetMapping("/totalRevenue")
-    @RolesAllowed({"ADMIN", "EMPLOYEE"})
-    public ResponseEntity<Double> getTotalRevenue() {
-        return ResponseEntity.ok(orderService.getTotalRevenue());
-    }
-
-    @TrackExecutionTime
     @GetMapping("/assigned")
     @RolesAllowed({"COURIER"})
     public ResponseEntity<List<OrderDTO>> getOrdersAssigned() {
