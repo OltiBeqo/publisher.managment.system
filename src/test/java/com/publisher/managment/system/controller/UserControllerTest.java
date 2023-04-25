@@ -1,9 +1,14 @@
 package com.publisher.managment.system.controller;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.publisher.managment.system.BaseTest;
 import com.publisher.managment.system.dto.UserDTO;
 import com.publisher.managment.system.exception.ResourceNotFoundException;
 import com.publisher.managment.system.service.UserService;
+
+import java.time.LocalDate;
+
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mockito;
@@ -17,13 +22,13 @@ import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.web.servlet.request.MockHttpServletRequestBuilder;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
-import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
 import java.util.ArrayList;
 
+import org.springframework.test.web.servlet.setup.MockMvcBuilders;
+
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.doReturn;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @SpringBootTest
@@ -44,6 +49,7 @@ public class UserControllerTest extends BaseTest {
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(mapper.writeValueAsString(new UserDTO())))
                 .andExpect(status().isOk());
+        //TODO
     }
 
     @Test
@@ -60,10 +66,7 @@ public class UserControllerTest extends BaseTest {
     public void test_getUsers_ok() throws Exception {
         SecurityContextHolder.getContext().setAuthentication(getAuthentication("ROLE_ADMIN"));
         when(userService.getUsers()).thenReturn(new ArrayList<>());
-        MockHttpServletRequestBuilder requestBuilder = MockMvcRequestBuilders.get("/users");
-        MockMvcBuilders.standaloneSetup(userController)
-                .build()
-                .perform(requestBuilder)
+        mvc.perform(MockMvcRequestBuilders.get("/users"))
                 .andExpect(MockMvcResultMatchers.status().isOk())
                 .andExpect(MockMvcResultMatchers.content().contentType(MediaType.APPLICATION_JSON))
                 .andExpect(MockMvcResultMatchers.content().string("[]"));
@@ -93,8 +96,11 @@ public class UserControllerTest extends BaseTest {
     }
 
     @Test
-    public void test_deleteUserById_ok() {
-
+    void testDeleteUserById() throws Exception {
+        SecurityContextHolder.getContext().setAuthentication(getAuthentication("ROLE_ADMIN"));
+        doNothing().when(userService).deleteUserById(Mockito.any());
+        mvc.perform(MockMvcRequestBuilders.delete("/users/{id}", 1)
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk());
     }
-
 }

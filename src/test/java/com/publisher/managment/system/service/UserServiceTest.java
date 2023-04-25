@@ -1,12 +1,12 @@
 package com.publisher.managment.system.service;
 
 import com.publisher.managment.system.dto.UserDTO;
-import com.publisher.managment.system.dto.auth.AuthRequest;
 import com.publisher.managment.system.entity.User;
 import com.publisher.managment.system.entity.enums.Gender;
 import com.publisher.managment.system.entity.enums.Role;
 import com.publisher.managment.system.exception.ResourceNotFoundException;
 import com.publisher.managment.system.repository.UserRepository;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,14 +14,12 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.ArgumentMatchers.anyInt;
 import static org.mockito.Mockito.*;
 
 @SpringBootTest
@@ -35,11 +33,13 @@ public class UserServiceTest {
     private PasswordEncoder encoder;
 
     @Test
+    @Disabled
     public void test_registerUser_ok(){
 
     }
 
     @Test
+    @Disabled
     public void test_registerUser_ko(){
 
     }
@@ -105,6 +105,7 @@ public class UserServiceTest {
     }
 
     @Test
+    @Disabled
     public void test_updateUser_ok(){
 
     }
@@ -121,6 +122,7 @@ public class UserServiceTest {
     }
 
     @Test
+    @Disabled
     public void test_getRandomCourier_ok(){
 
     }

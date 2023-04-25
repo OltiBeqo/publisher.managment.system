@@ -13,4 +13,6 @@ public class ExceptionMessage {
     protected static final String PAYMENT_NOT_FOUND = "Payment with id %s not found";
     protected static final String COURIER_NOT_FOUND = "Courier not found";
     protected static final String ORDER_ALREADY_CANCELLED = "Order %s is already cancelled and cannot be updated, please create a new one";
+    protected static final String ORDER_NOT_COMPLETED = "Order with id %s is in status %s, cannot be added a payment";
+    protected static final String PAYMENT_EXISTS = "Payment for order id %s already exists";
 }

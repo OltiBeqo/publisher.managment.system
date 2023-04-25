@@ -34,9 +34,8 @@ public class PaymentMapper {
                 .build();
     }
 
-    public static Payment toEntityForUpdate(Payment payment, PaymentDTO paymentDTO) {
+    public static Payment updatePaymentMethod(Payment payment, PaymentDTO paymentDTO) {
         payment.setPaymentMethod(PaymentMethod.fromValue(paymentDTO.getPaymentMethod()));
-        payment.setAmount(paymentDTO.getAmount());
         payment.setModifiedAt(LocalDateTime.now());
         return payment;
     }

@@ -24,6 +24,7 @@ public class OrderDTO {
     private String orderStatus;
     @NotNull(message = "at least a books is required to create an order")
     private List<BookDTO> books;
+    @NotNull(message = "Library is required")
     private LibraryDTO library;
     private LocalDateTime createdAt;
     private LocalDateTime modifiedAt;

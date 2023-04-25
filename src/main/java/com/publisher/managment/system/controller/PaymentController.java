@@ -49,6 +49,13 @@ public class PaymentController {
 
     @TrackExecutionTime
     @RolesAllowed({"ADMIN", "EMPLOYEE"})
+    @PutMapping
+    public ResponseEntity<PaymentDTO> updatePaymentMethod(@RequestBody PaymentDTO paymentDTO){
+        return ResponseEntity.ok(paymentService.updatePaymentMethod(paymentDTO));
+    }
+
+    @TrackExecutionTime
+    @RolesAllowed({"ADMIN", "EMPLOYEE"})
     @PostMapping
     public ResponseEntity<PaymentDTO> addPayment(@RequestBody PaymentDTO paymentDTO) {
         return ResponseEntity.ok(paymentService.addPayment(paymentDTO));

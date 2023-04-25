@@ -4,9 +4,12 @@ import com.publisher.managment.system.dto.OrderDTO;
 import com.publisher.managment.system.dto.PaymentDTO;
 import com.publisher.managment.system.entity.Order;
 import com.publisher.managment.system.entity.Payment;
+import com.publisher.managment.system.entity.enums.OrderStatus;
 import com.publisher.managment.system.entity.enums.PaymentMethod;
+import com.publisher.managment.system.exception.BadRequestException;
 import com.publisher.managment.system.exception.ExceptionMessage;
 import com.publisher.managment.system.exception.ResourceNotFoundException;
+import com.publisher.managment.system.mapper.OrderMapper;
 import com.publisher.managment.system.mapper.PaymentMapper;
 import com.publisher.managment.system.repository.PaymentRepository;
 import com.publisher.managment.system.service.OrderService;
@@ -15,6 +18,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -27,16 +31,24 @@ public class PaymentServiceImpl extends ExceptionMessage implements PaymentServi
     @Override
     public PaymentDTO addPayment(PaymentDTO paymentDTO) {
         OrderDTO orderDTO = orderService.getOrderById(paymentDTO.getOrder().getId());
+        Order order = OrderMapper.toEntity(orderDTO);
+        Optional <Payment> payment = paymentRepository.findByOrderId(order.getId());
+        if (payment.isPresent()){
+            throw new BadRequestException(String.format(PAYMENT_EXISTS, order.getId()));
+        }else if (!order.getOrderStatus().equals(OrderStatus.COMPLETED)){
+            throw new BadRequestException(String.format(ORDER_NOT_COMPLETED, order.getId(), order.getOrderStatus()));
+        }
         paymentDTO.setOrder(orderDTO);
         paymentDTO.setAmount(orderDTO.getTotalAmount());
         return PaymentMapper.toDto(paymentRepository.save(PaymentMapper.toEntity(paymentDTO)));
     }
 
     @Override
-    public PaymentDTO updatePayment(PaymentDTO paymentDTO) {
+    public PaymentDTO updatePaymentMethod(PaymentDTO paymentDTO) {
         Payment payment = paymentRepository.findById(paymentDTO.getId())
                 .orElseThrow(() -> new ResourceNotFoundException(String.format(PAYMENT_NOT_FOUND, paymentDTO.getId())));
-        return PaymentMapper.toDto(paymentRepository.save(PaymentMapper.toEntityForUpdate(payment, paymentDTO)));
+        payment.setPaymentMethod(PaymentMethod.fromValue(paymentDTO.getPaymentMethod()));
+        return PaymentMapper.toDto(paymentRepository.save(PaymentMapper.updatePaymentMethod(payment, paymentDTO)));
     }
 
     @Override

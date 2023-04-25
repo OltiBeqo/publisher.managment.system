@@ -8,7 +8,7 @@ import java.util.List;
 public interface PaymentService {
     PaymentDTO addPayment(PaymentDTO paymentDTO);
 
-    PaymentDTO updatePayment(PaymentDTO paymentDTO);
+    PaymentDTO updatePaymentMethod(PaymentDTO paymentDTO);
 
     List<PaymentDTO> getPaymentsByStatus(boolean isDeleted);
 
