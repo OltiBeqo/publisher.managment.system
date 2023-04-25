@@ -1,6 +1,7 @@
 package com.publisher.managment.system.mapper;
 
 import com.publisher.managment.system.dto.UserDTO;
+import com.publisher.managment.system.dto.auth.AuthRequest;
 import com.publisher.managment.system.entity.User;
 import com.publisher.managment.system.entity.enums.Gender;
 import com.publisher.managment.system.entity.enums.Role;
@@ -27,7 +28,6 @@ public class UserMapper {
                 .username(userDTO.getUsername())
                 .firstname(userDTO.getFirstname())
                 .lastname(userDTO.getLastname())
-                .password(userDTO.getPassword())
                 .gender(Gender.fromValue(userDTO.getGender()))
                 .role(Role.fromValue(userDTO.getRole()))
                 .createdAt(LocalDateTime.now())
@@ -42,6 +42,17 @@ public class UserMapper {
         user.setRole(Role.fromValue(userDTO.getRole()));
         user.setModifiedAt(LocalDateTime.now());
         return user;
+    }
+
+    public static User toRegister(AuthRequest request) {
+        return User.builder()
+                .username(request.getUsername())
+                .firstname(request.getFirstname())
+                .lastname(request.getLastname())
+                .password(request.getPassword())
+                .gender(Gender.fromValue(request.getGender()))
+                .role(request.getRole() != null ? Role.fromValue(request.getRole()) : Role.EMPLOYEE)
+                .build();
     }
 
 }

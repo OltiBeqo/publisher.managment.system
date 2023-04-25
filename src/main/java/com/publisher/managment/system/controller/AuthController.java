@@ -76,22 +76,14 @@ public class AuthController {
         }
     }
 
-    @TrackExecutionTime
-    @GetMapping("/logout")
-    //TODO CHECK
-    public Void logout(HttpServletRequest request, HttpServletResponse response) {
-        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-        if (auth != null) {
-            new SecurityContextLogoutHandler().logout(request, response, auth);
-        }
-        return null;
-    }
-
-    @TrackExecutionTime
-    @PostMapping("/register")
-    @RolesAllowed({"ADMIN"})
-    public ResponseEntity<UserDTO> registerUser(@RequestBody @Valid UserDTO u) {
-        return ResponseEntity.ok(userService.registerUser(u));
-    }
+//    @TrackExecutionTime
+//    @GetMapping("/logout")
+//    public Void logout(HttpServletRequest request, HttpServletResponse response) {
+//        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+//        if (auth != null) {
+//            new SecurityContextLogoutHandler().logout(request, response, auth);
+//        }
+//        return null;
+//    }
 
 }

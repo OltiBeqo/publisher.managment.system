@@ -39,10 +39,10 @@ public class CategoryController {
     }
 
     @TrackExecutionTime
-    @PutMapping("/{id}")
+    @PutMapping
     @RolesAllowed({"ADMIN", "EMPLOYEE"})
-    public ResponseEntity<CategoryDTO> updateCategory(@PathVariable Integer id, @RequestBody CategoryDTO categoryDTO) {
-        return ResponseEntity.ok(categoryService.updateCategory(id, categoryDTO));
+    public ResponseEntity<CategoryDTO> updateCategory(@RequestBody CategoryDTO categoryDTO) {
+        return ResponseEntity.ok(categoryService.updateCategory(categoryDTO));
     }
 
     @TrackExecutionTime

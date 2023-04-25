@@ -50,8 +50,9 @@ public class BookServiceImpl extends ExceptionMessage implements BookService {
 
     @Override
     @Transactional
-    public BookDTO updateBook(Integer id, BookDTO bookDTO) {
-        Book book = bookRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException(String.format(BOOK_NOT_FOUND, id)));
+    public BookDTO updateBook(BookDTO bookDTO) {
+        Book book = bookRepository.findById(bookDTO.getId())
+                .orElseThrow(() -> new ResourceNotFoundException(String.format(BOOK_NOT_FOUND, bookDTO.getId())));
         return BookMapper.toDto(bookRepository.save(BookMapper.toEntityForUpdate(book, bookDTO)));
     }
 

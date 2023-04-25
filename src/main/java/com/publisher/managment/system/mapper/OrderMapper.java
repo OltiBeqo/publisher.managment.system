@@ -19,7 +19,6 @@ public class OrderMapper {
                 .user(UserMapper.toDto(order.getUser()))
                 .courier(UserMapper.toDto(order.getCourier()))
                 .orderStatus(order.getOrderStatus().getValue())
-                .books(order.getBooks().stream().map(BookMapper::toDto).collect(Collectors.toList()))
                 .totalAmount(order.getTotalAmount())
                 .deleted(order.isDeleted())
                 .createdAt(LocalDateTime.now())
@@ -40,14 +39,12 @@ public class OrderMapper {
                         : null
                 )
                 .orderStatus(OrderStatus.fromValue(orderDTO.getOrderStatus()))
-                .books(orderDTO.getBooks().stream().map(BookMapper::toEntity).collect(Collectors.toList()))
                 .createdAt(LocalDateTime.now())
                 .modifiedAt(LocalDateTime.now())
                 .build();
     }
 
     public static Order toEntityForUpdate(Order order, OrderDTO orderDTO) {
-        order.setBooks(orderDTO.getBooks().stream().map(BookMapper::toEntity).collect(Collectors.toList()));
         order.setComment(orderDTO.getComment());
         order.setOrderStatus(OrderStatus.fromValue(orderDTO.getOrderStatus()));
         order.setModifiedAt(LocalDateTime.now());

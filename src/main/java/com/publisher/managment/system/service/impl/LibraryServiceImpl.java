@@ -36,9 +36,9 @@ public class LibraryServiceImpl extends ExceptionMessage implements LibraryServi
     }
     @Override
     @Transactional
-    public LibraryDTO updateLibrary(Integer id, LibraryDTO libraryDTO) {
-        Library library = libraryRepository.findById(id)
-                .orElseThrow(()-> new ResourceNotFoundException(String.format(LIBRARY_NOT_FOUND, id)));
+    public LibraryDTO updateLibrary(LibraryDTO libraryDTO) {
+        Library library = libraryRepository.findById(libraryDTO.getId())
+                .orElseThrow(()-> new ResourceNotFoundException(String.format(LIBRARY_NOT_FOUND, libraryDTO.getId())));
         return LibraryMapper.toDto(libraryRepository.save(LibraryMapper.toEntityForUpdate(library, libraryDTO)));
     }
     @Override

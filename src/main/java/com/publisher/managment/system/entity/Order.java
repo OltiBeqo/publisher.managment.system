@@ -42,9 +42,6 @@ public class Order {
     @ManyToOne
     @JoinColumn(name = "user_id", referencedColumnName = "id")
     private User user;
-    @ManyToMany
-    @JoinColumn(name = "order_id", referencedColumnName = "id")
-    private List<Book> books = new ArrayList<>();
     @OneToOne(mappedBy = "order", fetch = FetchType.LAZY)
     private Payment payment;
     @OneToOne

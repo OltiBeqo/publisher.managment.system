@@ -13,7 +13,7 @@ public interface BookService {
 
     BookDTO getBookByTitle(String title);
 
-    BookDTO updateBook(Integer id, BookDTO bookDTO);
+    BookDTO updateBook(BookDTO bookDTO);
 
     void deleteBookById(Integer id);
 }

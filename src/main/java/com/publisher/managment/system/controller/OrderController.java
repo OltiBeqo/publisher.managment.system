@@ -60,10 +60,10 @@ public class OrderController {
     }
 
     @TrackExecutionTime
-    @PutMapping("/{id}")
+    @PutMapping
     @RolesAllowed({"ADMIN", "EMPLOYEE"})
-    public ResponseEntity<OrderDTO> updateOrder(@PathVariable Integer id, @RequestBody OrderDTO orderDTO) {
-        return ResponseEntity.ok(orderService.updateOrder(id, orderDTO));
+    public ResponseEntity<OrderDTO> updateOrder(@RequestBody OrderDTO orderDTO) {
+        return ResponseEntity.ok(orderService.updateOrder(orderDTO));
     }
 
     @TrackExecutionTime

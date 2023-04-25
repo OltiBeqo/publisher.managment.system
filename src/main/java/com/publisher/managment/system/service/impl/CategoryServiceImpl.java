@@ -38,9 +38,9 @@ public class CategoryServiceImpl extends ExceptionMessage implements CategorySer
 
     @Override
     @Transactional
-    public CategoryDTO updateCategory(Integer id, CategoryDTO categoryDTO) {
-        Category category = categoryRepository.findById(id)
-                .orElseThrow(() -> new ResourceNotFoundException(String.format(CATEGORY_NOT_FOUND, id)));
+    public CategoryDTO updateCategory(CategoryDTO categoryDTO) {
+        Category category = categoryRepository.findById(categoryDTO.getId())
+                .orElseThrow(() -> new ResourceNotFoundException(String.format(CATEGORY_NOT_FOUND, categoryDTO.getId())));
         return CategoryMapper.toDto(categoryRepository.save(CategoryMapper.toEntityForUpdate(category, categoryDTO)));
     }
 

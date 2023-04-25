@@ -33,9 +33,9 @@ public class PaymentServiceImpl extends ExceptionMessage implements PaymentServi
     }
 
     @Override
-    public PaymentDTO updatePayment(Integer paymentId, PaymentDTO paymentDTO) {
-        Payment payment = paymentRepository.findById(paymentId)
-                .orElseThrow(() -> new ResourceNotFoundException(String.format(PAYMENT_NOT_FOUND, paymentId)));
+    public PaymentDTO updatePayment(PaymentDTO paymentDTO) {
+        Payment payment = paymentRepository.findById(paymentDTO.getId())
+                .orElseThrow(() -> new ResourceNotFoundException(String.format(PAYMENT_NOT_FOUND, paymentDTO.getId())));
         return PaymentMapper.toDto(paymentRepository.save(PaymentMapper.toEntityForUpdate(payment, paymentDTO)));
     }
 

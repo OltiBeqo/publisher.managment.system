@@ -1,6 +1,7 @@
 package com.publisher.managment.system.service.impl;
 
 import com.publisher.managment.system.dto.UserDTO;
+import com.publisher.managment.system.dto.auth.AuthRequest;
 import com.publisher.managment.system.entity.User;
 import com.publisher.managment.system.entity.enums.Role;
 import com.publisher.managment.system.exception.BadRequestException;
@@ -18,6 +19,7 @@ import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 import static java.lang.String.format;
@@ -31,16 +33,14 @@ public class UserServiceImpl extends ExceptionMessage implements UserService, Us
 
     @Override
     @Transactional
-    public UserDTO registerUser(UserDTO userDTO) {
+    public UserDTO registerUser(AuthRequest request) {
 
-        User user = userRepository.findByUsername(userDTO.getUsername()).orElse(null);
-        if (user != null) {
-            throw new BadRequestException(String.format(USERNAME_EXISTS, userDTO.getUsername()));
+        Optional <User> optionalUser = userRepository.findByUsername(request.getUsername());
+        if (optionalUser.isPresent()) {
+            throw new BadRequestException(String.format(USERNAME_EXISTS, request.getUsername()));
         }
-        user = UserMapper.toEntity(userDTO);
-        user.setRole(userDTO.getRole() != null ? Role.fromValue(userDTO.getRole()) : Role.EMPLOYEE);
-        user.setPassword(passwordEncoder.encode(userDTO.getPassword()));
-        return UserMapper.toDto(userRepository.save(user));
+        request.setPassword(passwordEncoder.encode(request.getPassword()));
+        return UserMapper.toDto(userRepository.save(UserMapper.toRegister(request)));
     }
 
     @Override
@@ -64,9 +64,9 @@ public class UserServiceImpl extends ExceptionMessage implements UserService, Us
 
     @Override
     @Transactional
-    public UserDTO updateUser(Integer id, UserDTO userDTO) {
-        User user = userRepository.findById(id)
-                .orElseThrow(() -> new ResourceNotFoundException(String.format(USER_NOT_FOUND, id)));
+    public UserDTO updateUser(UserDTO userDTO) {
+        User user = userRepository.findById(userDTO.getId())
+                .orElseThrow(() -> new ResourceNotFoundException(String.format(USER_NOT_FOUND, userDTO.getId())));
         return UserMapper.toDto(userRepository.save(UserMapper.toEntityForUpdate(user, userDTO)));
     }
 

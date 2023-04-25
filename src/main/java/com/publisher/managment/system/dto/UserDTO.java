@@ -17,7 +17,6 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-
 public class UserDTO {
     private Integer id;
     @NotEmpty(message = "Name is required")
@@ -26,9 +25,6 @@ public class UserDTO {
     private String lastname;
     @NotEmpty(message = "Username is required")
     private String username;
-    @NotEmpty(message = "Password is required")
-    @Size(min = 6, max = 10, message = "Password must be between 6 and 8 characters")
-    private String password;
     @NotEmpty(message = "Define gender")
     private String gender;
     @NotEmpty(message = "Select role")

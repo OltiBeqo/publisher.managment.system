@@ -17,6 +17,7 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configurers.oauth2.server.resource.OAuth2ResourceServerConfigurer;
 import org.springframework.security.config.http.SessionCreationPolicy;
+import org.springframework.security.config.web.server.ServerHttpSecurity;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -29,6 +30,10 @@ import org.springframework.security.oauth2.server.resource.authentication.JwtGra
 import org.springframework.security.oauth2.server.resource.web.BearerTokenAuthenticationEntryPoint;
 import org.springframework.security.oauth2.server.resource.web.access.BearerTokenAccessDeniedHandler;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.server.SecurityWebFilterChain;
+import org.springframework.security.web.server.authentication.logout.DelegatingServerLogoutHandler;
+import org.springframework.security.web.server.authentication.logout.SecurityContextServerLogoutHandler;
+import org.springframework.security.web.server.authentication.logout.WebSessionServerLogoutHandler;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 import org.springframework.web.filter.CorsFilter;
@@ -41,8 +46,7 @@ import static java.lang.String.format;
 
 @Configuration
 @EnableWebSecurity
-@EnableGlobalMethodSecurity(securedEnabled = true,
-        jsr250Enabled = true, prePostEnabled = true)
+@EnableGlobalMethodSecurity(securedEnabled = true, jsr250Enabled = true, prePostEnabled = true)
 @RequiredArgsConstructor
 public class SecurityConfig {
     private final UserRepository userRepository;
@@ -52,14 +56,8 @@ public class SecurityConfig {
     private RSAPrivateKey rsaPrivateKey;
 
     @Bean
-    public AuthenticationManager authenticationManager(
-            HttpSecurity http, BCryptPasswordEncoder bCryptPasswordEncoder) throws Exception {
-        return http.getSharedObject(AuthenticationManagerBuilder.class)
-                .userDetailsService(username -> userRepository.findByUsername(username).orElseThrow(
-                        () -> new UsernameNotFoundException(format("User: %s, not found", username))))
-                .passwordEncoder(bCryptPasswordEncoder)
-                .and()
-                .build();
+    public AuthenticationManager authenticationManager(HttpSecurity http, BCryptPasswordEncoder bCryptPasswordEncoder) throws Exception {
+        return http.getSharedObject(AuthenticationManagerBuilder.class).userDetailsService(username -> userRepository.findByUsername(username).orElseThrow(() -> new UsernameNotFoundException(format("User: %s, not found", username)))).passwordEncoder(bCryptPasswordEncoder).and().build();
     }
 
     @Bean
@@ -71,23 +69,15 @@ public class SecurityConfig {
         http.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
 
         // Set unauthorized requests exception handler
-        http.exceptionHandling(
-                (exceptions) ->
-                        exceptions
-                                .authenticationEntryPoint(new BearerTokenAuthenticationEntryPoint())
-                                .accessDeniedHandler(new BearerTokenAccessDeniedHandler()));
+        http.exceptionHandling((exceptions) -> exceptions.authenticationEntryPoint(new BearerTokenAuthenticationEntryPoint()).accessDeniedHandler(new BearerTokenAccessDeniedHandler()));
         // Set permissions on endpoints
         http.authorizeRequests()
                 // Our public endpoints
-                .mvcMatchers("/auth/**")
-                .permitAll()
+                .mvcMatchers("/auth/**").permitAll()
                 // Our private endpoints
-                .anyRequest()
-                .authenticated()
+                .anyRequest().authenticated()
                 // Set up oauth2 resource server
-                .and()
-                .httpBasic(Customizer.withDefaults())
-                .oauth2ResourceServer(OAuth2ResourceServerConfigurer::jwt);
+                .and().httpBasic(Customizer.withDefaults()).oauth2ResourceServer(OAuth2ResourceServerConfigurer::jwt);
 
         return http.build();
     }
@@ -138,8 +128,15 @@ public class SecurityConfig {
 
     // Expose authentication manager bean
     @Bean
-    public AuthenticationManager authenticationManager(
-            AuthenticationConfiguration authenticationConfiguration) throws Exception {
+    public AuthenticationManager authenticationManager(AuthenticationConfiguration authenticationConfiguration) throws Exception {
         return authenticationConfiguration.getAuthenticationManager();
+    }
+
+    @Bean
+    SecurityWebFilterChain http(ServerHttpSecurity http) throws Exception {
+        DelegatingServerLogoutHandler logoutHandler = new DelegatingServerLogoutHandler(new WebSessionServerLogoutHandler(), new SecurityContextServerLogoutHandler());
+        http.authorizeExchange((exchange) -> exchange.anyExchange().authenticated()).logout((logout) -> logout.logoutHandler(logoutHandler));
+
+        return http.build();
     }
 }

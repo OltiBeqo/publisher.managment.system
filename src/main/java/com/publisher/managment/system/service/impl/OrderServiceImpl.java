@@ -5,6 +5,7 @@ import com.publisher.managment.system.dto.OrderDTO;
 import com.publisher.managment.system.dto.auth.SecurityUtil;
 import com.publisher.managment.system.entity.Book;
 import com.publisher.managment.system.entity.Order;
+import com.publisher.managment.system.entity.OrdersBooks;
 import com.publisher.managment.system.entity.enums.OrderStatus;
 import com.publisher.managment.system.exception.BadRequestException;
 import com.publisher.managment.system.exception.ExceptionMessage;
@@ -12,6 +13,7 @@ import com.publisher.managment.system.exception.ResourceNotFoundException;
 import com.publisher.managment.system.mapper.OrderMapper;
 import com.publisher.managment.system.repository.BookRepository;
 import com.publisher.managment.system.repository.OrderRepository;
+import com.publisher.managment.system.repository.OrdersBooksRepository;
 import com.publisher.managment.system.service.OrderService;
 import com.publisher.managment.system.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,32 +31,43 @@ public class OrderServiceImpl extends ExceptionMessage implements OrderService {
     private UserService userService;
     @Autowired
     private BookRepository bookRepository;
+    @Autowired
+    private OrdersBooksRepository ordersBooksRepository;
 
     @Override
     @Transactional
     public OrderDTO createOrder(OrderDTO orderDTO) {
-        checkBooks(orderDTO.getBooks());
         calculateTotalAmount(orderDTO);
         orderDTO.setOrderStatus(OrderStatus.IN_PENDING.getValue());
         orderDTO.setCourier(userService.getRandomCourier());
         orderDTO.setUser(userService.getUserById(SecurityUtil.getUserIdFromContext()));
-        return OrderMapper.toDto(orderRepository.save(OrderMapper.toEntity(orderDTO)));
+        Order order = orderRepository.save(OrderMapper.toEntity(orderDTO));
+        saveOrderBooks(order.getId(), orderDTO.getBooks());
+        return OrderMapper.toDto(order);
     }
 
-    private void checkBooks(List<BookDTO> books) {
-        books.forEach(bookDTO ->
-        {
-            Book bookEntity = bookRepository.findById(bookDTO.getId())
-                    .orElseThrow(() -> new ResourceNotFoundException(String.format(BOOK_NOT_FOUND, bookDTO.getId())));
-            Integer quantity = bookEntity.getQuantity();
-            Integer orderedQuantity = bookDTO.getQuantity();
-            if (orderedQuantity <= quantity) {
-                bookEntity.setQuantity(quantity - orderedQuantity);
-                bookRepository.save(bookEntity);
-            } else {
-                throw new BadRequestException(String.format(QUANTITY_NOT_AVAILABLE, orderedQuantity));
-            }
+    private void saveOrderBooks(Integer orderId, List<BookDTO> books) {
+        books.forEach(bookDTO -> {
+            checkBooks(bookDTO);
+            OrdersBooks ordersBooks = new OrdersBooks();
+            ordersBooks.setOrderId(orderId);
+            ordersBooks.setBookId(bookDTO.getId());
+            ordersBooks.setBookQuantity(bookDTO.getQuantity());
+            ordersBooksRepository.save(ordersBooks);
         });
+    }
+
+    private void checkBooks(BookDTO bookDTO) {
+        Book bookEntity = bookRepository.findById(bookDTO.getId())
+                .orElseThrow(() -> new ResourceNotFoundException(String.format(BOOK_NOT_FOUND, bookDTO.getId())));
+        Integer quantity = bookEntity.getQuantity();
+        Integer orderedQuantity = bookDTO.getQuantity();
+        if (orderedQuantity <= quantity) {
+            bookEntity.setQuantity(quantity - orderedQuantity);
+            bookRepository.save(bookEntity);
+        } else {
+            throw new BadRequestException(String.format(QUANTITY_NOT_AVAILABLE, orderedQuantity));
+        }
     }
 
     @Override
@@ -70,17 +83,33 @@ public class OrderServiceImpl extends ExceptionMessage implements OrderService {
 
     @Override
     @Transactional
-    public OrderDTO updateOrder(Integer id, OrderDTO orderDTO) {
-        Order order = orderRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException(String.format(ORDER_NOT_FOUND, id)));
-        if (orderDTO.getOrderStatus() != OrderStatus.CANCELLED.getValue()) {
-            OrderMapper.toDto(orderRepository.save(OrderMapper.toEntityForUpdate(order, orderDTO)));
+    public OrderDTO updateOrder(OrderDTO orderDTO) {
+        Order order = orderRepository.findById(orderDTO.getId())
+                .orElseThrow(() -> new ResourceNotFoundException(String.format(ORDER_NOT_FOUND, orderDTO.getId())));
+
+        if (!orderDTO.getOrderStatus().equals(OrderStatus.CANCELLED.getValue())) {
+            orderRepository.save(OrderMapper.toEntityForUpdate(order, orderDTO));
         } else {
-            //set ordered quantity
-            //set payment to 0
-            return null;
+            rollbackChanges(order);
         }
-        return null;
-        //TODO ROLLBACK CHANGES IF ORDER GET CANCELLED
+        return orderDTO;
+    }
+
+    private void rollbackChanges(Order order) {
+        updateBookQuantity(order.getId());
+        order.setTotalAmount(0.0);
+        order.setOrderStatus(OrderStatus.CANCELLED);
+        orderRepository.save(order);
+    }
+
+    private void updateBookQuantity(Integer orderId){
+        List<OrdersBooks> ordersBooks = ordersBooksRepository.findByOrderId(orderId);
+        ordersBooks.forEach(relation -> {
+            Book book = bookRepository.findById(relation.getBookId())
+                    .orElseThrow(()-> new ResourceNotFoundException(String.format("")));
+            book.setQuantity(book.getQuantity() + relation.getBookQuantity());
+            bookRepository.save(book);
+        });
     }
 
     @Override

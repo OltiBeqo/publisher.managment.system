@@ -46,7 +46,7 @@ public class AuthControllerTest extends BaseTest {
 
         mvc.perform(MockMvcRequestBuilders.post("/auth/login")
                         .contentType(MediaType.APPLICATION_JSON)
-                        .content(mapper.writeValueAsString(new AuthRequest("username","password"))))
+                        .content(mapper.writeValueAsString(new AuthRequest("username","password", " ", " ", " ", " "))))
                 .andExpect(status().isOk());
     }
 }

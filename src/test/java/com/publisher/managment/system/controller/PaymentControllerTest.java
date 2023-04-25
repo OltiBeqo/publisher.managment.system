@@ -5,25 +5,25 @@ import org.springframework.boot.test.context.SpringBootTest;
 
 @SpringBootTest
 @AutoConfigureMockMvc
-public class CategoryControllerTest {
+public class PaymentControllerTest {
 
-    public void test_getCategories_ok() {
-
-    }
-
-    public void test_getCategoryById_ok() {
+    public void test_addPayment_ok() {
 
     }
 
-    public void test_addCategory_ok() {
+    public void test_getPaymentsByStatus_ok() {
 
     }
 
-    public void test_updateCategory_ok() {
+    public void test_getPaymentById_ok() {
 
     }
 
-    public void test_deleteCategoryById_ok() {
+    public void test_getTotalRevenue_ok() {
+
+    }
+
+    public void test_deletePayment_ok() {
 
     }
 

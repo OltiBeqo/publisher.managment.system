@@ -46,10 +46,10 @@ public class BookController {
     }
 
     @TrackExecutionTime
-    @PutMapping("/{id}")
+    @PutMapping
     @RolesAllowed({"ADMIN", "EMPLOYEE"})
-    public ResponseEntity<BookDTO> updateBook(@PathVariable Integer id, @RequestBody BookDTO bookDTO) {
-        return ResponseEntity.ok(bookService.updateBook(id, bookDTO));
+    public ResponseEntity<BookDTO> updateBook(@RequestBody BookDTO bookDTO) {
+        return ResponseEntity.ok(bookService.updateBook(bookDTO));
     }
 
     @TrackExecutionTime

@@ -39,10 +39,10 @@ public class LibraryController {
     }
 
     @TrackExecutionTime
-    @PutMapping("/{id}")
+    @PutMapping
     @RolesAllowed({"ADMIN", "EMPLOYEE"})
-    public ResponseEntity<LibraryDTO> updateLibrary(@PathVariable Integer id, @RequestBody LibraryDTO libraryDTO) {
-        return ResponseEntity.ok(libraryService.updateLibrary(id, libraryDTO));
+    public ResponseEntity<LibraryDTO> updateLibrary(@RequestBody LibraryDTO libraryDTO) {
+        return ResponseEntity.ok(libraryService.updateLibrary(libraryDTO));
     }
 
     @TrackExecutionTime
