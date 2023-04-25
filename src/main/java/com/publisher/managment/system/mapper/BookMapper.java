@@ -34,7 +34,7 @@ public class BookMapper {
                 .price(bookDTO.getPrice())
                 .category(
                         bookDTO.getCategory() != null
-                                ? Category.builder().id(bookDTO.getCategory().getId()).build()
+                                ? CategoryMapper.toEntity(bookDTO.getCategory())
                                 : null
                 )
                 .quantity(bookDTO.getQuantity())

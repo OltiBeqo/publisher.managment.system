@@ -2,21 +2,20 @@ package com.publisher.managment.system.dto.auth;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.annotation.CreatedDate;
 
-import javax.validation.constraints.Email;
-import javax.validation.constraints.NotEmpty;
-import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Size;
+import javax.validation.constraints.*;
 import java.time.LocalDateTime;
 
 @Data
 @AllArgsConstructor
+@NoArgsConstructor
 public class AuthRequest {
-    @NotNull
+    @NotEmpty(message = "Username is required")
     private String username;
-    @NotNull
+    @NotEmpty(message = "Create a password")
     private String password;
     @NotEmpty(message = "Name is required")
     private String firstname;

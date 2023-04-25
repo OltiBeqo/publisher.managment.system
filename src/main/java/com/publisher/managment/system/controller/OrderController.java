@@ -62,8 +62,9 @@ public class OrderController {
     @TrackExecutionTime
     @PutMapping
     @RolesAllowed({"ADMIN", "EMPLOYEE"})
-    public ResponseEntity<OrderDTO> updateOrder(@RequestBody OrderDTO orderDTO) {
-        return ResponseEntity.ok(orderService.updateOrder(orderDTO));
+    public ResponseEntity<Void> updateOrder(@RequestBody OrderDTO orderDTO) {
+         orderService.updateOrderStatus(orderDTO);
+         return new ResponseEntity<>(HttpStatus.OK);
     }
 
     @TrackExecutionTime

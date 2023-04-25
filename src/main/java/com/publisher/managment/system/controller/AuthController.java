@@ -3,6 +3,7 @@ package com.publisher.managment.system.controller;
 import com.publisher.managment.system.aspect.TrackExecutionTime;
 import com.publisher.managment.system.dto.UserDTO;
 import com.publisher.managment.system.dto.auth.AuthRequest;
+import com.publisher.managment.system.dto.auth.LoginAuth;
 import com.publisher.managment.system.dto.auth.TokenDTO;
 import com.publisher.managment.system.entity.User;
 import com.publisher.managment.system.service.UserService;
@@ -43,25 +44,23 @@ public class AuthController {
 
     @TrackExecutionTime
     @PostMapping("/login")
-    public ResponseEntity<TokenDTO> login(@RequestBody @Valid AuthRequest request) {
+    public ResponseEntity<TokenDTO> login(@RequestBody @Valid LoginAuth login) {
         try {
-            Authentication authentication =
-                    authenticationManager.authenticate(
-                            new UsernamePasswordAuthenticationToken(request.getUsername(), request.getPassword()));
+            Authentication authentication = authenticationManager
+                    .authenticate(new UsernamePasswordAuthenticationToken(login.getUsername(), login.getPassword()));
 
             User user = (User) authentication.getPrincipal();
 
             Instant now = Instant.now();
-
-            String scope =
-                    authentication.getAuthorities().stream()
+            Long expiry = 3600 * 8L;
+            String scope = authentication.getAuthorities().stream()
                             .map(GrantedAuthority::getAuthority)
                             .collect(Collectors.joining(" "));
 
-            JwtClaimsSet claims =
-                    JwtClaimsSet.builder()
+            JwtClaimsSet claims = JwtClaimsSet.builder()
                             .issuer("ikubinfo.al")
                             .issuedAt(now)
+                            .expiresAt(now.plusSeconds(expiry))
                             .subject(String.format("%s,%s", user.getId(), user.getUsername()))
                             .claim("roles", scope)
                             .build();
@@ -76,14 +75,21 @@ public class AuthController {
         }
     }
 
-//    @TrackExecutionTime
-//    @GetMapping("/logout")
-//    public Void logout(HttpServletRequest request, HttpServletResponse response) {
-//        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-//        if (auth != null) {
-//            new SecurityContextLogoutHandler().logout(request, response, auth);
-//        }
-//        return null;
-//    }
+    @TrackExecutionTime
+    @PostMapping("/register")
+    @RolesAllowed({"ADMIN"})
+    public ResponseEntity<UserDTO> registerUser(@RequestBody @Valid AuthRequest request) {
+        return ResponseEntity.ok(userService.registerUser(request));
+    }
+
+    @TrackExecutionTime
+    @GetMapping("/logout")
+    public Void logout(HttpServletRequest request, HttpServletResponse response) {
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        if (auth != null) {
+            new SecurityContextLogoutHandler().logout(request, response, auth);
+        }
+        return null;
+    }
 
 }

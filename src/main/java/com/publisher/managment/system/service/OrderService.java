@@ -11,7 +11,7 @@ public interface OrderService {
 
     OrderDTO getOrderById(Integer id);
 
-    OrderDTO updateOrder(OrderDTO orderDTO);
+    void updateOrderStatus(OrderDTO orderDTO);
 
     void deleteOrderById(Integer id);
 
