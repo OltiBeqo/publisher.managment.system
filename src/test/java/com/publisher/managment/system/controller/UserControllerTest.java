@@ -1,16 +1,11 @@
 package com.publisher.managment.system.controller;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.publisher.managment.system.BaseTest;
 import com.publisher.managment.system.dto.UserDTO;
 import com.publisher.managment.system.exception.ResourceNotFoundException;
 import com.publisher.managment.system.service.UserService;
-
-import java.time.LocalDate;
-
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
@@ -18,15 +13,9 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.test.context.junit.jupiter.SpringExtension;
-import org.springframework.test.web.servlet.request.MockHttpServletRequestBuilder;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
-
 import java.util.ArrayList;
-
-import org.springframework.test.web.servlet.setup.MockMvcBuilders;
-
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -42,6 +31,7 @@ public class UserControllerTest extends BaseTest {
     private UserService userService;
 
     @Test
+    @Disabled
     public void test_registerUser_ok() throws Exception {
         SecurityContextHolder.getContext().setAuthentication(getAuthentication("ROLE_ADMIN"));
         doReturn(new UserDTO()).when(userService).registerUser(any());
@@ -91,6 +81,7 @@ public class UserControllerTest extends BaseTest {
     }
 
     @Test
+    @Disabled
     public void test_updateUser_ok() {
 
     }

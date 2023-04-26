@@ -23,6 +23,10 @@ public class LibraryServiceImpl extends ExceptionMessage implements LibraryServi
     @Override
     @Transactional
     public LibraryDTO addLibrary(LibraryDTO libraryDTO) {
+        Library library = libraryRepository.findByLibrary(libraryDTO.getLibrary()).orElse(null);
+        if (library != null){
+            throw new BadRequestException(String.format(LIBRARY_EXISTS, libraryDTO.getLibrary()));
+        }
         return LibraryMapper.toDto(libraryRepository.save(LibraryMapper.toEntity(libraryDTO)));
     }
     @Override

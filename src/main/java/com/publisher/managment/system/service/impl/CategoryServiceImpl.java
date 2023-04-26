@@ -2,6 +2,7 @@ package com.publisher.managment.system.service.impl;
 
 import com.publisher.managment.system.dto.CategoryDTO;
 import com.publisher.managment.system.entity.Category;
+import com.publisher.managment.system.exception.BadRequestException;
 import com.publisher.managment.system.exception.ExceptionMessage;
 import com.publisher.managment.system.exception.ResourceNotFoundException;
 import com.publisher.managment.system.mapper.CategoryMapper;
@@ -22,6 +23,10 @@ public class CategoryServiceImpl extends ExceptionMessage implements CategorySer
     @Override
     @Transactional
     public CategoryDTO addCategory(CategoryDTO categoryDTO) {
+        Category category = categoryRepository.findCategoryByName(categoryDTO.getName()).orElse(null);
+        if (category != null){
+            throw new BadRequestException(String.format(CATEGORY_EXISTS, categoryDTO.getName()));
+        }
         return CategoryMapper.toDto(categoryRepository.save(CategoryMapper.toEntity(categoryDTO)));
     }
 

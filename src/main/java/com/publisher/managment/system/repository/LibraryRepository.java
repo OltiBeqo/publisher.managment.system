@@ -9,6 +9,6 @@ import java.util.Optional;
 
 @Repository
 public interface LibraryRepository extends JpaRepository<Library, Integer> {
-    Library findByLibrary(String library);
+    Optional<Library> findByLibrary(String library);
     List<Library> findByDeleted(boolean isDeleted);
 }

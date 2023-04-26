@@ -22,8 +22,8 @@ public class BookServiceImpl extends ExceptionMessage implements BookService {
     @Override
     @Transactional
     public BookDTO addBook(BookDTO bookDTO) {
-        if (bookDTO.getId() != null) {
-            Book bookExisting = bookRepository.findById(bookDTO.getId()).get();
+        Book bookExisting = bookRepository.findByTitle(bookDTO.getTitle()).get();
+        if (bookDTO.getTitle() != null) {
             BookMapper.toEntityForUpdate(bookExisting, bookDTO);
             return BookMapper.toDto(bookRepository.save(bookExisting));
         } else {
@@ -44,7 +44,7 @@ public class BookServiceImpl extends ExceptionMessage implements BookService {
 
     @Override
     public BookDTO getBookByTitle(String title) {
-        return bookRepository.findBookByTitle(title).map(BookMapper::toDto)
+        return bookRepository.findByTitle(title).map(BookMapper::toDto)
                 .orElseThrow(() -> new ResourceNotFoundException(String.format(BOOK_TITLE_FOUND, title)));
     }
 
