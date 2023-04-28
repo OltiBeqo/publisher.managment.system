@@ -22,8 +22,8 @@ public class BookServiceImpl extends ExceptionMessage implements BookService {
     @Override
     @Transactional
     public BookDTO addBook(BookDTO bookDTO) {
-        Book bookExisting = bookRepository.findByTitle(bookDTO.getTitle()).get();
-        if (bookDTO.getTitle() != null) {
+        Book bookExisting = bookRepository.findByTitle(bookDTO.getTitle()).orElse(null);
+        if (bookExisting != null) {
             BookMapper.toEntityForUpdate(bookExisting, bookDTO);
             return BookMapper.toDto(bookRepository.save(bookExisting));
         } else {

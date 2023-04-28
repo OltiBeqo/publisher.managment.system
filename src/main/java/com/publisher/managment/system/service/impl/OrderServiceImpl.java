@@ -132,15 +132,9 @@ public class OrderServiceImpl extends ExceptionMessage implements OrderService {
     }
 
     @Override
-    public List<OrderDTO> getOrdersByCourier(Integer courierId) {
-        return orderRepository.findByCourierId(courierId).stream().map(OrderMapper::toDto).collect(Collectors.toList());
-    }
-
-    @Override
     public long getTotalOfOrders() {
         return orderRepository.findAll().stream().count();
     }
-
 
     private void calculateTotalAmount(OrderDTO orderDTO) {
         double totalAmount = orderDTO.getBooks().stream().map(bookDTO -> {

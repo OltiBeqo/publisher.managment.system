@@ -19,9 +19,6 @@ public interface OrderService {
 
     List<OrderDTO> getOrdersAssigned();
 
-    List<OrderDTO> getOrdersByCourier(Integer courierId);
-
     long getTotalOfOrders();
-
 
 }

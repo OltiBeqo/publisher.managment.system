@@ -54,16 +54,16 @@ public class AuthController {
             Instant now = Instant.now();
             Long expiry = 3600 * 8L;
             String scope = authentication.getAuthorities().stream()
-                            .map(GrantedAuthority::getAuthority)
-                            .collect(Collectors.joining(" "));
+                    .map(GrantedAuthority::getAuthority)
+                    .collect(Collectors.joining(" "));
 
             JwtClaimsSet claims = JwtClaimsSet.builder()
-                            .issuer("ikubinfo.al")
-                            .issuedAt(now)
-                            .expiresAt(now.plusSeconds(expiry))
-                            .subject(String.format("%s,%s", user.getId(), user.getUsername()))
-                            .claim("roles", scope)
-                            .build();
+                    .issuer("ikubinfo.al")
+                    .issuedAt(now)
+                    .expiresAt(now.plusSeconds(expiry))
+                    .subject(String.format("%s,%s", user.getId(), user.getUsername()))
+                    .claim("roles", scope)
+                    .build();
 
             String token = this.jwtEncoder.encode(JwtEncoderParameters.from(claims)).getTokenValue();
 
@@ -84,12 +84,13 @@ public class AuthController {
 
     @TrackExecutionTime
     @GetMapping("/logout")
-    public Void logout(HttpServletRequest request, HttpServletResponse response) {
+    public ResponseEntity<Void> logout(HttpServletRequest request, HttpServletResponse response) {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         if (auth != null) {
-            new SecurityContextLogoutHandler().logout(request, response, auth);
+         //   new SecurityContextLogoutHandler().logout(request, response, auth);
+            SecurityContextHolder.getContext().setAuthentication(null);
         }
-        return null;
+        return new ResponseEntity<>(HttpStatus.OK);
     }
 
 }

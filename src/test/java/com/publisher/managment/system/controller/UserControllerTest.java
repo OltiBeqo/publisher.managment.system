@@ -7,7 +7,6 @@ import com.publisher.managment.system.service.UserService;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
@@ -24,17 +23,14 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @AutoConfigureMockMvc
 public class UserControllerTest extends BaseTest {
 
-    @Autowired
-    private UserController userController;
-
     @MockBean
-    private UserService userService;
+    private UserService toTest;
 
     @Test
     @Disabled
     public void test_registerUser_ok() throws Exception {
         SecurityContextHolder.getContext().setAuthentication(getAuthentication("ROLE_ADMIN"));
-        doReturn(new UserDTO()).when(userService).registerUser(any());
+        doReturn(new UserDTO()).when(toTest).registerUser(any());
         mvc.perform(MockMvcRequestBuilders.post("/users/register")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(mapper.writeValueAsString(new UserDTO())))
@@ -45,7 +41,7 @@ public class UserControllerTest extends BaseTest {
     @Test
     public void test_registerUser_ko() throws Exception {
         SecurityContextHolder.getContext().setAuthentication(getAuthentication("ROLE_CUSTOMER"));
-        doReturn(new UserDTO()).when(userService).registerUser(any());
+        doReturn(new UserDTO()).when(toTest).registerUser(any());
         mvc.perform(MockMvcRequestBuilders.post("/users/register")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(mapper.writeValueAsString(new UserDTO())))
@@ -55,7 +51,7 @@ public class UserControllerTest extends BaseTest {
     @Test
     public void test_getUsers_ok() throws Exception {
         SecurityContextHolder.getContext().setAuthentication(getAuthentication("ROLE_ADMIN"));
-        when(userService.getUsers()).thenReturn(new ArrayList<>());
+        when(toTest.getUsers()).thenReturn(new ArrayList<>());
         mvc.perform(MockMvcRequestBuilders.get("/users"))
                 .andExpect(MockMvcResultMatchers.status().isOk())
                 .andExpect(MockMvcResultMatchers.content().contentType(MediaType.APPLICATION_JSON))
@@ -65,7 +61,7 @@ public class UserControllerTest extends BaseTest {
     @Test
     public void test_getUserById_ok() throws Exception {
         SecurityContextHolder.getContext().setAuthentication(getAuthentication("ROLE_ADMIN"));
-        doReturn(new UserDTO()).when(userService).getUserById(any());
+        doReturn(new UserDTO()).when(toTest).getUserById(any());
         mvc.perform(MockMvcRequestBuilders.get("/users/1")
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk());
@@ -74,7 +70,7 @@ public class UserControllerTest extends BaseTest {
     @Test
     public void test_getUserById_ko() throws Exception {
         SecurityContextHolder.getContext().setAuthentication(getAuthentication("ROLE_ADMIN"));
-        when(userService.getUserById(Mockito.any())).thenThrow(new ResourceNotFoundException("user not found"));
+        when(toTest.getUserById(Mockito.any())).thenThrow(new ResourceNotFoundException("user not found"));
         mvc.perform(MockMvcRequestBuilders.get("/users/1")
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().is4xxClientError());
@@ -89,7 +85,7 @@ public class UserControllerTest extends BaseTest {
     @Test
     void testDeleteUserById() throws Exception {
         SecurityContextHolder.getContext().setAuthentication(getAuthentication("ROLE_ADMIN"));
-        doNothing().when(userService).deleteUserById(Mockito.any());
+        doNothing().when(toTest).deleteUserById(Mockito.any());
         mvc.perform(MockMvcRequestBuilders.delete("/users/{id}", 1)
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk());
