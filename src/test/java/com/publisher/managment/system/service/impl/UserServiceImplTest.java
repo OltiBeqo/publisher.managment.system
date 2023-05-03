@@ -1,4 +1,4 @@
-package com.publisher.managment.system.service;
+package com.publisher.managment.system.service.impl;
 
 import com.publisher.managment.system.dto.UserDTO;
 import com.publisher.managment.system.entity.User;
@@ -6,6 +6,7 @@ import com.publisher.managment.system.entity.enums.Gender;
 import com.publisher.managment.system.entity.enums.Role;
 import com.publisher.managment.system.exception.ResourceNotFoundException;
 import com.publisher.managment.system.repository.UserRepository;
+import com.publisher.managment.system.service.UserService;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
@@ -23,7 +24,7 @@ import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
 @SpringBootTest
-public class UserServiceTest {
+public class UserServiceImplTest {
 
     @Autowired
     private UserService toTest;
@@ -52,15 +53,15 @@ public class UserServiceTest {
         verify(userRepository).findAll();
 
         User user = new User();
-        user.setCreatedAt(LocalDateTime.now());
-        user.setFirstname("test");
-        user.setGender(Gender.MALE);
         user.setId(1);
-        user.setLastname("test");
-        user.setModifiedAt(LocalDateTime.now());
-        user.setPassword("test");
-        user.setRole(Role.ADMIN);
         user.setUsername("test");
+        user.setPassword("test");
+        user.setFirstname("test");
+        user.setLastname("test");
+        user.setGender(Gender.MALE);
+        user.setRole(Role.ADMIN);
+        user.setCreatedAt(LocalDateTime.now());
+        user.setModifiedAt(LocalDateTime.now());
 
         ArrayList<User> userList = new ArrayList<>();
         userList.add(user);

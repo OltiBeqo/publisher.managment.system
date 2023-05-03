@@ -25,7 +25,7 @@ public class OrderController {
     }
 
     @TrackExecutionTime
-    @GetMapping("library/{libraryId}")
+    @GetMapping("/library/{libraryId}")
     @RolesAllowed({"ADMIN", "EMPLOYEE"})
     public ResponseEntity<List<OrderDTO>> getOrdersByClient(@PathVariable Integer libraryId) {
         return ResponseEntity.ok(orderService.getOrdersByClient(libraryId));

@@ -12,7 +12,7 @@ public class PaymentMapper {
     public static PaymentDTO toDto(Payment payment) {
         return PaymentDTO.builder()
                 .id(payment.getId())
-                .paymentMethod(payment.getPaymentMethod().getValue())
+                .paymentMethod(payment.getPaymentMethod().getValue() )
                 .amount(payment.getAmount())
                 .transactionId(payment.getTransactionId())
                 .order(payment.getOrder().getId() != null ? OrderMapper.toDto(payment.getOrder()) : null)

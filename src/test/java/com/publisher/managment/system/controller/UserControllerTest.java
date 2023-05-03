@@ -1,6 +1,7 @@
 package com.publisher.managment.system.controller;
 
 import com.publisher.managment.system.BaseTest;
+import com.publisher.managment.system.dto.LibraryDTO;
 import com.publisher.managment.system.dto.UserDTO;
 import com.publisher.managment.system.exception.ResourceNotFoundException;
 import com.publisher.managment.system.service.UserService;
@@ -25,28 +26,6 @@ public class UserControllerTest extends BaseTest {
 
     @MockBean
     private UserService toTest;
-
-    @Test
-    @Disabled
-    public void test_registerUser_ok() throws Exception {
-        SecurityContextHolder.getContext().setAuthentication(getAuthentication("ROLE_ADMIN"));
-        doReturn(new UserDTO()).when(toTest).registerUser(any());
-        mvc.perform(MockMvcRequestBuilders.post("/users/register")
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .content(mapper.writeValueAsString(new UserDTO())))
-                .andExpect(status().isOk());
-        //TODO
-    }
-
-    @Test
-    public void test_registerUser_ko() throws Exception {
-        SecurityContextHolder.getContext().setAuthentication(getAuthentication("ROLE_CUSTOMER"));
-        doReturn(new UserDTO()).when(toTest).registerUser(any());
-        mvc.perform(MockMvcRequestBuilders.post("/users/register")
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .content(mapper.writeValueAsString(new UserDTO())))
-                .andExpect(status().is4xxClientError());
-    }
 
     @Test
     public void test_getUsers_ok() throws Exception {
@@ -77,9 +56,13 @@ public class UserControllerTest extends BaseTest {
     }
 
     @Test
-    @Disabled
-    public void test_updateUser_ok() {
-
+    public void test_updateUser_ok() throws Exception{
+        SecurityContextHolder.getContext().setAuthentication(getAuthentication("ROLE_ADMIN"));
+        when(toTest.updateUser(new UserDTO())).thenReturn(any());
+        mvc.perform(MockMvcRequestBuilders.put("/users")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(mapper.writeValueAsString(new UserDTO())))
+                .andExpect(status().isOk());
     }
 
     @Test
