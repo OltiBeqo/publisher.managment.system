@@ -1,11 +1,10 @@
 package com.publisher.managment.system.controller;
 
 import com.publisher.managment.system.aspect.TrackExecutionTime;
-import com.publisher.managment.system.dto.OrderDTO;
 import com.publisher.managment.system.dto.PaymentDTO;
 import com.publisher.managment.system.entity.enums.PaymentMethod;
 import com.publisher.managment.system.service.PaymentService;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -13,11 +12,11 @@ import org.springframework.web.bind.annotation.*;
 import javax.annotation.security.RolesAllowed;
 import java.util.List;
 
+@RequiredArgsConstructor
 @RestController
 @RequestMapping("/payments")
 public class PaymentController {
-    @Autowired
-    private PaymentService paymentService;
+    private final PaymentService paymentService;
 
     @TrackExecutionTime
     @RolesAllowed({"ADMIN", "EMPLOYEE"})
@@ -50,7 +49,7 @@ public class PaymentController {
     @TrackExecutionTime
     @RolesAllowed({"ADMIN", "EMPLOYEE"})
     @PutMapping
-    public ResponseEntity<PaymentDTO> updatePaymentMethod(@RequestBody PaymentDTO paymentDTO){
+    public ResponseEntity<PaymentDTO> updatePaymentMethod(@RequestBody PaymentDTO paymentDTO) {
         return ResponseEntity.ok(paymentService.updatePaymentMethod(paymentDTO));
     }
 

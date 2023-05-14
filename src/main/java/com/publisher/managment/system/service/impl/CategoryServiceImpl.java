@@ -8,7 +8,7 @@ import com.publisher.managment.system.exception.ResourceNotFoundException;
 import com.publisher.managment.system.mapper.CategoryMapper;
 import com.publisher.managment.system.repository.CategoryRepository;
 import com.publisher.managment.system.service.CategoryService;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
@@ -16,15 +16,15 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @Service
+@RequiredArgsConstructor
 public class CategoryServiceImpl extends ExceptionMessage implements CategoryService {
-    @Autowired
-    private CategoryRepository categoryRepository;
+    private final CategoryRepository categoryRepository;
 
     @Override
     @Transactional
     public CategoryDTO addCategory(CategoryDTO categoryDTO) {
         Category category = categoryRepository.findCategoryByName(categoryDTO.getName()).orElse(null);
-        if (category != null){
+        if (category != null) {
             throw new BadRequestException(String.format(CATEGORY_EXISTS, categoryDTO.getName()));
         }
         return CategoryMapper.toDto(categoryRepository.save(CategoryMapper.toEntity(categoryDTO)));

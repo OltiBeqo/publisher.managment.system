@@ -10,7 +10,7 @@ import com.publisher.managment.system.exception.ResourceNotFoundException;
 import com.publisher.managment.system.mapper.UserMapper;
 import com.publisher.managment.system.repository.UserRepository;
 import com.publisher.managment.system.service.UserService;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -25,11 +25,10 @@ import java.util.stream.Collectors;
 import static java.lang.String.format;
 
 @Service
+@RequiredArgsConstructor
 public class UserServiceImpl extends ExceptionMessage implements UserService, UserDetailsService {
-    @Autowired
-    private UserRepository userRepository;
-    @Autowired
-    private PasswordEncoder passwordEncoder;
+    private final UserRepository userRepository;
+    private final PasswordEncoder passwordEncoder;
 
     @Override
     @Transactional
