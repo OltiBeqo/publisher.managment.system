@@ -115,11 +115,6 @@ public class LibraryServiceImplTest {
 
     }
 
-
-    public void test_updateLibrary_ok() {
-        //TODO
-    }
-
     @Test
     public void test_deleteLibrary_ok() {
 

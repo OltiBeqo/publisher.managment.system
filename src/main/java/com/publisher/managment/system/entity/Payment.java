@@ -37,7 +37,7 @@ public class Payment {
     @CreatedDate
     private LocalDateTime createdAt;
     private LocalDateTime modifiedAt;
-    @OneToOne
+    @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "order_id", referencedColumnName = "id")
     private Order order;
     @PrePersist

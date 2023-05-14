@@ -10,14 +10,13 @@ import com.publisher.managment.system.entity.enums.OrderStatus;
 import com.publisher.managment.system.exception.BadRequestException;
 import com.publisher.managment.system.exception.ExceptionMessage;
 import com.publisher.managment.system.exception.ResourceNotFoundException;
-import com.publisher.managment.system.mapper.BookMapper;
 import com.publisher.managment.system.mapper.OrderMapper;
 import com.publisher.managment.system.repository.BookRepository;
 import com.publisher.managment.system.repository.OrderRepository;
 import com.publisher.managment.system.repository.OrdersBooksRepository;
 import com.publisher.managment.system.service.OrderService;
 import com.publisher.managment.system.service.UserService;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
@@ -25,15 +24,13 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @Service
+@RequiredArgsConstructor
 public class OrderServiceImpl extends ExceptionMessage implements OrderService {
-    @Autowired
-    private OrderRepository orderRepository;
-    @Autowired
-    private UserService userService;
-    @Autowired
-    private BookRepository bookRepository;
-    @Autowired
-    private OrdersBooksRepository ordersBooksRepository;
+
+    private final OrderRepository orderRepository;
+    private final UserService userService;
+    private final BookRepository bookRepository;
+    private final OrdersBooksRepository ordersBooksRepository;
 
     @Override
     @Transactional

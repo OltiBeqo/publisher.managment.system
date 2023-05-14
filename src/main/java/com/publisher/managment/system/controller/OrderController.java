@@ -3,7 +3,7 @@ package com.publisher.managment.system.controller;
 import com.publisher.managment.system.aspect.TrackExecutionTime;
 import com.publisher.managment.system.dto.OrderDTO;
 import com.publisher.managment.system.service.OrderService;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -11,11 +11,12 @@ import org.springframework.web.bind.annotation.*;
 import javax.annotation.security.RolesAllowed;
 import java.util.List;
 
+@RequiredArgsConstructor
 @RestController
 @RequestMapping("orders")
 public class OrderController {
-    @Autowired
-    private OrderService orderService;
+
+    private final OrderService orderService;
 
     @TrackExecutionTime
     @GetMapping
@@ -63,13 +64,13 @@ public class OrderController {
     @PutMapping
     @RolesAllowed({"ADMIN", "EMPLOYEE"})
     public ResponseEntity<Void> updateOrder(@RequestBody OrderDTO orderDTO) {
-         orderService.updateOrderStatus(orderDTO);
-         return new ResponseEntity<>(HttpStatus.OK);
+        orderService.updateOrderStatus(orderDTO);
+        return new ResponseEntity<>(HttpStatus.OK);
     }
 
     @TrackExecutionTime
     @DeleteMapping("/{id}")
-    @RolesAllowed({"ADMIN", "EMPLOYEE"})
+    @RolesAllowed({"ADMIN"})
     public ResponseEntity<Void> deleteOrder(@PathVariable Integer id) {
         orderService.deleteOrderById(id);
         return new ResponseEntity<>(HttpStatus.OK);

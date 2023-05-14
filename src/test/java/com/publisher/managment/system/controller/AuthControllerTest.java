@@ -6,7 +6,6 @@ import com.publisher.managment.system.dto.UserDTO;
 import com.publisher.managment.system.dto.auth.AuthRequest;
 import com.publisher.managment.system.entity.User;
 import com.publisher.managment.system.service.UserService;
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -57,13 +56,6 @@ public class AuthControllerTest extends BaseTest {
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(mapper.writeValueAsString(new AuthRequest("username", "password", " ", " ", " ", " "))))
                 .andExpect(status().isOk());
-    }
-
-    @Test
-    @Disabled
-    public void test_registerUser_ok() throws Exception {
-
-        //TODO
     }
 
     @Test

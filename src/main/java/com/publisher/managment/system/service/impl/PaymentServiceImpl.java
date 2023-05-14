@@ -14,19 +14,17 @@ import com.publisher.managment.system.mapper.PaymentMapper;
 import com.publisher.managment.system.repository.PaymentRepository;
 import com.publisher.managment.system.service.OrderService;
 import com.publisher.managment.system.service.PaymentService;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
+@RequiredArgsConstructor
 public class PaymentServiceImpl extends ExceptionMessage implements PaymentService {
-    @Autowired
-    private PaymentRepository paymentRepository;
-    @Autowired
-    private OrderService orderService;
+    private final PaymentRepository paymentRepository;
+    private final OrderService orderService;
 
     @Override
     public PaymentDTO addPayment(PaymentDTO paymentDTO) {
@@ -79,4 +77,5 @@ public class PaymentServiceImpl extends ExceptionMessage implements PaymentServi
     public List<PaymentDTO> getPaymentsByMethod(PaymentMethod paymentMethod) {
         return paymentRepository.findAllByPaymentMethod(paymentMethod).stream().map(PaymentMapper::toDto).collect(Collectors.toList());
     }
+
 }

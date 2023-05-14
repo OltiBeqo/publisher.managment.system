@@ -71,10 +71,6 @@ public class CategoryServiceImplTest {
         assertThrows(ResourceNotFoundException.class, () -> toTest.getCategories());
     }
 
-    public void test_updateCategory_ok() {
-        //TODO
-    }
-
     @Test
     public void test_deleteCategoryById_ok() {
         doNothing().when(categoryRepository).delete(Mockito.<Category>any());

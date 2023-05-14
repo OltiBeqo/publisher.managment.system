@@ -40,9 +40,9 @@ public class Order {
     @JoinColumn(name = "library_id", referencedColumnName = "id")
     private Library library;
     @ManyToOne
-    @JoinColumn(name = "user_id", referencedColumnName = "id")
+    @JoinColumn(name = "created_by_user", referencedColumnName = "id")
     private User user;
-    @OneToOne(mappedBy = "order", fetch = FetchType.LAZY)
+    @OneToOne(mappedBy = "order")
     private Payment payment;
     @OneToOne
     @JoinColumn(name = "courier_id", referencedColumnName = "id")

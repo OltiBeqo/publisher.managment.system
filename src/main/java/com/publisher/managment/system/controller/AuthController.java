@@ -7,7 +7,7 @@ import com.publisher.managment.system.dto.auth.LoginAuth;
 import com.publisher.managment.system.dto.auth.TokenDTO;
 import com.publisher.managment.system.entity.User;
 import com.publisher.managment.system.service.UserService;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -20,27 +20,23 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.oauth2.jwt.JwtClaimsSet;
 import org.springframework.security.oauth2.jwt.JwtEncoder;
 import org.springframework.security.oauth2.jwt.JwtEncoderParameters;
-import org.springframework.security.web.authentication.logout.SecurityContextLogoutHandler;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
-import javax.annotation.security.RolesAllowed;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 import java.time.Instant;
 import java.util.stream.Collectors;
 
+@RequiredArgsConstructor
 @RestController
 @RequestMapping(path = "/auth")
 @Validated
 public class AuthController {
-    @Autowired
-    private AuthenticationManager authenticationManager;
-    @Autowired
-    private JwtEncoder jwtEncoder;
-    @Autowired
-    private UserService userService;
+    private final AuthenticationManager authenticationManager;
+    private final JwtEncoder jwtEncoder;
+    private final UserService userService;
 
     @TrackExecutionTime
     @PostMapping("/login")
@@ -58,7 +54,6 @@ public class AuthController {
                     .collect(Collectors.joining(" "));
 
             JwtClaimsSet claims = JwtClaimsSet.builder()
-                    .issuer("ikubinfo.al")
                     .issuedAt(now)
                     .expiresAt(now.plusSeconds(expiry))
                     .subject(String.format("%s,%s", user.getId(), user.getUsername()))
@@ -77,7 +72,6 @@ public class AuthController {
 
     @TrackExecutionTime
     @PostMapping("/register")
-    @RolesAllowed({"ADMIN"})
     public ResponseEntity<UserDTO> registerUser(@RequestBody @Valid AuthRequest request) {
         return ResponseEntity.ok(userService.registerUser(request));
     }
@@ -87,7 +81,7 @@ public class AuthController {
     public ResponseEntity<Void> logout(HttpServletRequest request, HttpServletResponse response) {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         if (auth != null) {
-         //   new SecurityContextLogoutHandler().logout(request, response, auth);
+            //   new SecurityContextLogoutHandler().logout(request, response, auth);
             SecurityContextHolder.getContext().setAuthentication(null);
         }
         return new ResponseEntity<>(HttpStatus.OK);

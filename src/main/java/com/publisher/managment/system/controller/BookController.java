@@ -3,7 +3,7 @@ package com.publisher.managment.system.controller;
 import com.publisher.managment.system.aspect.TrackExecutionTime;
 import com.publisher.managment.system.dto.BookDTO;
 import com.publisher.managment.system.service.BookService;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -11,22 +11,22 @@ import org.springframework.web.bind.annotation.*;
 import javax.annotation.security.RolesAllowed;
 import java.util.List;
 
+@RequiredArgsConstructor
 @RestController
 @RequestMapping("/books")
 public class BookController {
-    @Autowired
-    private BookService bookService;
+    private final BookService bookService;
 
     @TrackExecutionTime
     @GetMapping
-    @RolesAllowed({"ADMIN", "EMPLOYEE"})
+    @RolesAllowed({"ADMIN", "EMPLOYEE", "COURIER"})
     public ResponseEntity<List<BookDTO>> getBooksByStatus(@RequestParam boolean isDeleted) {
         return ResponseEntity.ok(bookService.getBooksByStatus(isDeleted));
     }
 
     @TrackExecutionTime
     @GetMapping("/{id}")
-    @RolesAllowed({"ADMIN", "EMPLOYEE"})
+    @RolesAllowed({"ADMIN", "EMPLOYEE", "COURIER"})
     public ResponseEntity<BookDTO> getBookById(@PathVariable Integer id) {
         return ResponseEntity.ok(bookService.getBookById(id));
     }
@@ -36,6 +36,13 @@ public class BookController {
     @RolesAllowed({"ADMIN", "EMPLOYEE"})
     public ResponseEntity<BookDTO> getBookByTitle(@PathVariable String title) {
         return ResponseEntity.ok(bookService.getBookByTitle(title));
+    }
+
+    @TrackExecutionTime
+    @GetMapping("/category/{id}")
+    @RolesAllowed({"ADMIN", "EMPLOYEE", "COURIER"})
+    public ResponseEntity<List<BookDTO>> getBooksByCategory(@PathVariable Integer id) {
+        return ResponseEntity.ok(bookService.getBooksByCategoryId(id));
     }
 
     @TrackExecutionTime

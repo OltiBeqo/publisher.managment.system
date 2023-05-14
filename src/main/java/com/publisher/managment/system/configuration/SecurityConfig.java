@@ -52,7 +52,8 @@ public class SecurityConfig {
 
     @Bean
     public AuthenticationManager authenticationManager(HttpSecurity http, BCryptPasswordEncoder bCryptPasswordEncoder) throws Exception {
-        return http.getSharedObject(AuthenticationManagerBuilder.class).userDetailsService(username -> userRepository.findByUsername(username).orElseThrow(() -> new UsernameNotFoundException(format("User: %s, not found", username)))).passwordEncoder(bCryptPasswordEncoder).and().build();
+        return http.getSharedObject(AuthenticationManagerBuilder.class).userDetailsService(username -> userRepository.findByUsername(username)
+                .orElseThrow(() -> new UsernameNotFoundException(format("User: %s, not found", username)))).passwordEncoder(bCryptPasswordEncoder).and().build();
     }
 
     @Bean

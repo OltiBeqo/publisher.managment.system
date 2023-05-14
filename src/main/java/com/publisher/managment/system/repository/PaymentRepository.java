@@ -1,11 +1,11 @@
 package com.publisher.managment.system.repository;
 
 import com.publisher.managment.system.entity.Payment;
-import com.publisher.managment.system.entity.User;
 import com.publisher.managment.system.entity.enums.PaymentMethod;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 

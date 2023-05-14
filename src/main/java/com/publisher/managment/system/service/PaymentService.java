@@ -19,5 +19,4 @@ public interface PaymentService {
     void deletePayment(Integer paymentId);
 
     List<PaymentDTO> getPaymentsByMethod(PaymentMethod paymentMethod);
-
 }

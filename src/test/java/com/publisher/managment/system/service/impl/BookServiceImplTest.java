@@ -30,10 +30,6 @@ public class BookServiceImplTest {
     @Autowired
     private BookService toTest;
 
-    public void test_addBook_ok() {
-        //TODO
-    }
-
     @Test
     public void test_getBooks_ok() {
         Category category = new Category();
@@ -87,11 +83,6 @@ public class BookServiceImplTest {
         when(bookRepository.findAll()).thenThrow(new ResourceNotFoundException("not found"));
         assertThrows(ResourceNotFoundException.class, () -> toTest.getBookById(anyInt()));
 
-    }
-
-
-    public void test_updateBook_ok() {
-        //TODO
     }
 
     @Test

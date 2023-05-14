@@ -7,7 +7,7 @@ import com.publisher.managment.system.exception.ResourceNotFoundException;
 import com.publisher.managment.system.mapper.BookMapper;
 import com.publisher.managment.system.repository.BookRepository;
 import com.publisher.managment.system.service.BookService;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
@@ -15,9 +15,9 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @Service
+@RequiredArgsConstructor
 public class BookServiceImpl extends ExceptionMessage implements BookService {
-    @Autowired
-    private BookRepository bookRepository;
+    private final BookRepository bookRepository;
 
     @Override
     @Transactional
@@ -49,6 +49,11 @@ public class BookServiceImpl extends ExceptionMessage implements BookService {
     }
 
     @Override
+    public List<BookDTO> getBooksByCategoryId(Integer id) {
+        return bookRepository.findByCategoryId(id).stream().map(BookMapper::toDto).collect(Collectors.toList());
+    }
+
+    @Override
     @Transactional
     public BookDTO updateBook(BookDTO bookDTO) {
         Book book = bookRepository.findById(bookDTO.getId())
@@ -62,4 +67,5 @@ public class BookServiceImpl extends ExceptionMessage implements BookService {
         Book book = bookRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException(String.format(BOOK_NOT_FOUND, id)));
         bookRepository.delete(book);
     }
+
 }
