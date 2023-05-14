@@ -33,7 +33,7 @@ public class PaymentController {
     }
 
     @TrackExecutionTime
-    @GetMapping("/totalRevenue")
+    @GetMapping("/total-revenue")
     @RolesAllowed({"ADMIN", "EMPLOYEE"})
     public ResponseEntity<Double> getTotalRevenue() {
         return ResponseEntity.ok(paymentService.getTotalRevenue());

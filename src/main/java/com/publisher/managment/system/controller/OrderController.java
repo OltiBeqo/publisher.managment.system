@@ -40,7 +40,7 @@ public class OrderController {
     }
 
     @TrackExecutionTime
-    @GetMapping("/totalOrders")
+    @GetMapping("/total-orders")
     @RolesAllowed({"ADMIN", "EMPLOYEE"})
     public ResponseEntity<Long> getTotalOfOrders() {
         return ResponseEntity.ok(orderService.getTotalOfOrders());
