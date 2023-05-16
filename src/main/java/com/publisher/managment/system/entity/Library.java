@@ -25,7 +25,7 @@ public class Library {
     private Integer id;
     @Column(nullable = false, unique = true)
     private String library;
-    @Column(nullable = false, unique = true)
+    @Column(nullable = false)
     private String address;
     @Column(nullable = false, unique = true)
     private String email;

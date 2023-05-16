@@ -41,6 +41,10 @@ public class User implements UserDetails {
     private Gender gender;
     @CreatedDate
     private LocalDateTime createdAt;
+    @PrePersist
+    public void prePersist() {
+        createdAt = LocalDateTime.now();
+    }
     private LocalDateTime modifiedAt;
     @Enumerated(EnumType.STRING)@Column(name = "role",nullable = false)
     private Role role;
