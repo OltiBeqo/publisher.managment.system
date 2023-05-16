@@ -4,6 +4,7 @@ import com.publisher.managment.system.entity.enums.OrderStatus;
 import lombok.*;
 import org.hibernate.annotations.*;
 import org.springframework.data.annotation.CreatedDate;
+import org.springframework.data.annotation.LastModifiedDate;
 
 import javax.persistence.*;
 import javax.persistence.Entity;
@@ -32,6 +33,7 @@ public class Order {
     private String comment;
     @CreatedDate
     private LocalDateTime createdAt;
+    @LastModifiedDate
     private LocalDateTime modifiedAt;
     private boolean deleted = Boolean.FALSE;
     @Enumerated(EnumType.STRING)

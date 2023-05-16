@@ -5,6 +5,7 @@ import com.publisher.managment.system.entity.enums.Role;
 import lombok.*;
 import org.hibernate.annotations.*;
 import org.springframework.data.annotation.CreatedDate;
+import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -45,6 +46,7 @@ public class User implements UserDetails {
     public void prePersist() {
         createdAt = LocalDateTime.now();
     }
+    @LastModifiedDate
     private LocalDateTime modifiedAt;
     @Enumerated(EnumType.STRING)@Column(name = "role",nullable = false)
     private Role role;

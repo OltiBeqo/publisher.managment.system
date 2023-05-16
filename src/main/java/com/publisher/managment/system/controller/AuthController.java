@@ -23,6 +23,7 @@ import org.springframework.security.oauth2.jwt.JwtEncoderParameters;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
+import javax.annotation.security.RolesAllowed;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
@@ -71,20 +72,10 @@ public class AuthController {
     }
 
     @TrackExecutionTime
+    @RolesAllowed({"ADMIN"})
     @PostMapping("/register")
     public ResponseEntity<UserDTO> registerUser(@RequestBody @Valid AuthRequest request) {
         return ResponseEntity.ok(userService.registerUser(request));
-    }
-
-    @TrackExecutionTime
-    @GetMapping("/logout")
-    public ResponseEntity<Void> logout(HttpServletRequest request, HttpServletResponse response) {
-        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-        if (auth != null) {
-            //   new SecurityContextLogoutHandler().logout(request, response, auth);
-            SecurityContextHolder.getContext().setAuthentication(null);
-        }
-        return new ResponseEntity<>(HttpStatus.OK);
     }
 
 }
