@@ -2,6 +2,9 @@ package com.publisher.managment.system.controller;
 
 import com.publisher.managment.system.aspect.TrackExecutionTime;
 import com.publisher.managment.system.dto.OrderDTO;
+import com.publisher.managment.system.dto.request.AppConstants;
+import com.publisher.managment.system.dto.request.SearchRequest;
+import com.publisher.managment.system.dto.response.PageResponse;
 import com.publisher.managment.system.service.OrderService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -17,6 +20,29 @@ import java.util.List;
 public class OrderController {
 
     private final OrderService orderService;
+
+    @TrackExecutionTime
+    @GetMapping("/page")
+    @RolesAllowed({"ADMIN", "EMPLOYEE"})
+    public ResponseEntity<PageResponse<OrderDTO>> getOrdersPaginated(
+            @RequestParam(value = "pageNo", defaultValue = AppConstants.DEFAULT_PAGE_NUMBER, required = false) int pageNo,
+            @RequestParam(value = "pageSize", defaultValue = AppConstants.DEFAULT_PAGE_SIZE, required = false) int pageSize,
+            @RequestParam(value = "sortBy", defaultValue = AppConstants.DEFAULT_SORT_BY, required = false) String sortBy,
+            @RequestParam(value = "sortDir", defaultValue = AppConstants.DEFAULT_SORT_DIRECTION, required = false) String sortDir
+    ) {
+        PageResponse<OrderDTO> response = new PageResponse<>();
+        response.setPageStats(orderService.getOrdersPaginated(pageNo, pageSize, sortBy, sortDir));
+        return ResponseEntity.ok(response);
+    }
+
+    @TrackExecutionTime
+    @PostMapping("/search")
+    @RolesAllowed({"ADMIN", "EMPLOYEE"})
+    public ResponseEntity<PageResponse<OrderDTO>> searchOrder(@RequestBody SearchRequest request){
+        PageResponse<OrderDTO> response = new PageResponse<>();
+        response.setPageStats(orderService.searchOrder(request));
+        return ResponseEntity.ok(response);
+    }
 
     @TrackExecutionTime
     @GetMapping

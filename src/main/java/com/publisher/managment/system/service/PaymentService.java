@@ -1,7 +1,9 @@
 package com.publisher.managment.system.service;
 
 import com.publisher.managment.system.dto.PaymentDTO;
+import com.publisher.managment.system.dto.request.SearchRequest;
 import com.publisher.managment.system.entity.enums.PaymentMethod;
+import org.springframework.data.domain.Page;
 
 import java.util.List;
 
@@ -19,4 +21,8 @@ public interface PaymentService {
     void deletePayment(Integer paymentId);
 
     List<PaymentDTO> getPaymentsByMethod(PaymentMethod paymentMethod);
+
+    Page<PaymentDTO> getPaymentsPaginated(int pageNo, int pageSize, String sortBy, String sortDir);
+
+    Page<PaymentDTO> searchPayment(SearchRequest request);
 }

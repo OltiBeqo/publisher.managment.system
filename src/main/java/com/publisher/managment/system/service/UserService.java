@@ -2,7 +2,9 @@ package com.publisher.managment.system.service;
 
 import com.publisher.managment.system.dto.UserDTO;
 import com.publisher.managment.system.dto.auth.AuthRequest;
+import com.publisher.managment.system.dto.request.SearchRequest;
 import com.publisher.managment.system.entity.enums.Role;
+import org.springframework.data.domain.Page;
 
 import java.util.List;
 
@@ -20,4 +22,8 @@ public interface UserService {
     List<UserDTO> getUsersByRole(Role role);
 
     UserDTO getRandomCourier();
+
+    Page<UserDTO> getUsersPaginated(int pageNo, int pageSize, String sortBy, String sortDir);
+
+    Page<UserDTO> searchUser(SearchRequest request);
 }

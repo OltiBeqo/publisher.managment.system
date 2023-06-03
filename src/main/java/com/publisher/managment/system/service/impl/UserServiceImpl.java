@@ -2,6 +2,8 @@ package com.publisher.managment.system.service.impl;
 
 import com.publisher.managment.system.dto.UserDTO;
 import com.publisher.managment.system.dto.auth.AuthRequest;
+import com.publisher.managment.system.dto.request.SearchRequest;
+import com.publisher.managment.system.dto.search.SearchSpecification;
 import com.publisher.managment.system.entity.User;
 import com.publisher.managment.system.entity.enums.Role;
 import com.publisher.managment.system.exception.BadRequestException;
@@ -11,6 +13,7 @@ import com.publisher.managment.system.mapper.UserMapper;
 import com.publisher.managment.system.repository.UserRepository;
 import com.publisher.managment.system.service.UserService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.*;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -31,10 +34,33 @@ public class UserServiceImpl extends ExceptionMessage implements UserService, Us
     private final PasswordEncoder passwordEncoder;
 
     @Override
+    public Page<UserDTO> getUsersPaginated(int pageNo, int pageSize, String sortBy, String sortDir) {
+        Sort sort = sortDir.equalsIgnoreCase(Sort.Direction.ASC.name())
+                ? Sort.by(sortBy).ascending() : Sort.by(sortBy).descending();
+        Pageable pageable = PageRequest.of(pageNo, pageSize, sort);
+        Page<User> userPage = userRepository.findAll(pageable);
+        List<User> userList = userPage.getContent();
+        List<UserDTO> content = userList.stream().map(UserMapper::toDto).collect(Collectors.toList());
+
+        return new PageImpl<>(content, userPage.getPageable(), userPage.getSize());
+    }
+
+    @Override
+    public Page<UserDTO> searchUser(SearchRequest request) {
+        SearchSpecification<User> specification = new SearchSpecification<>(request);
+        Pageable pageable = PageRequest.of(request.getPage(), request.getSize());
+        Page<User> userPage = userRepository.findAll(specification, pageable);
+        List<User> userList = userPage.getContent();
+        List<UserDTO> content = userList.stream().map(UserMapper::toDto).collect(Collectors.toList());
+
+        return new PageImpl<>(content, userPage.getPageable(), userPage.getSize());
+    }
+
+    @Override
     @Transactional
     public UserDTO registerUser(AuthRequest request) {
 
-        Optional <User> optionalUser = userRepository.findByUsername(request.getUsername());
+        Optional<User> optionalUser = userRepository.findByUsername(request.getUsername());
         if (optionalUser.isPresent()) {
             throw new BadRequestException(String.format(USERNAME_EXISTS, request.getUsername()));
         }
@@ -89,4 +115,5 @@ public class UserServiceImpl extends ExceptionMessage implements UserService, Us
                 .findAny()
                 .orElseThrow(() -> new ResourceNotFoundException(String.format(COURIER_NOT_FOUND))));
     }
+
 }

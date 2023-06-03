@@ -1,6 +1,8 @@
 package com.publisher.managment.system.service.impl;
 
 import com.publisher.managment.system.dto.LibraryDTO;
+import com.publisher.managment.system.dto.request.SearchRequest;
+import com.publisher.managment.system.dto.search.SearchSpecification;
 import com.publisher.managment.system.entity.Library;
 import com.publisher.managment.system.exception.BadRequestException;
 import com.publisher.managment.system.exception.ExceptionMessage;
@@ -9,6 +11,7 @@ import com.publisher.managment.system.mapper.LibraryMapper;
 import com.publisher.managment.system.repository.LibraryRepository;
 import com.publisher.managment.system.service.LibraryService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.*;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
@@ -28,6 +31,29 @@ public class LibraryServiceImpl extends ExceptionMessage implements LibraryServi
             throw new BadRequestException(String.format(LIBRARY_EXISTS, libraryDTO.getLibrary()));
         }
         return LibraryMapper.toDto(libraryRepository.save(LibraryMapper.toEntity(libraryDTO)));
+    }
+
+    @Override
+    public Page<LibraryDTO> getLibrariesPaginated(int pageNo, int pageSize, String sortBy, String sortDir) {
+        Sort sort = sortDir.equalsIgnoreCase(Sort.Direction.ASC.name())
+                ? Sort.by(sortBy).ascending() : Sort.by(sortBy).descending();
+        Pageable pageable = PageRequest.of(pageNo, pageSize, sort);
+        Page<Library> libraryPage = libraryRepository.findAll(pageable);
+        List<Library> libraryList = libraryPage.getContent();
+        List<LibraryDTO> content = libraryList.stream().map(LibraryMapper::toDto).collect(Collectors.toList());
+
+        return new PageImpl<>(content, libraryPage.getPageable(), libraryPage.getSize());
+    }
+
+    @Override
+    public Page<LibraryDTO> searchLibrary(SearchRequest request) {
+        SearchSpecification<Library> specification = new SearchSpecification<>(request);
+        Pageable pageable = SearchSpecification.getPageable(request.getPage(), request.getSize());
+        Page<Library> libraryPage = libraryRepository.findAll(specification, pageable);
+        List<Library> libraryList = libraryPage.getContent();
+        List<LibraryDTO> content = libraryList.stream().map(LibraryMapper::toDto).collect(Collectors.toList());
+
+        return new PageImpl<>(content, libraryPage.getPageable(), libraryPage.getSize());
     }
 
     @Override
@@ -56,4 +82,5 @@ public class LibraryServiceImpl extends ExceptionMessage implements LibraryServi
                 .orElseThrow(() -> new ResourceNotFoundException(String.format(LIBRARY_NOT_FOUND, id)));
         libraryRepository.delete(library);
     }
+
 }

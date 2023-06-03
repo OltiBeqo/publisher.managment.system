@@ -7,7 +7,10 @@ import com.publisher.managment.system.exception.ResourceNotFoundException;
 import com.publisher.managment.system.mapper.BookMapper;
 import com.publisher.managment.system.repository.BookRepository;
 import com.publisher.managment.system.service.BookService;
+import com.publisher.managment.system.dto.request.SearchRequest;
+import com.publisher.managment.system.dto.search.SearchSpecification;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.*;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
@@ -29,6 +32,29 @@ public class BookServiceImpl extends ExceptionMessage implements BookService {
         } else {
             return BookMapper.toDto(bookRepository.save(BookMapper.toEntity(bookDTO)));
         }
+    }
+
+    @Override
+    public Page<BookDTO> getBooksPaginated(int pageNo, int pageSize, String sortBy, String sortDir) {
+        Sort sort = sortDir.equalsIgnoreCase(Sort.Direction.ASC.name())
+                ? Sort.by(sortBy).ascending() : Sort.by(sortBy).descending();
+
+        Pageable pageable = PageRequest.of(pageNo, pageSize, sort);
+        Page<Book> bookPage = bookRepository.findAll(pageable);
+        List<Book> bookList = bookPage.getContent();
+        List<BookDTO> content = bookList.stream().map(BookMapper::toDto).collect(Collectors.toList());
+
+        return new PageImpl<>(content, bookPage.getPageable(), bookPage.getSize());
+    }
+
+    public Page<BookDTO> searchBook(SearchRequest request) {
+        SearchSpecification<Book> specification = new SearchSpecification<>(request);
+        Pageable pageable = SearchSpecification.getPageable(request.getPage(), request.getSize());
+        Page<Book> bookPage = bookRepository.findAll(specification, pageable);
+        List<Book> bookList = bookPage.getContent();
+        List<BookDTO> content = bookList.stream().map(BookMapper::toDto).collect(Collectors.toList());
+
+        return new PageImpl<>(content, bookPage.getPageable(), bookPage.getSize());
     }
 
     @Override

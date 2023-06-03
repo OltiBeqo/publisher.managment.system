@@ -1,15 +1,20 @@
 package com.publisher.managment.system.service.impl;
 
+import com.publisher.managment.system.configuration.SecurityUtil;
 import com.publisher.managment.system.dto.BookDTO;
+import com.publisher.managment.system.dto.LibraryDTO;
 import com.publisher.managment.system.dto.OrderDTO;
-import com.publisher.managment.system.dto.auth.SecurityUtil;
+import com.publisher.managment.system.dto.request.SearchRequest;
+import com.publisher.managment.system.dto.search.SearchSpecification;
 import com.publisher.managment.system.entity.Book;
+import com.publisher.managment.system.entity.Library;
 import com.publisher.managment.system.entity.Order;
 import com.publisher.managment.system.entity.OrdersBooks;
 import com.publisher.managment.system.entity.enums.OrderStatus;
 import com.publisher.managment.system.exception.BadRequestException;
 import com.publisher.managment.system.exception.ExceptionMessage;
 import com.publisher.managment.system.exception.ResourceNotFoundException;
+import com.publisher.managment.system.mapper.LibraryMapper;
 import com.publisher.managment.system.mapper.OrderMapper;
 import com.publisher.managment.system.repository.BookRepository;
 import com.publisher.managment.system.repository.OrderRepository;
@@ -17,6 +22,8 @@ import com.publisher.managment.system.repository.OrdersBooksRepository;
 import com.publisher.managment.system.service.OrderService;
 import com.publisher.managment.system.service.UserService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.*;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
@@ -31,6 +38,29 @@ public class OrderServiceImpl extends ExceptionMessage implements OrderService {
     private final UserService userService;
     private final BookRepository bookRepository;
     private final OrdersBooksRepository ordersBooksRepository;
+
+    @Override
+    public Page<OrderDTO> getOrdersPaginated(int pageNo, int pageSize, String sortBy, String sortDir) {
+        Sort sort = sortDir.equalsIgnoreCase(Sort.Direction.ASC.name())
+                ? Sort.by(sortBy).ascending() : Sort.by(sortBy).descending();
+        Pageable pageable = PageRequest.of(pageNo, pageSize, sort);
+        Page<Order> orderPage = orderRepository.findAll(pageable);
+        List<Order> orderList = orderPage.getContent();
+        List<OrderDTO> content = orderList.stream().map(OrderMapper::toDto).collect(Collectors.toList());
+
+        return new PageImpl<>(content, orderPage.getPageable(), orderPage.getSize());
+    }
+
+    @Override
+    public Page<OrderDTO> searchOrder(SearchRequest request) {
+        SearchSpecification<Order> specification = new SearchSpecification<>(request);
+        Pageable pageable = SearchSpecification.getPageable(request.getPage(), request.getSize());
+        Page<Order> orderPage = orderRepository.findAll(specification, pageable);
+        List<Order> orderList = orderPage.getContent();
+        List<OrderDTO> content = orderList.stream().map(OrderMapper::toDto).collect(Collectors.toList());
+
+        return new PageImpl<>(content, orderPage.getPageable(), orderPage.getSize());
+    }
 
     @Override
     @Transactional

@@ -1,4 +1,4 @@
-package com.publisher.managment.system.dto.auth;
+package com.publisher.managment.system.configuration;
 
 import org.springframework.security.core.context.SecurityContextHolder;
 public class SecurityUtil {

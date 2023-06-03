@@ -2,9 +2,7 @@ package com.publisher.managment.system.controller;
 
 import com.publisher.managment.system.aspect.TrackExecutionTime;
 import com.publisher.managment.system.dto.UserDTO;
-import com.publisher.managment.system.dto.auth.AuthRequest;
-import com.publisher.managment.system.dto.auth.LoginAuth;
-import com.publisher.managment.system.dto.auth.TokenDTO;
+import com.publisher.managment.system.dto.auth.*;
 import com.publisher.managment.system.entity.User;
 import com.publisher.managment.system.service.UserService;
 import lombok.RequiredArgsConstructor;
@@ -16,16 +14,16 @@ import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.oauth2.jwt.JwtClaimsSet;
 import org.springframework.security.oauth2.jwt.JwtEncoder;
 import org.springframework.security.oauth2.jwt.JwtEncoderParameters;
 import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 import javax.annotation.security.RolesAllowed;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 import java.time.Instant;
 import java.util.stream.Collectors;
@@ -49,7 +47,7 @@ public class AuthController {
             User user = (User) authentication.getPrincipal();
 
             Instant now = Instant.now();
-            Long expiry = 3600 * 8L;
+            Long expiry = 3600L;
             String scope = authentication.getAuthorities().stream()
                     .map(GrantedAuthority::getAuthority)
                     .collect(Collectors.joining(" "));

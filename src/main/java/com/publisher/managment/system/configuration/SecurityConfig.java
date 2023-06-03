@@ -5,6 +5,7 @@ import com.nimbusds.jose.jwk.RSAKey;
 import com.nimbusds.jose.jwk.source.ImmutableJWKSet;
 import com.publisher.managment.system.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -44,7 +45,8 @@ import static java.lang.String.format;
 @EnableGlobalMethodSecurity(securedEnabled = true, jsr250Enabled = true, prePostEnabled = true)
 @RequiredArgsConstructor
 public class SecurityConfig {
-    private final UserRepository userRepository;
+    @Autowired
+    private UserRepository userRepository;
     @Value("${jwt.public.key}")
     private RSAPublicKey rsaPublicKey;
     @Value("${jwt.private.key}")
@@ -60,10 +62,8 @@ public class SecurityConfig {
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         // Enable CORS and disable CSRF
         http.cors().and().csrf().disable();
-
         // Set session management to stateless
         http.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
-
         // Set unauthorized requests exception handler
         http.exceptionHandling((exceptions) -> exceptions.authenticationEntryPoint(new BearerTokenAuthenticationEntryPoint()).accessDeniedHandler(new BearerTokenAccessDeniedHandler()));
         // Set permissions on endpoints
@@ -77,7 +77,6 @@ public class SecurityConfig {
 
         return http.build();
     }
-
     // Used by JwtAuthenticationProvider to generate JWT tokens
     @Bean
     public JwtEncoder jwtEncoder() {
@@ -85,13 +84,11 @@ public class SecurityConfig {
         ImmutableJWKSet jwks = new ImmutableJWKSet<>(new JWKSet(jwk));
         return new NimbusJwtEncoder(jwks);
     }
-
     // Used by JwtAuthenticationProvider to decode and validate JWT tokens
     @Bean
     public JwtDecoder jwtDecoder() {
         return NimbusJwtDecoder.withPublicKey(this.rsaPublicKey).build();
     }
-
     // Extract authorities from the roles claim
     @Bean
     public JwtAuthenticationConverter jwtAuthenticationConverter() {
@@ -102,7 +99,6 @@ public class SecurityConfig {
         jwtAuthenticationConverter.setJwtGrantedAuthoritiesConverter(jwtGrantedAuthoritiesConverter);
         return jwtAuthenticationConverter;
     }
-
     // Set password encoding schema
     @Bean
     public PasswordEncoder passwordEncoder() {
@@ -121,7 +117,6 @@ public class SecurityConfig {
         source.registerCorsConfiguration("/**", config);
         return new CorsFilter(source);
     }
-
     // Expose authentication manager bean
     @Bean
     public AuthenticationManager authenticationManager(AuthenticationConfiguration authenticationConfiguration) throws Exception {

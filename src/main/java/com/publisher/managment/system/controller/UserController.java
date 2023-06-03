@@ -2,6 +2,9 @@ package com.publisher.managment.system.controller;
 
 import com.publisher.managment.system.aspect.TrackExecutionTime;
 import com.publisher.managment.system.dto.UserDTO;
+import com.publisher.managment.system.dto.request.AppConstants;
+import com.publisher.managment.system.dto.request.SearchRequest;
+import com.publisher.managment.system.dto.response.PageResponse;
 import com.publisher.managment.system.entity.enums.Role;
 import com.publisher.managment.system.service.UserService;
 import lombok.RequiredArgsConstructor;
@@ -17,6 +20,29 @@ import java.util.List;
 public class UserController {
 
     private final UserService userService;
+
+    @TrackExecutionTime
+    @GetMapping("/page")
+    @RolesAllowed({"ADMIN"})
+    public ResponseEntity<PageResponse<UserDTO>> getUsersPaginated (
+            @RequestParam(value = "pageNo", defaultValue = AppConstants.DEFAULT_PAGE_NUMBER, required = false) int pageNo,
+            @RequestParam(value = "pageSize", defaultValue = AppConstants.DEFAULT_PAGE_SIZE, required = false) int pageSize,
+            @RequestParam(value = "sortBy", defaultValue = AppConstants.DEFAULT_SORT_BY, required = false) String sortBy,
+            @RequestParam(value = "sortDir", defaultValue = AppConstants.DEFAULT_SORT_DIRECTION, required = false) String sortDir
+    ){
+        PageResponse<UserDTO> response = new PageResponse<>();
+        response.setPageStats(userService.getUsersPaginated(pageNo, pageSize, sortBy, sortDir));
+        return ResponseEntity.ok(response);
+    }
+
+    @TrackExecutionTime
+    @GetMapping("/search")
+    @RolesAllowed({"ADMIN"})
+    public ResponseEntity<PageResponse<UserDTO>> searchUser (@RequestBody SearchRequest request){
+        PageResponse<UserDTO> response = new PageResponse<>();
+        response.setPageStats(userService.searchUser(request));
+        return ResponseEntity.ok(response);
+    }
 
     @TrackExecutionTime
     @GetMapping

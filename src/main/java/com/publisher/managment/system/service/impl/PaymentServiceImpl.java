@@ -2,6 +2,8 @@ package com.publisher.managment.system.service.impl;
 
 import com.publisher.managment.system.dto.OrderDTO;
 import com.publisher.managment.system.dto.PaymentDTO;
+import com.publisher.managment.system.dto.request.SearchRequest;
+import com.publisher.managment.system.dto.search.SearchSpecification;
 import com.publisher.managment.system.entity.Order;
 import com.publisher.managment.system.entity.Payment;
 import com.publisher.managment.system.entity.enums.OrderStatus;
@@ -15,7 +17,9 @@ import com.publisher.managment.system.repository.PaymentRepository;
 import com.publisher.managment.system.service.OrderService;
 import com.publisher.managment.system.service.PaymentService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.*;
 import org.springframework.stereotype.Service;
+
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -27,13 +31,36 @@ public class PaymentServiceImpl extends ExceptionMessage implements PaymentServi
     private final OrderService orderService;
 
     @Override
+    public Page<PaymentDTO> getPaymentsPaginated(int pageNo, int pageSize, String sortBy, String sortDir) {
+        Sort sort = sortDir.equalsIgnoreCase(Sort.Direction.ASC.name())
+                ? Sort.by(sortBy).ascending() : Sort.by(sortBy).descending();
+        Pageable pageable = PageRequest.of(pageNo, pageSize, sort);
+        Page<Payment> paymentPage = paymentRepository.findAll(pageable);
+        List<Payment> paymentList = paymentPage.getContent();
+        List<PaymentDTO> content = paymentList.stream().map(PaymentMapper::toDto).collect(Collectors.toList());
+
+        return new PageImpl<>(content, paymentPage.getPageable(), paymentPage.getSize());
+    }
+
+    @Override
+    public Page<PaymentDTO> searchPayment(SearchRequest request) {
+        SearchSpecification<Payment> specification = new SearchSpecification<>(request);
+        Pageable pageable = PageRequest.of(request.getPage(), request.getSize());
+        Page<Payment> paymentPage = paymentRepository.findAll(specification, pageable);
+        List<Payment> paymentList = paymentPage.getContent();
+        List<PaymentDTO> content = paymentList.stream().map(PaymentMapper::toDto).collect(Collectors.toList());
+
+        return new PageImpl<>(content, paymentPage.getPageable(), paymentPage.getSize());
+    }
+
+    @Override
     public PaymentDTO addPayment(PaymentDTO paymentDTO) {
         OrderDTO orderDTO = orderService.getOrderById(paymentDTO.getOrder().getId());
         Order order = OrderMapper.toEntity(orderDTO);
-        Optional <Payment> payment = paymentRepository.findByOrderId(order.getId());
-        if (payment.isPresent()){
+        Optional<Payment> payment = paymentRepository.findByOrderId(order.getId());
+        if (payment.isPresent()) {
             throw new BadRequestException(String.format(PAYMENT_EXISTS, order.getId()));
-        }else if (!order.getOrderStatus().equals(OrderStatus.COMPLETED)){
+        } else if (!order.getOrderStatus().equals(OrderStatus.COMPLETED)) {
             throw new BadRequestException(String.format(ORDER_NOT_COMPLETED, order.getId(), order.getOrderStatus()));
         }
         paymentDTO.setOrder(orderDTO);
