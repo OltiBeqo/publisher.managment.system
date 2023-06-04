@@ -2,6 +2,7 @@ package com.publisher.managment.system.controller;
 
 import com.publisher.managment.system.aspect.TrackExecutionTime;
 import com.publisher.managment.system.dto.OrderDTO;
+import com.publisher.managment.system.dto.projections.OrderSummary;
 import com.publisher.managment.system.dto.request.SearchRequest;
 import com.publisher.managment.system.service.OrderService;
 import lombok.RequiredArgsConstructor;
@@ -91,5 +92,15 @@ public class OrderController {
     public ResponseEntity<Void> deleteOrder(@PathVariable Integer id) {
         orderService.deleteOrderById(id);
         return new ResponseEntity<>(HttpStatus.OK);
+    }
+
+    @GetMapping("/counted-orders")
+    public ResponseEntity<OrderSummary> getCountedOrders(){
+        return ResponseEntity.ok(orderService.countedOrders());
+    }
+
+    @GetMapping("/completed-orders")
+    public ResponseEntity<OrderSummary.TotalOrders> getCompletedOrders(){
+        return ResponseEntity.ok(orderService.findCompletedOrders());
     }
 }

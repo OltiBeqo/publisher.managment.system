@@ -1,6 +1,7 @@
 package com.publisher.managment.system.service;
 
 import com.publisher.managment.system.dto.OrderDTO;
+import com.publisher.managment.system.dto.projections.OrderSummary;
 import com.publisher.managment.system.dto.request.SearchRequest;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -27,5 +28,9 @@ public interface OrderService {
     Page<OrderDTO> getOrdersPaginated(Pageable pageable);
 
     Page<OrderDTO> searchOrder(SearchRequest request);
+
+    OrderSummary countedOrders();
+
+    OrderSummary.TotalOrders findCompletedOrders();
 
 }

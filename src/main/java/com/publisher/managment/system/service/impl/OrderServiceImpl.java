@@ -3,6 +3,7 @@ package com.publisher.managment.system.service.impl;
 import com.publisher.managment.system.configuration.SecurityUtil;
 import com.publisher.managment.system.dto.BookDTO;
 import com.publisher.managment.system.dto.OrderDTO;
+import com.publisher.managment.system.dto.projections.OrderSummary;
 import com.publisher.managment.system.dto.request.SearchRequest;
 import com.publisher.managment.system.dto.search.SearchSpecification;
 import com.publisher.managment.system.entity.Book;
@@ -23,6 +24,7 @@ import org.springframework.data.domain.*;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -109,6 +111,7 @@ public class OrderServiceImpl extends ExceptionMessage implements OrderService {
             ordersBooks.setOrderId(orderId);
             ordersBooks.setBookId(bookDTO.getId());
             ordersBooks.setBookQuantity(bookDTO.getQuantity());
+            ordersBooks.setCreatedAt(LocalDateTime.now());
             ordersBooksRepository.save(ordersBooks);
         });
     }
@@ -164,5 +167,13 @@ public class OrderServiceImpl extends ExceptionMessage implements OrderService {
             return price * bookDTO.getQuantity();
         }).mapToDouble(Double::doubleValue).sum();
         orderDTO.setTotalAmount(totalAmount - (totalAmount * orderDTO.getDiscount()));
+    }
+
+    public OrderSummary countedOrders(){
+        return orderRepository.findOrderSummary();
+    }
+
+    public OrderSummary.TotalOrders findCompletedOrders(){
+        return orderRepository.findOrdersCompleted();
     }
 }

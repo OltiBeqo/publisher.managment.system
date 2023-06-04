@@ -1,6 +1,7 @@
 package com.publisher.managment.system.service;
 
 import com.publisher.managment.system.dto.PaymentDTO;
+import com.publisher.managment.system.dto.projections.PaymentSummary;
 import com.publisher.managment.system.dto.request.SearchRequest;
 import com.publisher.managment.system.entity.enums.PaymentMethod;
 import org.springframework.data.domain.Page;
@@ -26,4 +27,6 @@ public interface PaymentService {
     Page<PaymentDTO> getPaymentsPaginated(Pageable pageable);
 
     Page<PaymentDTO> searchPayment(SearchRequest request);
+
+    PaymentSummary getPaymentSummary();
 }

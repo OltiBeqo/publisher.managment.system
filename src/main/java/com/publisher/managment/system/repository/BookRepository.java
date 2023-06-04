@@ -1,5 +1,6 @@
 package com.publisher.managment.system.repository;
 
+import com.publisher.managment.system.dto.projections.BookSummary;
 import com.publisher.managment.system.entity.Book;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;

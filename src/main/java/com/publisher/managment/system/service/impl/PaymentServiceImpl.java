@@ -2,6 +2,7 @@ package com.publisher.managment.system.service.impl;
 
 import com.publisher.managment.system.dto.OrderDTO;
 import com.publisher.managment.system.dto.PaymentDTO;
+import com.publisher.managment.system.dto.projections.PaymentSummary;
 import com.publisher.managment.system.dto.request.SearchRequest;
 import com.publisher.managment.system.dto.search.SearchSpecification;
 import com.publisher.managment.system.entity.Order;
@@ -17,7 +18,10 @@ import com.publisher.managment.system.repository.PaymentRepository;
 import com.publisher.managment.system.service.OrderService;
 import com.publisher.managment.system.service.PaymentService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.domain.*;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -103,4 +107,7 @@ public class PaymentServiceImpl extends ExceptionMessage implements PaymentServi
         return paymentRepository.findAllByPaymentMethod(paymentMethod).stream().map(PaymentMapper::toDto).collect(Collectors.toList());
     }
 
+    public PaymentSummary getPaymentSummary() {
+        return paymentRepository.getPaymentSummary();
+    }
 }

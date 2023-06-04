@@ -2,6 +2,7 @@ package com.publisher.managment.system.controller;
 
 import com.publisher.managment.system.aspect.TrackExecutionTime;
 import com.publisher.managment.system.dto.PaymentDTO;
+import com.publisher.managment.system.dto.projections.PaymentSummary;
 import com.publisher.managment.system.dto.request.SearchRequest;
 import com.publisher.managment.system.entity.enums.PaymentMethod;
 import com.publisher.managment.system.service.PaymentService;
@@ -84,5 +85,11 @@ public class PaymentController {
     public ResponseEntity<Void> deletePayment(@PathVariable Integer paymentId) {
         paymentService.deletePayment(paymentId);
         return new ResponseEntity<>(HttpStatus.OK);
+    }
+
+    @GetMapping("/payments-summary")
+    public ResponseEntity<PaymentSummary> getPaymentsSummary(){
+        return ResponseEntity.ok(paymentService.getPaymentSummary());
+
     }
 }

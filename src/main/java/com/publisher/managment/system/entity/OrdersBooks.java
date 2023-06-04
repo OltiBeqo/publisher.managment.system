@@ -6,6 +6,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
+import java.time.LocalDateTime;
 
 @Data
 @NoArgsConstructor
@@ -21,4 +22,5 @@ public class OrdersBooks {
     private Integer orderId;
     private Integer bookId;
     private Integer bookQuantity;
+    private LocalDateTime createdAt;
 }
