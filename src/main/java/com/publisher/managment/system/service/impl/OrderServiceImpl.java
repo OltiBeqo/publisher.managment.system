@@ -2,19 +2,16 @@ package com.publisher.managment.system.service.impl;
 
 import com.publisher.managment.system.configuration.SecurityUtil;
 import com.publisher.managment.system.dto.BookDTO;
-import com.publisher.managment.system.dto.LibraryDTO;
 import com.publisher.managment.system.dto.OrderDTO;
 import com.publisher.managment.system.dto.request.SearchRequest;
 import com.publisher.managment.system.dto.search.SearchSpecification;
 import com.publisher.managment.system.entity.Book;
-import com.publisher.managment.system.entity.Library;
 import com.publisher.managment.system.entity.Order;
 import com.publisher.managment.system.entity.OrdersBooks;
 import com.publisher.managment.system.entity.enums.OrderStatus;
 import com.publisher.managment.system.exception.BadRequestException;
 import com.publisher.managment.system.exception.ExceptionMessage;
 import com.publisher.managment.system.exception.ResourceNotFoundException;
-import com.publisher.managment.system.mapper.LibraryMapper;
 import com.publisher.managment.system.mapper.OrderMapper;
 import com.publisher.managment.system.repository.BookRepository;
 import com.publisher.managment.system.repository.OrderRepository;
@@ -22,7 +19,6 @@ import com.publisher.managment.system.repository.OrdersBooksRepository;
 import com.publisher.managment.system.service.OrderService;
 import com.publisher.managment.system.service.UserService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.*;
 import org.springframework.stereotype.Service;
 
@@ -159,7 +155,7 @@ public class OrderServiceImpl extends ExceptionMessage implements OrderService {
 
     @Override
     public long getTotalOfOrders() {
-        return orderRepository.findAll().stream().count();
+        return orderRepository.findAll().size();
     }
 
     private void calculateTotalAmount(OrderDTO orderDTO) {
