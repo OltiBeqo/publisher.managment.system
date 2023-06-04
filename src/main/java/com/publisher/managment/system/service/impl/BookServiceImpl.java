@@ -34,12 +34,7 @@ public class BookServiceImpl extends ExceptionMessage implements BookService {
         }
     }
 
-    @Override
-    public Page<BookDTO> getBooksPaginated(int pageNo, int pageSize, String sortBy, String sortDir) {
-        Sort sort = sortDir.equalsIgnoreCase(Sort.Direction.ASC.name())
-                ? Sort.by(sortBy).ascending() : Sort.by(sortBy).descending();
-
-        Pageable pageable = PageRequest.of(pageNo, pageSize, sort);
+    public Page<BookDTO> getBooksPaginated (Pageable pageable){
         Page<Book> bookPage = bookRepository.findAll(pageable);
         List<Book> bookList = bookPage.getContent();
         List<BookDTO> content = bookList.stream().map(BookMapper::toDto).collect(Collectors.toList());

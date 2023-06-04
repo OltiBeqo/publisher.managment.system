@@ -4,6 +4,7 @@ import com.publisher.managment.system.dto.PaymentDTO;
 import com.publisher.managment.system.dto.request.SearchRequest;
 import com.publisher.managment.system.entity.enums.PaymentMethod;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 
 import java.util.List;
 
@@ -22,7 +23,7 @@ public interface PaymentService {
 
     List<PaymentDTO> getPaymentsByMethod(PaymentMethod paymentMethod);
 
-    Page<PaymentDTO> getPaymentsPaginated(int pageNo, int pageSize, String sortBy, String sortDir);
+    Page<PaymentDTO> getPaymentsPaginated(Pageable pageable);
 
     Page<PaymentDTO> searchPayment(SearchRequest request);
 }

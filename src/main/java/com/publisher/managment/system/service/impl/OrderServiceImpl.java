@@ -40,10 +40,8 @@ public class OrderServiceImpl extends ExceptionMessage implements OrderService {
     private final OrdersBooksRepository ordersBooksRepository;
 
     @Override
-    public Page<OrderDTO> getOrdersPaginated(int pageNo, int pageSize, String sortBy, String sortDir) {
-        Sort sort = sortDir.equalsIgnoreCase(Sort.Direction.ASC.name())
-                ? Sort.by(sortBy).ascending() : Sort.by(sortBy).descending();
-        Pageable pageable = PageRequest.of(pageNo, pageSize, sort);
+    public Page<OrderDTO> getOrdersPaginated(Pageable pageable) {
+
         Page<Order> orderPage = orderRepository.findAll(pageable);
         List<Order> orderList = orderPage.getContent();
         List<OrderDTO> content = orderList.stream().map(OrderMapper::toDto).collect(Collectors.toList());

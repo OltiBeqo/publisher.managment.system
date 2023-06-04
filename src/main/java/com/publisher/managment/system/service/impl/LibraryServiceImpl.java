@@ -34,10 +34,8 @@ public class LibraryServiceImpl extends ExceptionMessage implements LibraryServi
     }
 
     @Override
-    public Page<LibraryDTO> getLibrariesPaginated(int pageNo, int pageSize, String sortBy, String sortDir) {
-        Sort sort = sortDir.equalsIgnoreCase(Sort.Direction.ASC.name())
-                ? Sort.by(sortBy).ascending() : Sort.by(sortBy).descending();
-        Pageable pageable = PageRequest.of(pageNo, pageSize, sort);
+    public Page<LibraryDTO> getLibrariesPaginated(Pageable pageable) {
+
         Page<Library> libraryPage = libraryRepository.findAll(pageable);
         List<Library> libraryList = libraryPage.getContent();
         List<LibraryDTO> content = libraryList.stream().map(LibraryMapper::toDto).collect(Collectors.toList());

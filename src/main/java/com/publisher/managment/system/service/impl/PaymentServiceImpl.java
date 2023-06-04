@@ -31,10 +31,8 @@ public class PaymentServiceImpl extends ExceptionMessage implements PaymentServi
     private final OrderService orderService;
 
     @Override
-    public Page<PaymentDTO> getPaymentsPaginated(int pageNo, int pageSize, String sortBy, String sortDir) {
-        Sort sort = sortDir.equalsIgnoreCase(Sort.Direction.ASC.name())
-                ? Sort.by(sortBy).ascending() : Sort.by(sortBy).descending();
-        Pageable pageable = PageRequest.of(pageNo, pageSize, sort);
+    public Page<PaymentDTO> getPaymentsPaginated(Pageable pageable) {
+
         Page<Payment> paymentPage = paymentRepository.findAll(pageable);
         List<Payment> paymentList = paymentPage.getContent();
         List<PaymentDTO> content = paymentList.stream().map(PaymentMapper::toDto).collect(Collectors.toList());

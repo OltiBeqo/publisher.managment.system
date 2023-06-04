@@ -34,10 +34,8 @@ public class CategoryServiceImpl extends ExceptionMessage implements CategorySer
     }
 
     @Override
-    public Page<CategoryDTO> getCategoriesPaginated(int pageNo, int pageSize, String sortBy, String sortDir) {
-        Sort sort = sortDir.equalsIgnoreCase(Sort.Direction.ASC.name())
-                ? Sort.by(sortBy).ascending() : Sort.by(sortBy).descending();
-        Pageable pageable = PageRequest.of(pageNo, pageSize, sort);
+    public Page<CategoryDTO> getCategoriesPaginated(Pageable pageable) {
+
         Page<Category> categoryPage = categoryRepository.findAll(pageable);
         List<Category> categoryList = categoryPage.getContent();
         List<CategoryDTO> content = categoryList.stream().map(CategoryMapper::toDto).collect(Collectors.toList());

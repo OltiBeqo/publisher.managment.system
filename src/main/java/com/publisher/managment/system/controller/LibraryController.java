@@ -2,11 +2,12 @@ package com.publisher.managment.system.controller;
 
 import com.publisher.managment.system.aspect.TrackExecutionTime;
 import com.publisher.managment.system.dto.LibraryDTO;
-import com.publisher.managment.system.dto.request.AppConstants;
 import com.publisher.managment.system.dto.request.SearchRequest;
 import com.publisher.managment.system.dto.response.PageResponse;
 import com.publisher.managment.system.service.LibraryService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -23,24 +24,15 @@ public class LibraryController {
     @TrackExecutionTime
     @GetMapping("/page")
     @RolesAllowed({"ADMIN", "EMPLOYEE", "COURIER"})
-    public ResponseEntity<PageResponse<LibraryDTO>> getLibrariesPaginated(
-            @RequestParam(value = "pageNo", defaultValue = AppConstants.DEFAULT_PAGE_NUMBER, required = false) int pageNo,
-            @RequestParam(value = "pageSize", defaultValue = AppConstants.DEFAULT_PAGE_SIZE, required = false) int pageSize,
-            @RequestParam(value = "sortBy", defaultValue = AppConstants.DEFAULT_SORT_BY, required = false) String sortBy,
-            @RequestParam(value = "sortDir", defaultValue = AppConstants.DEFAULT_SORT_DIRECTION, required = false) String sortDir
-    ) {
-        PageResponse<LibraryDTO> response = new PageResponse<>();
-        response.setPageStats(libraryService.getLibrariesPaginated(pageNo, pageSize, sortBy, sortDir));
-        return ResponseEntity.ok(response);
+    public ResponseEntity<Page<LibraryDTO>> getLibrariesPaginated(Pageable pageable) {
+        return ResponseEntity.ok(libraryService.getLibrariesPaginated(pageable));
     }
 
     @TrackExecutionTime
     @PostMapping("/search")
     @RolesAllowed({"ADMIN", "EMPLOYEE", "COURIER"})
-    public ResponseEntity<PageResponse<LibraryDTO>> searchLibrary(@RequestBody SearchRequest request) {
-        PageResponse<LibraryDTO> response = new PageResponse<>();
-        response.setPageStats(libraryService.searchLibrary(request));
-        return ResponseEntity.ok(response);
+    public ResponseEntity<Page<LibraryDTO>> searchLibrary(@RequestBody SearchRequest request) {
+        return ResponseEntity.ok(libraryService.searchLibrary(request));
     }
 
     @TrackExecutionTime

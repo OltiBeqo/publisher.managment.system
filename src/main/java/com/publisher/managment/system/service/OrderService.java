@@ -3,6 +3,7 @@ package com.publisher.managment.system.service;
 import com.publisher.managment.system.dto.OrderDTO;
 import com.publisher.managment.system.dto.request.SearchRequest;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 
 import java.util.List;
 
@@ -23,7 +24,7 @@ public interface OrderService {
 
     long getTotalOfOrders();
 
-    Page<OrderDTO> getOrdersPaginated(int pageNo, int pageSize, String sortBy, String sortDir);
+    Page<OrderDTO> getOrdersPaginated(Pageable pageable);
 
     Page<OrderDTO> searchOrder(SearchRequest request);
 

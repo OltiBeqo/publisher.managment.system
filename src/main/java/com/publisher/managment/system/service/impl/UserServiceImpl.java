@@ -34,10 +34,7 @@ public class UserServiceImpl extends ExceptionMessage implements UserService, Us
     private final PasswordEncoder passwordEncoder;
 
     @Override
-    public Page<UserDTO> getUsersPaginated(int pageNo, int pageSize, String sortBy, String sortDir) {
-        Sort sort = sortDir.equalsIgnoreCase(Sort.Direction.ASC.name())
-                ? Sort.by(sortBy).ascending() : Sort.by(sortBy).descending();
-        Pageable pageable = PageRequest.of(pageNo, pageSize, sort);
+    public Page<UserDTO> getUsersPaginated(Pageable pageable) {
         Page<User> userPage = userRepository.findAll(pageable);
         List<User> userList = userPage.getContent();
         List<UserDTO> content = userList.stream().map(UserMapper::toDto).collect(Collectors.toList());
